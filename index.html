@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b3a5f" />
+  <title>11.1 Describing circular motion — Pre-lesson</title>
+  <style>
+    :root {
+      --navy: #1b3a5f;
+      --navy-2: #24507f;
+      --ink: #1a1a1a;
+      --muted: #5a6570;
+      --line: #d5dbe3;
+      --paper: #f6f3ec;
+      --card: #ffffff;
+      --arc: #1a7aad;
+      --arc-soft: #d7eef8;
+      --ok: #1b7a46;
+      --ok-bg: #e7f6ec;
+      --bad: #b42318;
+      --bad-bg: #fdecea;
+      --accent: #c45c26;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(27,58,95,.08), 0 8px 24px rgba(27,58,95,.06);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+      font-size: 17px;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .app { max-width: 42rem; margin: 0 auto; height: 100dvh; height: 100svh; display: flex; flex-direction: column; overflow: hidden; }
+    header.top {
+      background: var(--navy);
+      color: #fff;
+      padding: 0.7rem 1.15rem 0.85rem;
+      position: relative;
+    }
+    header.top .kicker {
+      padding-right: 5.8rem;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      margin: 0 0 .15rem;
+      pointer-events: none;
+    }
+    .lang-switch {
+      position: absolute;
+      top: 0.7rem;
+      right: 1rem;
+      display: flex;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 5;
+      pointer-events: auto;
+    }
+    .lang-switch button {
+      min-height: 36px;
+      min-width: 2.45rem;
+      padding: 0 .55rem;
+      background: transparent;
+      color: rgba(255,255,255,.9);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      border-radius: 0;
+    }
+    .lang-switch button[aria-pressed="true"] {
+      background: #fff;
+      color: var(--navy);
+    }
+    html[lang="zh-HK"] body { line-height: 1.65; }
+    html[lang="zh-HK"] .lbl,
+    html[lang="zh-HK"] .pill,
+    html[lang="zh-HK"] .kicker {
+      text-transform: none;
+      letter-spacing: .03em;
+    }
+    header.top .kicker {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .8;
+      margin: 0 0 .2rem;
+    }
+    header.top h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.3;
+    }
+    header.top p {
+      margin: .25rem 0 0;
+      font-size: .92rem;
+      opacity: .9;
+    }
+    .progress {
+      display: flex;
+      gap: 4px;
+      padding: .55rem 1.15rem .2rem;
+      background: #efebe3;
+    }
+    .progress button {
+      flex: 1;
+      height: 5px;
+      border: 0;
+      padding: 0;
+      border-radius: 99px;
+      background: #c9c3b6;
+      cursor: pointer;
+    }
+    .progress button.on { background: var(--navy); }
+    .progress button.done { background: #7a93b0; }
+    main {
+      flex: 1;
+      padding: 1rem 1.15rem 1.4rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .step { display: none; }
+    .step.show { display: block; }
+    h2 {
+      font-size: 1.22rem;
+      margin: 0 0 .55rem;
+      color: var(--navy);
+    }
+    h3 {
+      font-size: 1.02rem;
+      margin: .7rem 0 .25rem;
+      color: var(--navy-2);
+    }
+    p { margin: 0 0 .7rem; }
+    .lead { font-size: 1.02rem; }
+    .eqn {
+      display: block;
+      text-align: center;
+      font-size: 1.25rem;
+      margin: .55rem 0;
+      padding: .6rem .8rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hint {
+      font-size: .92rem;
+      color: var(--muted);
+      background: #efe8d8;
+      border-radius: 10px;
+      padding: .55rem .7rem;
+      margin: .7rem 0;
+    }
+    .note {
+      font-size: .95rem;
+      color: var(--muted);
+    }
+    figure { margin: .65rem 0 .7rem; }
+    figure svg, table.conv svg { width: 100%; height: auto; display: block; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    svg text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    figcaption { font-size: .88rem; color: var(--muted); text-align: center; margin-top: .3rem; }
+    .controls {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      margin: .4rem 0 1rem;
+    }
+    .controls label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--navy); }
+    .readout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: .4rem;
+      margin-top: .55rem;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .85rem;
+    }
+    .readout div {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .45rem .5rem;
+      text-align: center;
+    }
+    .readout b { display: block; font-size: 1rem; color: var(--navy); font-family: inherit; }
+    table.conv {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: .95rem;
+    }
+    table.conv th, table.conv td {
+      border: 1px solid var(--line);
+      padding: .55rem .4rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.conv th { background: #eef2f6; font-weight: 600; width: 28%; }
+    table.conv svg { width: 72px; height: 72px; margin: 0 auto; display: block; background: transparent; border: 0; box-shadow: none; }
+    .q {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: .55rem .7rem .6rem;
+      margin: 0 0 .5rem;
+      box-shadow: var(--shadow);
+    }
+    .q .num {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: .04em;
+      flex: 0 0 auto;
+    }
+    .q p { margin: .2rem 0 .45rem; }
+    .q-line { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .4rem; }
+    .q-line input[type="text"] { flex: 1; min-width: 6.5rem; }
+    .q .note { margin: .25rem 0 0; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+    }
+    input[type="text"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: .45rem .55rem;
+      border: 1px solid #b8c0c8;
+      border-radius: 8px;
+      min-width: 0;
+      flex: 1;
+      min-height: 44px;
+    }
+    input[type="text"]:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
+    .unit { color: var(--muted); }
+    button {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      border: 0;
+      border-radius: 10px;
+      min-height: 44px;
+      padding: 0 .9rem;
+      cursor: pointer;
+    }
+    button.primary { background: var(--navy); color: #fff; }
+    button.primary:active { background: #132a46; }
+    button.ghost { background: transparent; color: var(--navy); border: 1px solid #b7c4d3; }
+    button.play { background: var(--navy-2); color: #fff; }
+    .feedback { font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; font-size: .88rem; margin-top: .45rem; border-radius: 8px; padding: .4rem .55rem; display: none; }
+    .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+    .feedback.bad { display: block; background: var(--bad-bg); color: var(--bad); }
+    .feedback.show { display: block; background: #eef2f6; color: var(--navy); }
+    nav.bar {
+      display: flex;
+      gap: .5rem;
+      flex-shrink: 0;
+      padding: .7rem 1.15rem 1.1rem;
+      background: #efebe3;
+      border-top: 1px solid #e0d9cc;
+      padding-bottom: max(1.1rem, env(safe-area-inset-bottom));
+    }
+    nav.bar button { flex: 1; }
+    .pill {
+      display: inline-block;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      background: #e8e1d2;
+      color: var(--navy);
+      border-radius: 99px;
+      padding: .15rem .55rem;
+      margin-bottom: .45rem;
+    }
+    ul.learn { margin: .3rem 0 .8rem 1.1rem; padding: 0; }
+    ul.learn li { margin: 0 0 .35rem; }
+    .summary dt { font-weight: 700; color: var(--navy); margin-top: .55rem; }
+    .summary dd { margin: .15rem 0 0 0; }
+    .form-box {
+      background: var(--card);
+      border: 1px dashed #8aa0b8;
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      margin-top: .8rem;
+    }
+    .form-box a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy);
+      color: #fff;
+      text-decoration: none;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-weight: 600;
+      border-radius: 10px;
+      min-height: 48px;
+      padding: 0 1.1rem;
+      margin-top: .4rem;
+    }
+
+    .think, .worked, .watch, #radCue {
+      border-radius: 12px;
+      padding: .65rem .75rem;
+      margin: .7rem 0;
+      font-size: .95rem;
+    }
+    .think { background: #e8f1f8; border-left: 3px solid var(--arc); }
+    .worked, #radCue { background: #f3efe6; border-left: 3px solid #b0893e; }
+    .watch { background: #f8eee8; border-left: 3px solid var(--accent); }
+    .think p, .worked p, .watch p, #radCue p { margin: 0 0 .4rem; }
+    .think p:last-child, .worked p:last-child, .watch p:last-child, #radCue p:last-child { margin: 0; }
+    .lbl {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin: 0 0 .3rem;
+      color: var(--navy);
+    }
+    details.hint-fold { margin: .4rem 0 0; font-size: .9rem; }
+    details.hint-fold summary {
+      cursor: pointer;
+      color: var(--navy);
+      font-weight: 600;
+      user-select: none;
+    }
+    details.hint-fold p { margin: .35rem 0 0; color: var(--muted); }
+    #radCue { display: none; }
+    #radCue.on { display: block; }
+    .eqn { font-variant-numeric: lining-nums; }
+    .hidden { display: none !important; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="lang-switch" role="group" aria-label="Language" id="langSwitch">
+        <button type="button" id="langEn" aria-pressed="true" lang="en">EN</button>
+        <button type="button" id="langZh" aria-pressed="false" lang="zh-HK">粵</button>
+      </div>
+      <p class="kicker" data-i18n="kicker">CSWCSS F.5 Physics · Pre-lesson task</p>
+      <h1>Chapter 11 Uniform Circular Motion</h1>
+      <p>11.1 Describing circular motion</p>
+    </header>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <main id="main"></main>
+    <nav class="bar">
+      <button type="button" class="ghost" id="btnBack" data-i18n="back">Back</button>
+      <button type="button" class="primary" id="btnNext" data-i18n="next">Next</button>
+    </nav>
+  </div>
+
+  <!-- Paste your Google Form URL between the quotes when ready. Leave empty until then. -->
+  <script>window.GOOGLE_FORM_URL = "";</script>
+
+  <script>
+  (function () {
+    const steps = [];
+    const $main = document.getElementById("main");
+    const $prog = document.getElementById("progress");
+    const $back = document.getElementById("btnBack");
+    const $next = document.getElementById("btnNext");
+    let i = 0;
+
+    const I18N = {
+      en: {
+          "docTitle": "11.1 Describing circular motion — Pre-lesson",
+          "langGroup": "Language",
+          "kicker": "CSWCSS F.5 Physics · Pre-lesson task",
+          "back": "Back",
+          "next": "Next",
+          "backToStart": "Back to start",
+          "play": "Play",
+          "stop": "Stop",
+          "check": "Check",
+          "showAnswers": "Show answers",
+          "checkPage": "Check this page",
+          "hint": "Hint",
+          "tryThis": "Try this",
+          "worked": "Worked example",
+          "watchOut": "Watch out",
+          "why2pi": "Why 2π?",
+          "twoQty": "Two different quantities",
+          "predictFirst": "Predict first",
+          "formOpen": "Open the Google Form",
+          "pillPre": "Pre-lesson",
+          "pillPr": "Practice",
+          "pillSum": "Summary",
+          "s0h": "What you will learn",
+          "s0lead": "Work through this short tutorial before the lesson. It covers the same ideas as your Chapter 11 in-class notes on describing circular motion.",
+          "s0li1": "The <b>radian</b> as the SI unit of angle, and how to convert between radians, degrees and revolutions",
+          "s0li2": "<b>Angular displacement</b> θ, and how it is related to arc length",
+          "s0li3": "<b>Angular velocity</b> and <b>angular speed</b>, and what uniform circular motion means",
+          "s0try": "There are a few practice questions along the way. When you see <b>Try this</b> or <b>Hint</b>, attempt the idea first — that is how you will remember it in the lesson.",
+          "s0form": "A Google Form will be used later to check your understanding.",
+          "s1h": "Radian as a unit of angle",
+          "s1p1": "The <b>radian</b> (rad) is the SI unit of <b>angle</b>. It is defined from the circle itself: how many radii fit along the arc.",
+          "s1p2": "An angle θ in radians is the ratio of the arc length <i>s</i> to the radius <i>r</i>:",
+          "s1try": "Drag the slider until the arc length <i>s</i> equals the radius <i>r</i>. What is θ then?",
+          "s1cap": "Compare the blue arc <i>s</i> with the radius <i>r</i>.",
+          "s1ang": "Angle",
+          "s1arc": "Arc length s",
+          "s1rad": "Radius r",
+          "s1th": "Angle θ = s/r",
+          "s1cue": "Here <i>s</i> = <i>r</i>, so θ = <i>s</i>/<i>r</i> = <b>1</b>. This angle is <b>1 radian</b> (about 57.3°).",
+          "s2h": "The angle around a point",
+          "s2why": "A full turn follows the whole circumference, so the arc length is <i>s</i> = 2π<i>r</i>. Put that into θ = <i>s</i>/<i>r</i>:",
+          "s2p": "So 2π is not a number to memorise on its own — it is how many radii fit around the circle. That full turn is <b>2π rad = 360° = 1 revolution</b>.",
+          "s2note": "The unit ‘rad’ is often omitted when the angle is expressed in terms of π.",
+          "s3h": "Radians and degrees",
+          "s3p": "The two sides of this equation mean the same thing: <b>what fraction of a full turn</b> is the angle?",
+          "s3ex1": "180° is half a turn, so 180/360 = 1/2. Half of 2π is π. Therefore 180° = π rad.",
+          "s3ex2": "Rearranging that fraction gives the working forms you will actually use:",
+          "s3remember": "<b>Remember:</b> π rad = 180° and 1 revolution (rev) = 1 cycle = 2π rad = 360°.",
+          "s4h": "Some conversions",
+          "s4p": "Fill in the missing values. Use the pictures first: a quarter-turn, a half-turn and a full turn.",
+          "s4hint": "A full turn is 2π rad = 360°. A half-turn is half of that (π rad = 180°). A quarter-turn is half again (π/2 rad = 90°).",
+          "thAngles": "Angles",
+          "thDeg": "Expressed in degrees°",
+          "thRad": "Expressed in rad",
+          "fbTableReveal": "Quarter-circle: 90° = π/2 rad. Semicircle: 180° = π rad. Full circle: 360° = 2π rad.",
+          "fbTableAll": "All four are correct.",
+          "fbTableSome": "{n} of 4 correct. A quarter-turn is π/2, a half-turn is π, a full turn is 2π.",
+          "s5h": "Convert angles",
+          "s5remember": "<b>Remember:</b> π rad = 180° and 1 revolution (rev) = 1 cycle = 2π rad = 360°. You may leave answers in terms of π.",
+          "s5ex1": "Convert 60° to radians: θ<sub>rad</sub> = 60 × π/180 = π/3 rad.",
+          "s5ex2": "If the degree value is a simple fraction of 180, keep the answer in terms of π.",
+          "hintP1": "45° is half of 90°, and 90° = π/2, so 45° = π/4.",
+          "hintP2": "150/180 = 5/6, so 150° = 5π/6.",
+          "hintP3": "75 rad is many full turns, not 75°. Use ° = rad × 180/π. (One turn is only about 6.28 rad, so 75 rad is more than 11 turns.)",
+          "hintP4": "1 rev = 2π rad, so 10 rev = 20π rad.",
+          "correct": "Correct.",
+          "exactPrefix": "Exact: ",
+          "enterAns": "Enter an answer.",
+          "notQuite": "Not quite. Try again, or use the hint.",
+          "phAnswer": "answer",
+          "ariaAnswer": "Answer {label}",
+          "s6h": "Convert rates",
+          "s6p": "A rate has two units (an angle unit and a time unit). Change them in <b>two separate steps</b>. Remember: 1 rpm = 1 revolution per minute.",
+          "s6ex1": "Change 30 rpm to rad s<sup>−1</sup>.",
+          "s6ex2": "<b>Angle:</b> 1 rev = 2π rad, so 30 rpm = 30 × 2π rad min<sup>−1</sup>.",
+          "s6ex3": "<b>Time:</b> 1 min = 60 s, so divide by 60: 30 × 2π / 60 = π rad s<sup>−1</sup>.",
+          "hintP5": "First convert 50° to rad (× π/180). Then change per minute to per second (÷ 60).",
+          "hintP6": "The angle is already in rad. Only the time changes: 1 h = 3600 s, so divide by 3600.",
+          "hintP7": "Same method as the example: multiply by 2π, then divide by 60.",
+          "hintP8": "This is the reverse of (c): multiply by 60 / 2π.",
+          "s7p": "The motion of an object moving in a circle can be described by <b>angular displacement</b> θ, which concerns only the <b>angle</b> but not the distance travelled.",
+          "s7two": "<i>s</i> is the distance along the arc. θ is how far the object has <b>turned</b> about the centre. They are linked by the same formula as the radian, so θ is in radians.",
+          "s7cap": "Press Play and watch both: the grey arc is the distance <i>s</i>; the blue angle is θ.",
+          "svgCentre": "centre",
+          "svgRadius": "radius",
+          "svgDist": "distance travelled = s",
+          "svgObject": "object",
+          "s8h": "Same angle, different distance",
+          "s8pred": "Two objects turn through the <b>same</b> angle θ, but one is farther from the centre. Which one travels the larger distance? Move the slider and check.",
+          "s8slider": "Common angle θ",
+          "s8in": "Inner arc s<sub>1</sub>",
+          "s8out": "Outer arc s<sub>2</sub>",
+          "s8p": "The outer object travels farther. From θ = <i>s</i>/<i>r</i> we get <i>s</i> = <i>r</i>θ, so for the same θ, a <b>larger</b> radius means a <b>larger</b> distance.",
+          "s8door": "A door shows the same idea: the handle moves farther than a point near the hinge, but both rotate through the same angle.",
+          "s9p1": "Ordinary speed is distance per unit time. <b>Angular velocity</b> ω is the same idea for turning: the rate of change of angular displacement, or the angular displacement per unit time.",
+          "s9p2": "θ is measured in rad and <i>t</i> in seconds, so the unit of angular velocity is <b>rad s<sup>−1</sup></b>.",
+          "s9drag": "Drag the slider: a larger ω means the object sweeps out a larger angle in the same time.",
+          "s9ucm": "When an object performs circular motion with a <b>constant</b> angular velocity, equal angles are swept out in equal times. Such motion is called <b>uniform circular motion</b> — as in the animation when you leave the slider still.",
+          "s9hVec": "A note on vectors",
+          "s9vec": "Angular displacement and angular velocity are vectors (they have a sense of direction). For simplicity, we omit their directions in this book. The magnitude of the angular velocity is the <b>angular speed</b>: it is the size of ω, and is always a positive value.",
+          "svgConstW": "constant ω — uniform circular motion",
+          "s10h": "Before you go",
+          "dtConv": "Conversion",
+          "ddRad": "SI unit of angle. θ = <i>s</i>/<i>r</i>. A full turn is 2π rad = 360° = 1 rev.",
+          "ddDisp": "Describes circular motion by the angle, not the path length. For the same θ, a larger radius means a larger distance <i>s</i> = <i>r</i>θ.",
+          "ddVel": "ω = Δθ/Δ<i>t</i>, unit rad s<sup>−1</sup>. Constant ω means uniform circular motion. Angular speed is the magnitude of angular velocity.",
+          "watch1": "Do not treat a value in rad as if it were in degrees (75 rad is not 75°).",
+          "watch2": "When converting rates, change the angle unit and the time unit as two separate steps.",
+          "watch3": "<i>s</i> and θ are not the same: one is a distance, the other is an angle.",
+          "formMsgSoon": "When you have finished, complete the Google Form your teacher will share to check your understanding.",
+          "formMsgReady": "You have finished the tutorial. Open the Google Form to check your understanding."
+    },
+      "zh-HK": {
+          "docTitle": "11.1 Describing circular motion — 課前學習",
+          "langGroup": "語言",
+          "kicker": "CSWCSS F.5 Physics · 課前任務",
+          "back": "返回",
+          "next": "下一頁",
+          "backToStart": "回到開始",
+          "play": "播放",
+          "stop": "停止",
+          "check": "檢查",
+          "showAnswers": "顯示答案",
+          "checkPage": "檢查本頁",
+          "hint": "提示",
+          "tryThis": "試一試",
+          "worked": "例題",
+          "watchOut": "注意",
+          "why2pi": "為甚麼是 2π？",
+          "twoQty": "兩個不同的物理量",
+          "predictFirst": "先預測",
+          "formOpen": "開啟 Google Form",
+          "pillPre": "課前",
+          "pillPr": "練習",
+          "pillSum": "總結",
+          "s0h": "你會學到甚麼",
+          "s0lead": "請在上課前完成這份短教程。內容與你的 Chapter 11 堂課筆記「11.1 Describing circular motion」相同。",
+          "s0li1": "<b>radian</b> 作為角度的 SI 單位，以及 radian、度和 revolution 之間的換算",
+          "s0li2": "<b>angular displacement</b> θ，以及它與弧長的關係",
+          "s0li3": "<b>angular velocity</b> 和 <b>angular speed</b>，以及甚麼是 uniform circular motion",
+          "s0try": "途中有幾道練習題。見到「試一試」或「提示」時，請先自己想一想——這樣上課時會記得更牢。",
+          "s0form": "稍後會用 Google Form 檢查你的理解。",
+          "s1h": "radian 作為角度單位",
+          "s1p1": "<b>radian</b>（rad）是角度的 SI 單位。它由圓本身來定義：弧上可以放下多少段半徑。",
+          "s1p2": "以 radian 表示的角 θ，是弧長 <i>s</i> 與半徑 <i>r</i> 的比：",
+          "s1try": "拖動滑桿，直到弧長 <i>s</i> 等於半徑 <i>r</i>。那時 θ 是多少？",
+          "s1cap": "比較藍色弧 <i>s</i> 與半徑 <i>r</i>。",
+          "s1ang": "角度",
+          "s1arc": "弧長 s",
+          "s1rad": "半徑 r",
+          "s1th": "角 θ = s/r",
+          "s1cue": "此時 <i>s</i> = <i>r</i>，所以 θ = <i>s</i>/<i>r</i> = <b>1</b>。這個角就是 <b>1 radian</b>（約 57.3°）。",
+          "s2h": "環繞一點的角",
+          "s2why": "轉一整圈會走完整條圓周，所以弧長是 <i>s</i> = 2π<i>r</i>。代入 θ = <i>s</i>/<i>r</i>：",
+          "s2p": "所以 2π 不是單靠記下來的數字——它其實是圓周可以放下多少段半徑。這一整圈就是 <b>2π rad = 360° = 1 revolution</b>。",
+          "s2note": "當角度用 π 表示時，單位 rad 常常會省略。",
+          "s3h": "radian 與度",
+          "s3p": "等式兩邊的意思相同：這個角是整整一圈的<b style=\"white-space:nowrap\">幾分之幾</b>？",
+          "s3ex1": "180° 是半圈，所以 180/360 = 1/2。2π 的一半是 π。因此 180° = π rad。",
+          "s3ex2": "把這個比例式移項，就得到實際計算時用的公式：",
+          "s3remember": "<b>要記住：</b>π rad = 180°，而且 1 revolution（rev）= 1 cycle = 2π rad = 360°。",
+          "s4h": "一些換算",
+          "s4p": "填上缺了的數值。先看圖：四分之一圈、半圈和整整一圈。",
+          "s4hint": "整整一圈是 2π rad = 360°。半圈是它的一半（π rad = 180°）。四分之一圈再一半（π/2 rad = 90°）。",
+          "thAngles": "角",
+          "thDeg": "以 ° 表示",
+          "thRad": "以 rad 表示",
+          "fbTableReveal": "四分之一圓：90° = π/2 rad。半圓：180° = π rad。整個圓：360° = 2π rad。",
+          "fbTableAll": "四題全部正確。",
+          "fbTableSome": "4 題之中答對 {n} 題。四分之一圈是 π/2，半圈是 π，一圈是 2π。",
+          "s5h": "換算角度",
+          "s5remember": "<b>要記住：</b>π rad = 180°，而且 1 revolution（rev）= 1 cycle = 2π rad = 360°。答案可以用 π 表示。",
+          "s5ex1": "把 60° 換成 radian：θ<sub>rad</sub> = 60 × π/180 = π/3 rad。",
+          "s5ex2": "如果度數是 180 的簡單分數，請把答案保留為 π 的形式。",
+          "hintP1": "45° 是 90° 的一半，而 90° = π/2，所以 45° = π/4。",
+          "hintP2": "150/180 = 5/6，所以 150° = 5π/6。",
+          "hintP3": "75 rad 是很多整圈，不是 75°。用 ° = rad × 180/π。（一圈大約只有 6.28 rad，所以 75 rad 超過 11 圈。）",
+          "hintP4": "1 rev = 2π rad，所以 10 rev = 20π rad。",
+          "correct": "正確。",
+          "exactPrefix": "準確答案：",
+          "enterAns": "請輸入答案。",
+          "notQuite": "未答對。再試一次，或先看提示。",
+          "phAnswer": "答案",
+          "ariaAnswer": "答案 {label}",
+          "s6h": "換算速率",
+          "s6p": "速率有兩個單位（角度單位和時間單位）。要分<b>兩步</b>分開換算。記住：1 rpm = 1 revolution per minute。",
+          "s6ex1": "把 30 rpm 換成 rad s<sup>−1</sup>。",
+          "s6ex2": "<b>角度：</b>1 rev = 2π rad，所以 30 rpm = 30 × 2π rad min<sup>−1</sup>。",
+          "s6ex3": "<b>時間：</b>1 min = 60 s，所以除以 60：30 × 2π / 60 = π rad s<sup>−1</sup>。",
+          "hintP5": "先把 50° 換成 rad（× π/180），再把「每分鐘」換成「每秒」（÷ 60）。",
+          "hintP6": "角度已經是 rad，只需換時間：1 h = 3600 s，所以除以 3600。",
+          "hintP7": "方法與例題相同：先乘 2π，再除以 60。",
+          "hintP8": "這是 (c) 的相反：乘以 60 / 2π。",
+          "s7p": "物體做圓周運動時，可以用 <b>angular displacement</b> θ 來描述；它只關乎轉過的<b>角</b>，而不是走過的距離。",
+          "s7two": "<i>s</i> 是沿弧走過的距離。θ 是物體繞圓心<b>轉了多少</b>。兩者用與 radian 相同的公式相連，所以 θ 的單位是 radian。",
+          "s7cap": "按「播放」，同時觀察兩樣東西：灰色弧是距離 <i>s</i>；藍色的角是 θ。",
+          "svgCentre": "圓心",
+          "svgRadius": "半徑",
+          "svgDist": "距離 = s",
+          "svgObject": "物體",
+          "s8h": "相同的角，不同的距離",
+          "s8pred": "兩個物體轉過<b>相同</b>的角 θ，但其中一個離圓心較遠。哪一個走過的距離較大？移動滑桿來驗證。",
+          "s8slider": "相同的角 θ",
+          "s8in": "內圈弧長 s<sub>1</sub>",
+          "s8out": "外圈弧長 s<sub>2</sub>",
+          "s8p": "外圈的物體走得較遠。由 θ = <i>s</i>/<i>r</i> 可得 <i>s</i> = <i>r</i>θ，所以在同一 θ 之下，<b>較大</b>的半徑代表<b>較大</b>的距離。",
+          "s8door": "門也是同一個道理：門把手比靠近鉸鏈的一點走得更遠，但兩者轉過的角相同。",
+          "s9p1": "普通的速率是單位時間內走過的距離。<b>angular velocity</b> ω 是轉動的同一概念：angular displacement 的變化率，亦即單位時間內的 angular displacement。",
+          "s9p2": "θ 以 rad 量度，<i>t</i> 以秒量度，所以 angular velocity 的單位是 <b>rad s<sup>−1</sup></b>。",
+          "s9drag": "拖動滑桿：較大的 ω 代表物體在同一時間掃過較大的角。",
+          "s9ucm": "當物體做圓周運動而 angular velocity 保持<b>恆定</b>時，相等時間內掃過相等的角。這種運動稱為 <b>uniform circular motion</b>——滑桿不動時，動畫顯示的就是這種運動。",
+          "s9hVec": "關於矢量的說明",
+          "s9vec": "angular displacement 和 angular velocity 都是矢量（有方向）。為求簡明，本書不標示它們的方向。angular velocity 的大小就是 <b>angular speed</b>：即 ω 的數值，並且永遠是正值。",
+          "svgConstW": "恆定 ω — uniform circular motion",
+          "s10h": "離開之前",
+          "dtConv": "換算",
+          "ddRad": "角度的 SI 單位。θ = <i>s</i>/<i>r</i>。整整一圈是 2π rad = 360° = 1 rev。",
+          "ddDisp": "用轉過的角（不是路徑長度）來描述圓周運動。同一 θ 之下，較大的半徑代表較大的距離 <i>s</i> = <i>r</i>θ。",
+          "ddVel": "ω = Δθ/Δ<i>t</i>，單位是 rad s<sup>−1</sup>。恆定的 ω 即是 uniform circular motion。angular speed 是 angular velocity 的大小。",
+          "watch1": "不要把 rad 的數值當成度來用（75 rad 不是 75°）。",
+          "watch2": "換算速率時，角度單位和時間單位要分兩步換。",
+          "watch3": "<i>s</i> 和 θ 不是同一樣東西：一個是距離，一個是角。",
+          "formMsgSoon": "完成後，請填寫老師稍後分享的 Google Form，以檢查你的理解。",
+          "formMsgReady": "你已完成教程。請開啟 Google Form，檢查你的理解。"
+    }
+    };
+
+    let lang = "en";
+    try { lang = localStorage.getItem("cm11.lang") || "en"; } catch (e) {}
+    if (lang !== "zh-HK") lang = "en";
+
+    function t(key) {
+      const pack = I18N[lang] || I18N.en;
+      return (pack && pack[key] != null) ? pack[key] : (I18N.en[key] || key);
+    }
+
+    function applyLang() {
+      document.documentElement.lang = lang === "zh-HK" ? "zh-HK" : "en";
+      document.title = t("docTitle");
+      const grp = document.getElementById("langSwitch");
+      if (grp) grp.setAttribute("aria-label", t("langGroup"));
+      const enBtn = document.getElementById("langEn");
+      const zhBtn = document.getElementById("langZh");
+      if (enBtn) enBtn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+      if (zhBtn) zhBtn.setAttribute("aria-pressed", lang === "zh-HK" ? "true" : "false");
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        if (el.id === "btnNext") return; // set below from current step
+        if (el.id === "dispPlay") return;
+        if (el.id === "formMsg") return;
+        const key = el.getAttribute("data-i18n");
+        el.innerHTML = t(key);
+      });
+
+      document.querySelectorAll("input[data-aria-label]").forEach((el) => {
+        el.setAttribute("aria-label", t("ariaAnswer").replace("{label}", el.getAttribute("data-aria-label")));
+        el.setAttribute("placeholder", t("phAnswer"));
+      });
+
+      const setTxt = (id, key) => { const n = document.getElementById(id); if (n) n.textContent = t(key); };
+      setTxt("dispCentre", "svgCentre");
+      setTxt("dispRlbl", "svgRadius");
+      setTxt("dispSlbl", "svgDist");
+      setTxt("dispObjLbl", "svgObject");
+      setTxt("wCaption", "svgConstW");
+
+      $back.textContent = t("back");
+      $next.textContent = i === steps.length - 1 ? t("backToStart") : t("next");
+      const playBtn = document.getElementById("dispPlay");
+      if (playBtn) playBtn.textContent = dispTimer ? t("stop") : t("play");
+
+      const link = document.getElementById("formLink");
+      const msg = document.getElementById("formMsg");
+      if (link && msg) {
+        const url = (window.GOOGLE_FORM_URL || "").trim();
+        msg.textContent = url ? t("formMsgReady") : t("formMsgSoon");
+      }
+    }
+
+    function setLang(next) {
+      lang = next === "zh-HK" ? "zh-HK" : "en";
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+      applyLang();
+    }
+
+
+    function el(html) {
+      const d = document.createElement("div");
+      d.className = "step";
+      d.innerHTML = html;
+      return d;
+    }
+
+    /* ---------- Step content ---------- */
+    steps.push(el(`
+      <span class="pill" data-i18n="pillPre">Pre-lesson</span>
+      <h2 data-i18n="s0h">What you will learn</h2>
+      <p class="lead" data-i18n="s0lead">Work through this short tutorial before the lesson. It covers the same ideas as your Chapter 11 in-class notes on describing circular motion.</p>
+      <ul class="learn">
+        <li data-i18n="s0li1">The <b>radian</b> as the SI unit of angle, and how to convert between radians, degrees and revolutions</li>
+        <li data-i18n="s0li2"><b>Angular displacement</b> &theta;, and how it is related to arc length</li>
+        <li data-i18n="s0li3"><b>Angular velocity</b> and <b>angular speed</b>, and what uniform circular motion means</li>
+      </ul>
+      <p data-i18n="s0try">There are a few practice questions along the way. When you see <b>Try this</b> or <b>Hint</b>, attempt the idea first — that is how you will remember it in the lesson.</p>
+      <p data-i18n="s0form">A Google Form will be used later to check your understanding.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">A · Radian</span>
+      <h2 data-i18n="s1h">Radian as a unit of angle</h2>
+      <p data-i18n="s1p1">The <b>radian</b> (rad) is the SI unit of <b>angle</b>. It is defined from the circle itself: how many radii fit along the arc.</p>
+      <p data-i18n="s1p2">An angle &theta; in radians is the ratio of the arc length <i>s</i> to the radius <i>r</i>:</p>
+      <div class="eqn">&theta; = <i>s</i> / <i>r</i></div>
+      <div class="think">
+        <div class="lbl" data-i18n="tryThis">Try this</div>
+        <p data-i18n="s1try">Drag the slider until the arc length <i>s</i> equals the radius <i>r</i>. What is &theta; then?</p>
+      </div>
+      <figure>
+        <svg id="svgRad" viewBox="0 12 320 206" role="img" aria-label="Circle showing radius, arc length and angle theta">
+          <line x1="160" y1="20" x2="160" y2="210" stroke="#eee" />
+          <line x1="30" y1="115" x2="290" y2="115" stroke="#eee" />
+          <path id="radArc" fill="var(--arc-soft)" stroke="var(--arc)" stroke-width="2.5" />
+          <circle cx="160" cy="115" r="90" fill="none" stroke="#222" stroke-width="2" />
+          <line id="radR1" x1="160" y1="115" x2="250" y2="115" stroke="#222" stroke-width="1.8" />
+          <line id="radR2" x1="160" y1="115" x2="250" y2="115" stroke="#222" stroke-width="1.8" />
+          <circle cx="160" cy="115" r="3.2" fill="#222" />
+          <circle id="radDot" r="6" fill="var(--navy)" stroke="#fff" stroke-width="1.5" />
+          <text id="radTheta" font-size="20" font-style="italic" fill="var(--arc)" text-anchor="middle">θ</text>
+          <text id="radS" font-size="16" font-style="italic" fill="#222">s</text>
+          <text id="radRlbl" font-size="16" font-style="italic" fill="#222">r</text>
+        </svg>
+        <figcaption data-i18n="s1cap">Compare the blue arc <i>s</i> with the radius <i>r</i>.</figcaption>
+      </figure>
+      <div class="controls">
+        <label><span data-i18n="s1ang">Angle</span><span id="radSliderLbl">1.00 rad</span></label>
+        <input type="range" id="radSlider" min="0.15" max="6.283" step="0.01" value="1" />
+      </div>
+      <div class="readout">
+        <div><span data-i18n="s1arc">Arc length s</span><b id="outS">r</b></div>
+        <div><span data-i18n="s1rad">Radius r</span><b>r</b></div>
+        <div><span data-i18n="s1th">Angle &theta; = s/r</span><b id="outTh">1.00 rad</b></div>
+      </div>
+      <div id="radCue" class="on"><p data-i18n="s1cue">Here <i>s</i> = <i>r</i>, so &theta; = <i>s</i>/<i>r</i> = <b>1</b>. This angle is <b>1 radian</b> (about 57.3°).</p></div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">A · Radian</span>
+      <h2 data-i18n="s2h">The angle around a point</h2>
+      <div class="think">
+        <div class="lbl" data-i18n="why2pi">Why 2&pi;?</div>
+        <p data-i18n="s2why">A full turn follows the whole circumference, so the arc length is <i>s</i> = 2&pi;<i>r</i>. Put that into &theta; = <i>s</i>/<i>r</i>:</p>
+      </div>
+      <div class="eqn">&theta;<sub>circle</sub> = 2&pi;<i>r</i> / <i>r</i> = 2&pi;</div>
+      <p data-i18n="s2p">So 2&pi; is not a number to memorise on its own — it is how many radii fit around the circle. That full turn is <b>2&pi; rad = 360° = 1 revolution</b>.</p>
+      <p class="note" data-i18n="s2note">The unit ‘rad’ is often omitted when the angle is expressed in terms of &pi;.</p>
+      <figure>
+        <svg viewBox="0 0 320 200" role="img" aria-label="Full circle marked as 2 pi radians">
+          <circle cx="160" cy="100" r="70" fill="#f8fbfd" stroke="#222" stroke-width="2" />
+          <circle cx="160" cy="100" r="28" fill="none" stroke="var(--arc)" stroke-width="2.5" />
+          <line x1="160" y1="100" x2="230" y2="100" stroke="#222" stroke-width="1.6" />
+          <circle cx="160" cy="100" r="3" fill="#222" />
+          <text x="132" y="106" font-size="20" font-style="italic" fill="#222">&theta;</text>
+          <text x="160" y="188" text-anchor="middle" font-size="15">&theta;<tspan font-size="11" baseline-shift="sub">circle</tspan> = 2&pi;</text>
+        </svg>
+      </figure>
+    `));
+
+    steps.push(el(`
+      <span class="pill">A · Radian</span>
+      <h2 data-i18n="s3h">Radians and degrees</h2>
+      <p data-i18n="s3p">The two sides of this equation mean the same thing: <b>what fraction of a full turn</b> is the angle?</p>
+      <div class="eqn">&theta; (in radian) / 2&pi; = &theta; (in degree) / 360°</div>
+      <div class="worked">
+        <div class="lbl" data-i18n="worked">Worked example</div>
+        <p data-i18n="s3ex1">180° is half a turn, so 180/360 = 1/2. Half of 2&pi; is &pi;. Therefore 180° = &pi; rad.</p>
+        <p data-i18n="s3ex2">Rearranging that fraction gives the working forms you will actually use:</p>
+      </div>
+      <div class="eqn">&theta;<sub>rad</sub> = &theta;<sub>deg</sub> &times; &pi;/180</div>
+      <div class="eqn">&theta;<sub>deg</sub> = &theta;<sub>rad</sub> &times; 180/&pi;</div>
+      <p class="hint" data-i18n="s3remember"><b>Remember:</b> &pi; rad = 180° and 1 revolution (rev) = 1 cycle = 2&pi; rad = 360°.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">A · Radian</span>
+      <h2 data-i18n="s4h">Some conversions</h2>
+      <p data-i18n="s4p">Fill in the missing values. Use the pictures first: a quarter-turn, a half-turn and a full turn.</p>
+      <details class="hint-fold"><summary data-i18n="hint">Hint</summary>
+        <p data-i18n="s4hint">A full turn is 2&pi; rad = 360°. A half-turn is half of that (&pi; rad = 180°). A quarter-turn is half again (&pi;/2 rad = 90°).</p>
+      </details>
+      <div style="overflow-x:auto">
+      <table class="conv" id="convTable">
+        <tr>
+          <th data-i18n="thAngles">Angles</th>
+          <td>
+            <svg viewBox="0 0 80 80"><path d="M16 64 L16 16 A48 48 0 0 1 64 64 Z" fill="none" stroke="#222" stroke-width="2"/><path d="M16 64 A14 14 0 0 1 30 50" fill="none" stroke="var(--arc)" stroke-width="2"/><text x="28" y="58" font-size="14" font-style="italic" fill="var(--arc)">&theta;</text></svg>
+          </td>
+          <td>
+            <svg viewBox="0 0 80 80"><path d="M8 52 L72 52 A32 32 0 0 0 8 52 Z" fill="none" stroke="#222" stroke-width="2"/><path d="M26 52 A14 14 0 0 1 54 52" fill="none" stroke="var(--arc)" stroke-width="2"/><text x="36" y="48" font-size="14" font-style="italic" fill="#222">&theta;</text></svg>
+          </td>
+          <td>
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="#222" stroke-width="2"/><circle cx="40" cy="40" r="11" fill="none" stroke="var(--arc)" stroke-width="2"/><line x1="40" y1="40" x2="68" y2="40" stroke="#222" stroke-width="1.4"/><text x="16" y="44" font-size="14" font-style="italic">&theta;</text></svg>
+          </td>
+        </tr>
+        <tr>
+          <th data-i18n="thDeg">Expressed in degrees°</th>
+          <td>90°</td>
+          <td><input type="text" id="t180" inputmode="text" placeholder="? °" aria-label="Semicircle in degrees" style="width:100%;min-width:4.5rem"></td>
+          <td><input type="text" id="t360" inputmode="text" placeholder="? °" aria-label="Full circle in degrees" style="width:100%;min-width:4.5rem"></td>
+        </tr>
+        <tr>
+          <th data-i18n="thRad">Expressed in rad</th>
+          <td><input type="text" id="tPi2" inputmode="text" placeholder="? rad" aria-label="Quarter circle in radians" style="width:100%;min-width:4.5rem"></td>
+          <td><input type="text" id="tPi" inputmode="text" placeholder="? rad" aria-label="Semicircle in radians" style="width:100%;min-width:4.5rem"></td>
+          <td>2&pi;</td>
+        </tr>
+      </table>
+      </div>
+      <div class="row" style="margin-top:.7rem">
+        <button type="button" class="primary" id="checkTable" data-i18n="check">Check</button>
+        <button type="button" class="ghost" id="revealTable" data-i18n="showAnswers">Show answers</button>
+      </div>
+      <div class="feedback" id="fbTable"></div>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillPr">Practice</span>
+      <h2 data-i18n="s5h">Convert angles</h2>
+      <p class="hint" data-i18n="s5remember"><b>Remember:</b> &pi; rad = 180° and 1 revolution (rev) = 1 cycle = 2&pi; rad = 360°. You may leave answers in terms of &pi;.</p>
+      <div class="worked">
+        <div class="lbl" data-i18n="worked">Worked example</div>
+        <p data-i18n="s5ex1">Convert 60° to radians: &theta;<sub>rad</sub> = 60 &times; &pi;/180 = &pi;/3 rad.</p>
+        <p data-i18n="s5ex2">If the degree value is a simple fraction of 180, keep the answer in terms of &pi;.</p>
+      </div>
+      ${practiceQ("p1","(a)","45° =","rad","","hintP1")}
+      ${practiceQ("p2","(b)","150° =","rad","","hintP2")}
+      ${practiceQ("p3","(c)","75 rad =","deg","","hintP3")}
+      ${practiceQ("p4","(d)","10 rev =","rad","","hintP4")}
+      <div class="row" style="margin-top:.3rem">
+        <button type="button" class="primary" id="checkP1" data-i18n="checkPage">Check this page</button>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillPr">Practice</span>
+      <h2 data-i18n="s6h">Convert rates</h2>
+      <p data-i18n="s6p">A rate has two units (an angle unit and a time unit). Change them in <b>two separate steps</b>. Remember: 1 rpm = 1 revolution per minute.</p>
+      <div class="worked">
+        <div class="lbl" data-i18n="worked">Worked example</div>
+        <p data-i18n="s6ex1">Change 30 rpm to rad s<sup>&minus;1</sup>.</p>
+        <p data-i18n="s6ex2"><b>Angle:</b> 1 rev = 2&pi; rad, so 30 rpm = 30 &times; 2&pi; rad min<sup>&minus;1</sup>.</p>
+        <p data-i18n="s6ex3"><b>Time:</b> 1 min = 60 s, so divide by 60: 30 &times; 2&pi; / 60 = &pi; rad s<sup>&minus;1</sup>.</p>
+      </div>
+      ${practiceQ("p5","(a)","50° min<sup>&minus;1</sup> =","rad s<sup>&minus;1</sup>","","hintP5")}
+      ${practiceQ("p6","(b)","2000 rad h<sup>&minus;1</sup> =","rad s<sup>&minus;1</sup>","","hintP6")}
+      ${practiceQ("p7","(c)","20 rpm =","rad s<sup>&minus;1</sup>","","hintP7")}
+      ${practiceQ("p8","(d)","6 rad s<sup>&minus;1</sup> =","rpm","","hintP8")}
+      <div class="row" style="margin-top:.3rem">
+        <button type="button" class="primary" id="checkP2" data-i18n="checkPage">Check this page</button>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">B · Angular displacement</span>
+      <h2>Angular displacement</h2>
+      <p data-i18n="s7p">The motion of an object moving in a circle can be described by <b>angular displacement</b> &theta;, which concerns only the <b>angle</b> but not the distance travelled.</p>
+      <div class="think">
+        <div class="lbl" data-i18n="twoQty">Two different quantities</div>
+        <p data-i18n="s7two"><i>s</i> is the distance along the arc. &theta; is how far the object has <b>turned</b> about the centre. They are linked by the same formula as the radian, so &theta; is in radians.</p>
+      </div>
+      <div class="eqn">&theta; = <i>s</i> / <i>r</i></div>
+      <figure>
+        <svg id="svgDisp" viewBox="0 22 320 198" role="img" aria-label="Object moving on a circle, showing angular displacement theta and arc s">
+          <circle cx="160" cy="125" r="80" fill="#fff" stroke="#222" stroke-width="2" />
+          <path id="dispArc" fill="none" stroke="#888" stroke-width="2.2" stroke-linecap="round" />
+          <path id="dispArcArr" fill="#555" />
+          <line id="dispR1" x1="160" y1="125" x2="160" y2="45" stroke="#222" stroke-width="1.6" />
+          <line id="dispR2" x1="160" y1="125" x2="160" y2="45" stroke="#222" stroke-width="1.6" />
+          <path id="dispAng" fill="none" stroke="var(--arc)" stroke-width="2.2" />
+          <circle cx="160" cy="125" r="3" fill="#222" />
+          <circle id="dispStart" r="9" fill="#c8c8c8" stroke="#222" stroke-width="1.4" />
+          <circle id="dispObj" r="9" fill="#9aa0a6" stroke="#222" stroke-width="1.4" />
+          <text x="168" y="102" font-size="16" font-style="italic" fill="var(--arc)">θ</text>
+          <text id="dispCentre" x="148" y="138" font-size="12">centre</text>
+          <text id="dispRlbl" font-size="13" fill="#333">radius</text>
+          <text id="dispSlbl" font-size="13">distance travelled = s</text>
+          <text id="dispObjLbl" font-size="13">object</text>
+        </svg>
+        <figcaption data-i18n="s7cap">Press Play and watch both: the grey arc is the distance <i>s</i>; the blue angle is &theta;.</figcaption>
+      </figure>
+      <div class="controls">
+        <label><span>Angular displacement &theta;</span><span id="dispLbl">1.00 rad</span></label>
+        <div class="row">
+          <input type="range" id="dispSlider" min="0.2" max="6.0" step="0.01" value="1" style="flex:1;min-width:8rem" />
+          <button type="button" class="play" id="dispPlay" data-i18n="play">Play</button>
+        </div>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">B · Angular displacement</span>
+      <h2 data-i18n="s8h">Same angle, different distance</h2>
+      <div class="think">
+        <div class="lbl" data-i18n="predictFirst">Predict first</div>
+        <p data-i18n="s8pred">Two objects turn through the <b>same</b> angle &theta;, but one is farther from the centre. Which one travels the larger distance? Move the slider and check.</p>
+      </div>
+      <figure>
+        <svg id="svgTwo" viewBox="0 0 320 250" role="img" aria-label="Two concentric circles showing a larger arc on the larger radius">
+          <circle cx="160" cy="130" r="100" fill="none" stroke="#222" stroke-width="2" />
+          <circle cx="160" cy="130" r="55" fill="none" stroke="#222" stroke-width="2" />
+          <path id="twoArc1" fill="none" stroke="var(--arc)" stroke-width="3" stroke-linecap="round" />
+          <path id="twoArc2" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" />
+          <line id="twoRay" x1="160" y1="130" x2="160" y2="30" stroke="#222" stroke-width="1.5" />
+          <line x1="160" y1="130" x2="160" y2="30" stroke="#222" stroke-width="1.5" />
+          <circle cx="160" cy="130" r="3" fill="#222" />
+          <circle id="twoA" r="7" fill="var(--arc)" stroke="#fff" stroke-width="1.5" />
+          <circle id="twoB" r="7" fill="var(--accent)" stroke="#fff" stroke-width="1.5" />
+          <text x="168" y="112" font-size="16" font-style="italic" fill="var(--arc)">θ</text>
+          <text id="twoLeg1" x="24" y="24" font-size="13" fill="var(--arc)">s₁ = rθ</text>
+          <text id="twoLeg2" x="24" y="42" font-size="13" fill="var(--accent)">s₂ = Rθ</text>
+        </svg>
+      </figure>
+      <div class="controls">
+        <label><span data-i18n="s8slider">Common angle &theta;</span><span id="twoLbl">1.00 rad</span></label>
+        <input type="range" id="twoSlider" min="0.25" max="3.14" step="0.01" value="1" />
+      </div>
+      <div class="readout" style="grid-template-columns:1fr 1fr">
+        <div><span data-i18n="s8in">Inner arc s<sub>1</sub></span><b id="twoS1">rθ</b></div>
+        <div><span data-i18n="s8out">Outer arc s<sub>2</sub></span><b id="twoS2">Rθ = (R/r) s<sub>1</sub></b></div>
+      </div>
+      <p data-i18n="s8p">The outer object travels farther. From &theta; = <i>s</i>/<i>r</i> we get <i>s</i> = <i>r</i>&theta;, so for the same &theta;, a <b>larger</b> radius means a <b>larger</b> distance.</p>
+      <p class="note" data-i18n="s8door">A door shows the same idea: the handle moves farther than a point near the hinge, but both rotate through the same angle.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">C · Angular velocity</span>
+      <h2>Angular velocity and angular speed</h2>
+      <p data-i18n="s9p1">Ordinary speed is distance per unit time. <b>Angular velocity</b> &omega; is the same idea for turning: the rate of change of angular displacement, or the angular displacement per unit time.</p>
+      <div class="eqn">&omega; = &Delta;&theta; / &Delta;<i>t</i></div>
+      <p data-i18n="s9p2">&theta; is measured in rad and <i>t</i> in seconds, so the unit of angular velocity is <b>rad s<sup>&minus;1</sup></b>.</p>
+      <figure>
+        <svg id="svgW" viewBox="0 0 320 168" role="img" aria-label="Object moving at constant angular velocity">
+          <circle cx="160" cy="88" r="60" fill="#fff" stroke="#222" stroke-width="2" />
+          <line id="wRay" x1="160" y1="88" x2="160" y2="28" stroke="#222" stroke-width="1.6" />
+          <circle cx="160" cy="88" r="3" fill="#222" />
+          <circle id="wObj" r="8" fill="#9aa0a6" stroke="#222" stroke-width="1.4" />
+          <text id="wCaption" x="160" y="162" text-anchor="middle" font-size="13">constant ω — uniform circular motion</text>
+        </svg>
+      </figure>
+      <div class="controls">
+        <label><span>Angular speed</span><span id="wLbl">slow</span></label>
+        <input type="range" id="wSlider" min="0.3" max="3.2" step="0.05" value="1" />
+      </div>
+      <p data-i18n="s9drag">Drag the slider: a larger &omega; means the object sweeps out a larger angle in the same time.</p>
+      <h3>Uniform circular motion</h3>
+      <p data-i18n="s9ucm">When an object performs circular motion with a <b>constant</b> angular velocity, equal angles are swept out in equal times. Such motion is called <b>uniform circular motion</b> — as in the animation when you leave the slider still.</p>
+      <h3 data-i18n="s9hVec">A note on vectors</h3>
+      <p data-i18n="s9vec">Angular displacement and angular velocity are vectors (they have a sense of direction). For simplicity, we omit their directions in this book. The magnitude of the angular velocity is the <b>angular speed</b>: it is the size of &omega;, and is always a positive value.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillSum">Summary</span>
+      <h2 data-i18n="s10h">Before you go</h2>
+      <dl class="summary">
+        <dt>Radian</dt>
+        <dd data-i18n="ddRad">SI unit of angle. &theta; = <i>s</i>/<i>r</i>. A full turn is 2&pi; rad = 360° = 1 rev.</dd>
+        <dt data-i18n="dtConv">Conversion</dt>
+        <dd>&theta;<sub>rad</sub> = &theta;<sub>deg</sub> &times; &pi;/180；&theta;<sub>deg</sub> = &theta;<sub>rad</sub> &times; 180/&pi;.</dd>
+        <dt>Angular displacement &theta;</dt>
+        <dd data-i18n="ddDisp">Describes circular motion by the angle, not the path length. For the same &theta;, a larger radius means a larger distance <i>s</i> = <i>r</i>&theta;.</dd>
+        <dt>Angular velocity &omega;</dt>
+        <dd data-i18n="ddVel">&omega; = &Delta;&theta;/&Delta;<i>t</i>, unit rad s<sup>&minus;1</sup>. Constant &omega; means uniform circular motion. Angular speed is the magnitude of angular velocity.</dd>
+      </dl>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="watch1">Do not treat a value in rad as if it were in degrees (75 rad is not 75°).</p>
+        <p data-i18n="watch2">When converting rates, change the angle unit and the time unit as two separate steps.</p>
+        <p data-i18n="watch3"><i>s</i> and &theta; are not the same: one is a distance, the other is an angle.</p>
+      </div>
+      <div class="form-box" id="formBox">
+        <p id="formMsg" data-i18n="formMsgSoon" style="margin:0">When you have finished, complete the Google Form your teacher will share to check your understanding.</p>
+        <a class="btn hidden" id="formLink" target="_blank" rel="noopener" data-i18n="formOpen">Open the Google Form</a>
+      </div>
+    `));
+
+    function practiceQ(id, label, left, unit, extra, hintKey) {
+      return `<div class="q">
+        <div class="q-line">
+          <span class="num">${label}</span>
+          <span>${left}</span>
+          <input type="text" id="${id}" inputmode="text" aria-label="Answer ${label}" placeholder="answer" data-aria-label="${label}">
+          <span class="unit">${unit}</span>
+        </div>
+        ${extra ? `<p class="note">${extra}</p>` : ""}
+        ${hintKey ? `<details class="hint-fold"><summary data-i18n="hint">Hint</summary><p data-i18n="${hintKey}"></p></details>` : ""}
+        <div class="feedback" id="fb_${id}"></div>
+      </div>`;
+    }
+
+    steps.forEach((s, n) => {
+      $main.appendChild(s);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.title = "Go to step " + (n + 1);
+      b.addEventListener("click", () => go(n));
+      $prog.appendChild(b);
+    });
+
+    function go(n) {
+      i = Math.max(0, Math.min(steps.length - 1, n));
+      steps.forEach((s, k) => s.classList.toggle("show", k === i));
+      [...$prog.children].forEach((b, k) => {
+        b.classList.toggle("on", k === i);
+        b.classList.toggle("done", k < i);
+      });
+      $back.disabled = i === 0;
+      $back.style.opacity = i === 0 ? .4 : 1;
+      $next.textContent = i === steps.length - 1 ? t("backToStart") : t("next");
+      $main.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      initStep(i);
+      applyLang();
+    }
+    $back.addEventListener("click", () => go(i - 1));
+    $next.addEventListener("click", () => {
+      if (i === steps.length - 1) go(0);
+      else go(i + 1);
+    });
+
+    /* ---------- Math helpers ---------- */
+    function norm(s) {
+      return String(s).trim()
+        .replace(/π/g, "pi")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "")
+        .replace(/degrees?|deg|rads?|rpm/gi, "")
+        .replace(/\^/g, "**")
+        .toLowerCase();
+    }
+    function evalExpr(s) {
+      const t = norm(s);
+      if (!t) return NaN;
+      if (!/^[0-9.+*/()pi-]+$/.test(t.replace(/\*\*/g, ""))) return NaN;
+      try {
+        const fn = new Function("pi", "return (" + t + ");");
+        const v = fn(Math.PI);
+        return typeof v === "number" && isFinite(v) ? v : NaN;
+      } catch (e) { return NaN; }
+    }
+    function close(a, b, rel) {
+      if (!isFinite(a) || !isFinite(b)) return false;
+      const tol = Math.max(Math.abs(b) * (rel || 0.02), 0.015);
+      return Math.abs(a - b) <= tol;
+    }
+    function mark(input, fb, ok, msg) {
+      input.style.borderColor = ok ? "#1b7a46" : "#b42318";
+      fb.className = "feedback " + (ok ? "ok" : "bad");
+      fb.textContent = msg;
+    }
+    function checkOne(id, expected, exactText) {
+      const input = document.getElementById(id);
+      const fb = document.getElementById("fb_" + id);
+      const v = evalExpr(input.value);
+      const ok = expected.some(e => close(v, e));
+      if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
+      else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
+      else mark(input, fb, false, t("notQuite"));
+      return ok;
+    }
+
+    /* ---------- Radian explorer ---------- */
+    function polar(cx, cy, r, ang) {
+      return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+    }
+    function arcPath(cx, cy, r, a0, a1, swap) {
+      const [x0, y0] = polar(cx, cy, r, a0);
+      const [x1, y1] = polar(cx, cy, r, a1);
+      const large = (a1 - a0) > Math.PI ? 1 : 0;
+      return `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z`;
+    }
+    function arcOnly(cx, cy, r, a0, a1) {
+      const [x0, y0] = polar(cx, cy, r, a0);
+      const [x1, y1] = polar(cx, cy, r, a1);
+      const large = (a1 - a0) > Math.PI ? 1 : 0;
+      return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
+    }
+    function fmt(th) {
+      const keys = [
+        [1, "1"], [Math.PI/6, "π/6"], [Math.PI/4, "π/4"], [Math.PI/3, "π/3"],
+        [Math.PI/2, "π/2"], [2*Math.PI/3, "2π/3"], [3*Math.PI/4, "3π/4"],
+        [Math.PI, "π"], [5*Math.PI/4, "5π/4"], [3*Math.PI/2, "3π/2"],
+        [7*Math.PI/4, "7π/4"], [2*Math.PI, "2π"]
+      ];
+      for (const [v, s] of keys) if (Math.abs(th - v) < 0.02) return s + " rad";
+      return th.toFixed(2) + " rad";
+    }
+
+    function updateRad() {
+      const th = +document.getElementById("radSlider").value;
+      const cx = 160, cy = 115, R = 90;
+      const a0 = 0, a1 = th;
+      document.getElementById("radArc").setAttribute("d", arcPath(cx, cy, R, a0, a1));
+      const [x2, y2] = polar(cx, cy, R, a1);
+      document.getElementById("radR1").setAttribute("x2", cx + R);
+      document.getElementById("radR1").setAttribute("y2", cy);
+      document.getElementById("radR2").setAttribute("x2", x2);
+      document.getElementById("radR2").setAttribute("y2", y2);
+      document.getElementById("radDot").setAttribute("cx", x2);
+      document.getElementById("radDot").setAttribute("cy", y2);
+      const mid = th / 2;
+      const [tx, ty] = polar(cx, cy, 28, mid);
+      const tEl = document.getElementById("radTheta");
+      tEl.setAttribute("x", tx); tEl.setAttribute("y", ty + 6);
+      const [sx, sy] = polar(cx, cy, R + 16, mid);
+      const sEl = document.getElementById("radS");
+      sEl.setAttribute("x", sx); sEl.setAttribute("y", sy + 5);
+      document.getElementById("radRlbl").setAttribute("x", cx + R * 0.45);
+      document.getElementById("radRlbl").setAttribute("y", cy - 8);
+      document.getElementById("radSliderLbl").textContent = fmt(th);
+      document.getElementById("outS").textContent = Math.abs(th - 1) < 0.03 ? "r" : (th.toFixed(2) + " r");
+      document.getElementById("outTh").textContent = fmt(th);
+      const cue = document.getElementById("radCue");
+      if (cue) cue.classList.toggle("on", Math.abs(th - 1) < 0.03);
+    }
+
+    /* ---------- Conversion table ---------- */
+    function checkTable(reveal) {
+      const items = [
+        ["t180", 180, "180°"],
+        ["t360", 360, "360°"],
+        ["tPi2", Math.PI/2, "π/2"],
+        ["tPi", Math.PI, "π"]
+      ];
+      let n = 0;
+      items.forEach(([id, val, text]) => {
+        const inp = document.getElementById(id);
+        if (reveal) inp.value = text;
+        const v = evalExpr(inp.value.replace("°",""));
+        const ok = close(v, val, 0.01);
+        inp.style.borderColor = ok ? "#1b7a46" : "#b42318";
+        if (ok) n++;
+      });
+      const fb = document.getElementById("fbTable");
+      if (reveal) {
+        fb.className = "feedback show";
+        fb.textContent = t("fbTableReveal");
+      } else if (n === 4) {
+        fb.className = "feedback ok";
+        fb.textContent = t("fbTableAll");
+      } else {
+        fb.className = "feedback bad";
+        fb.textContent = t("fbTableSome").replace("{n}", n);
+      }
+    }
+
+    /* ---------- Angular displacement ---------- */
+    let dispTimer = null;
+    function drawDisp(th) {
+      const cx = 160, cy = 125, R = 80;
+      const a0 = -Math.PI/2, a1 = a0 + th;
+      const [x0, y0] = polar(cx, cy, R, a0);
+      const [x1, y1] = polar(cx, cy, R, a1);
+      document.getElementById("dispR1").setAttribute("x2", x0);
+      document.getElementById("dispR1").setAttribute("y2", y0);
+      document.getElementById("dispR2").setAttribute("x2", x1);
+      document.getElementById("dispR2").setAttribute("y2", y1);
+      document.getElementById("dispStart").setAttribute("cx", x0);
+      document.getElementById("dispStart").setAttribute("cy", y0);
+      document.getElementById("dispObj").setAttribute("cx", x1);
+      document.getElementById("dispObj").setAttribute("cy", y1);
+      const ol = document.getElementById("dispObjLbl");
+      const ox = x1 + (x1 >= cx ? 12 : -52);
+      const oy = y1 + (y1 < cy - 20 ? -10 : 4);
+      ol.setAttribute("x", ox);
+      ol.setAttribute("y", oy);
+      document.getElementById("dispArc").setAttribute("d", arcOnly(cx, cy, R + 16, a0, a1));
+      document.getElementById("dispAng").setAttribute("d", arcOnly(cx, cy, 22, a0, a1));
+      const [rx, ry] = polar(cx, cy, R * 0.52, a0 + 0.15);
+      const rl = document.getElementById("dispRlbl");
+      rl.setAttribute("x", rx - 10); rl.setAttribute("y", ry);
+      const mid = (a0 + a1) / 2;
+      const [sx, sy] = polar(cx, cy, R + 28, mid);
+      const sl = document.getElementById("dispSlbl");
+      sl.setAttribute("x", Math.min(230, Math.max(20, sx - 20)));
+      sl.setAttribute("y", Math.max(18, sy));
+      document.getElementById("dispLbl").textContent = fmt(th);
+    }
+    function playDisp() {
+      if (dispTimer) { clearInterval(dispTimer); dispTimer = null; document.getElementById("dispPlay").textContent = t("play"); return; }
+      const sl = document.getElementById("dispSlider");
+      sl.value = "0.2";
+      drawDisp(0.2);
+      document.getElementById("dispPlay").textContent = t("stop");
+      dispTimer = setInterval(() => {
+        let v = +sl.value + 0.03;
+        if (v >= 6) { v = 6; clearInterval(dispTimer); dispTimer = null; document.getElementById("dispPlay").textContent = t("play"); }
+        sl.value = v;
+        drawDisp(v);
+      }, 30);
+    }
+
+    function drawTwo(th) {
+      const cx = 160, cy = 130, r = 55, R = 100;
+      const a0 = -Math.PI/2, a1 = a0 + th;
+      document.getElementById("twoArc1").setAttribute("d", arcOnly(cx, cy, r, a0, a1));
+      document.getElementById("twoArc2").setAttribute("d", arcOnly(cx, cy, R, a0, a1));
+      const [x, y] = polar(cx, cy, R, a1);
+      document.getElementById("twoRay").setAttribute("x2", x);
+      document.getElementById("twoRay").setAttribute("y2", y);
+      const [xa, ya] = polar(cx, cy, r, a1);
+      document.getElementById("twoA").setAttribute("cx", xa);
+      document.getElementById("twoA").setAttribute("cy", ya);
+      document.getElementById("twoB").setAttribute("cx", x);
+      document.getElementById("twoB").setAttribute("cy", y);
+      document.getElementById("twoLbl").textContent = fmt(th);
+      document.getElementById("twoS1").textContent = (th).toFixed(2) + " r";
+      document.getElementById("twoS2").textContent = (th * R / r).toFixed(2) + " r  (= " + (R/r).toFixed(2) + " s₁)";
+    }
+
+    /* ---------- omega animation ---------- */
+    let wAngle = 0, wLast = 0, wRaf = 0;
+    function tickW(ts) {
+      const sl = document.getElementById("wSlider");
+      if (!sl) { wRaf = 0; return; }
+      if (!wLast) wLast = ts;
+      const dt = Math.min(0.05, (ts - wLast) / 1000);
+      wLast = ts;
+      const w = +sl.value;
+      wAngle += w * dt;
+      const cx = 160, cy = 88, R = 60;
+      const a = -Math.PI/2 + wAngle;
+      const [x, y] = polar(cx, cy, R, a);
+      document.getElementById("wRay").setAttribute("x2", x);
+      document.getElementById("wRay").setAttribute("y2", y);
+      document.getElementById("wObj").setAttribute("cx", x);
+      document.getElementById("wObj").setAttribute("cy", y);
+      document.getElementById("wLbl").textContent = w.toFixed(2) + " rad s⁻¹";
+      wRaf = requestAnimationFrame(tickW);
+    }
+
+    function initStep(n) {
+      if (dispTimer) { clearInterval(dispTimer); dispTimer = null; }
+      if (wRaf) { cancelAnimationFrame(wRaf); wRaf = 0; wLast = 0; }
+
+      const radSl = document.getElementById("radSlider");
+      if (radSl && steps[n].contains(radSl) && !radSl.dataset.ready) {
+        radSl.addEventListener("input", updateRad);
+        radSl.dataset.ready = "1";
+      }
+      if (radSl && steps[n].contains(radSl)) updateRad();
+
+      const ct = document.getElementById("checkTable");
+      if (ct && !ct.dataset.ready) {
+        ct.addEventListener("click", () => checkTable(false));
+        document.getElementById("revealTable").addEventListener("click", () => checkTable(true));
+        ct.dataset.ready = "1";
+      }
+
+      const c1 = document.getElementById("checkP1");
+      if (c1 && !c1.dataset.ready) {
+        c1.addEventListener("click", () => {
+          checkOne("p1", [Math.PI/4], t("exactPrefix") + "π/4 rad.");
+          checkOne("p2", [5*Math.PI/6], t("exactPrefix") + "5π/6 rad.");
+          checkOne("p3", [75*180/Math.PI], "75 × 180/π ≈ 4297°.");
+          checkOne("p4", [20*Math.PI], t("exactPrefix") + "20π rad.");
+        });
+        c1.dataset.ready = "1";
+      }
+      const c2 = document.getElementById("checkP2");
+      if (c2 && !c2.dataset.ready) {
+        c2.addEventListener("click", () => {
+          checkOne("p5", [Math.PI/216], "50° × (π/180) ÷ 60 = π/216 ≈ 0.0145 rad s⁻¹.");
+          checkOne("p6", [2000/3600, 5/9], "2000 / 3600 = 5/9 ≈ 0.556 rad s⁻¹.");
+          checkOne("p7", [20*2*Math.PI/60, 2*Math.PI/3], "20 × 2π / 60 = 2π/3 ≈ 2.09 rad s⁻¹.");
+          checkOne("p8", [6*60/(2*Math.PI), 180/Math.PI], "6 × 60 / 2π = 180/π ≈ 57.3 rpm.");
+        });
+        c2.dataset.ready = "1";
+      }
+
+      const ds = document.getElementById("dispSlider");
+      if (ds && steps[n].contains(ds)) {
+        if (!ds.dataset.ready) {
+          ds.addEventListener("input", () => drawDisp(+ds.value));
+          document.getElementById("dispPlay").addEventListener("click", playDisp);
+          ds.dataset.ready = "1";
+        }
+        drawDisp(+ds.value);
+      }
+
+      const ts = document.getElementById("twoSlider");
+      if (ts && steps[n].contains(ts)) {
+        if (!ts.dataset.ready) {
+          ts.addEventListener("input", () => drawTwo(+ts.value));
+          ts.dataset.ready = "1";
+        }
+        drawTwo(+ts.value);
+      }
+
+      const ws = document.getElementById("wSlider");
+      if (ws && steps[n].contains(ws)) {
+        wRaf = requestAnimationFrame(tickW);
+      }
+
+      const link = document.getElementById("formLink");
+      if (link) {
+        const url = (window.GOOGLE_FORM_URL || "").trim();
+        if (url) {
+          link.href = url;
+          link.classList.remove("hidden");
+          document.getElementById("formMsg").textContent = t("formMsgReady");
+        }
+      }
+    }
+
+
+    document.getElementById("langEn").addEventListener("click", () => setLang("en"));
+    document.getElementById("langZh").addEventListener("click", () => setLang("zh-HK"));
+
+    const params = new URLSearchParams(location.search);
+    const ql = params.get("lang");
+    if (ql === "zh-HK" || ql === "en") {
+      lang = ql;
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+    }
+    const q = params.get("step");
+    const start = q !== null && !isNaN(+q) ? Math.max(0, Math.min(steps.length - 1, +q)) : 0;
+    go(start);
+  })();
+  </script>
+</body>
+</html>
