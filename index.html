@@ -825,6 +825,7 @@
       ${practiceQ("p4","(d)","10 rev =","rad","","hintP4")}
       <div class="row" style="margin-top:.3rem">
         <button type="button" class="primary" id="checkP1" data-i18n="checkPage">Check this page</button>
+        <button type="button" class="ghost" id="revealP1" data-i18n="showAnswers">Show answers</button>
       </div>
     `));
 
@@ -844,6 +845,7 @@
       ${practiceQ("p8","(d)","6 rad s<sup>&minus;1</sup> =","rpm","","hintP8")}
       <div class="row" style="margin-top:.3rem">
         <button type="button" class="primary" id="checkP2" data-i18n="checkPage">Check this page</button>
+        <button type="button" class="ghost" id="revealP2" data-i18n="showAnswers">Show answers</button>
       </div>
     `));
 
@@ -1024,7 +1026,9 @@
         .replace(/\s+/g, "")
         .replace(/degrees?|deg|rads?|rpm/gi, "")
         .replace(/\^/g, "**")
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/(\d)(pi)/g, "$1*$2")
+        .replace(/(pi)(\d)/g, "$1*$2");
     }
     function evalExpr(s) {
       const t = norm(s);
@@ -1046,15 +1050,33 @@
       fb.className = "feedback " + (ok ? "ok" : "bad");
       fb.textContent = msg;
     }
-    function checkOne(id, expected, exactText) {
+    function checkOne(id, expected, exactText, reveal, fillText) {
       const input = document.getElementById(id);
       const fb = document.getElementById("fb_" + id);
+      if (reveal) {
+        input.value = fillText;
+        mark(input, fb, true, exactText || fillText);
+        return true;
+      }
       const v = evalExpr(input.value);
       const ok = expected.some(e => close(v, e));
       if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
       else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
       else mark(input, fb, false, t("notQuite"));
       return ok;
+    }
+    function checkPractice(which, reveal) {
+      if (which === 1) {
+        checkOne("p1", [Math.PI/4], t("exactPrefix") + "π/4 rad.", reveal, "π/4");
+        checkOne("p2", [5*Math.PI/6], t("exactPrefix") + "5π/6 rad.", reveal, "5π/6");
+        checkOne("p3", [75*180/Math.PI], "75 × 180/π ≈ 4297°.", reveal, "75×180/π");
+        checkOne("p4", [20*Math.PI], t("exactPrefix") + "20π rad.", reveal, "20π");
+      } else {
+        checkOne("p5", [Math.PI/216], "50° × (π/180) ÷ 60 = π/216 ≈ 0.0145 rad s⁻¹.", reveal, "π/216");
+        checkOne("p6", [2000/3600, 5/9], "2000 / 3600 = 5/9 ≈ 0.556 rad s⁻¹.", reveal, "5/9");
+        checkOne("p7", [20*2*Math.PI/60, 2*Math.PI/3], "20 × 2π / 60 = 2π/3 ≈ 2.09 rad s⁻¹.", reveal, "2π/3");
+        checkOne("p8", [6*60/(2*Math.PI), 180/Math.PI], "6 × 60 / 2π = 180/π ≈ 57.3 rpm.", reveal, "180/π");
+      }
     }
 
     /* ---------- Radian explorer ---------- */
@@ -1247,22 +1269,14 @@
 
       const c1 = document.getElementById("checkP1");
       if (c1 && !c1.dataset.ready) {
-        c1.addEventListener("click", () => {
-          checkOne("p1", [Math.PI/4], t("exactPrefix") + "π/4 rad.");
-          checkOne("p2", [5*Math.PI/6], t("exactPrefix") + "5π/6 rad.");
-          checkOne("p3", [75*180/Math.PI], "75 × 180/π ≈ 4297°.");
-          checkOne("p4", [20*Math.PI], t("exactPrefix") + "20π rad.");
-        });
+        c1.addEventListener("click", () => checkPractice(1, false));
+        document.getElementById("revealP1").addEventListener("click", () => checkPractice(1, true));
         c1.dataset.ready = "1";
       }
       const c2 = document.getElementById("checkP2");
       if (c2 && !c2.dataset.ready) {
-        c2.addEventListener("click", () => {
-          checkOne("p5", [Math.PI/216], "50° × (π/180) ÷ 60 = π/216 ≈ 0.0145 rad s⁻¹.");
-          checkOne("p6", [2000/3600, 5/9], "2000 / 3600 = 5/9 ≈ 0.556 rad s⁻¹.");
-          checkOne("p7", [20*2*Math.PI/60, 2*Math.PI/3], "20 × 2π / 60 = 2π/3 ≈ 2.09 rad s⁻¹.");
-          checkOne("p8", [6*60/(2*Math.PI), 180/Math.PI], "6 × 60 / 2π = 180/π ≈ 57.3 rpm.");
-        });
+        c2.addEventListener("click", () => checkPractice(2, false));
+        document.getElementById("revealP2").addEventListener("click", () => checkPractice(2, true));
         c2.dataset.ready = "1";
       }
 
