@@ -351,6 +351,54 @@
       body { font-size: 18px; }
       header.top h1 { font-size: 1.35rem; }
     }
+
+    /* Fluid layout: phone, tablet, desktop, wide */
+    .app { width: 100%; max-width: 42rem; }
+    .spread > .copy, .spread > .viz { min-width: 0; }
+    .ex-grid { display: grid; gap: 0.85rem; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+      .app { max-width: 52rem; }
+      header.top { padding-left: 1.35rem; padding-right: 1.35rem; }
+      .progress, main, nav.bar { padding-left: 1.35rem; padding-right: 1.35rem; }
+    }
+    @media (min-width: 900px) {
+      .app { max-width: 70rem; }
+      header.top { padding: 0.85rem 1.7rem 1rem; }
+      .lang-switch { top: 0.85rem; right: 1.5rem; }
+      .progress { padding: .55rem 1.7rem .2rem; }
+      main { padding: 1.25rem 1.7rem 1.7rem; }
+      nav.bar { padding-left: 1.7rem; padding-right: 1.7rem; }
+      header.top h1 { font-size: 1.45rem; }
+      .spread {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+        gap: 1.1rem 2rem;
+        align-items: start;
+      }
+      .spread > .viz figure { margin-top: 0; }
+      .spread > .viz { position: sticky; top: 0; }
+      .ex-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        align-items: start;
+      }
+      .step.show:not(:has(.spread)):not(:has(.ex-grid)) { max-width: 46rem; }
+    }
+    @media (min-width: 1200px) {
+      .app { max-width: 80rem; }
+      .spread {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        gap: 1.25rem 2.5rem;
+      }
+    }
+    @media (max-height: 480px) and (orientation: landscape) {
+      header.top { padding-top: .45rem; padding-bottom: .55rem; }
+      header.top h1 { font-size: 1.05rem; }
+      .progress { padding-top: .35rem; padding-bottom: .15rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -696,6 +744,8 @@
     steps.push(el(`
       <span class="pill">A · Radian</span>
       <h2 data-i18n="s1h">Radian as a unit of angle</h2>
+      <div class="spread">
+      <div class="copy">
       <p data-i18n="s1p1">The <b>radian</b> (rad) is the SI unit of <b>angle</b>. It is defined from the circle itself: how many radii fit along the arc.</p>
       <p data-i18n="s1p2">An angle &theta; in radians is the ratio of the arc length <i>s</i> to the radius <i>r</i>:</p>
       <div class="eqn">&theta; = <i>s</i> / <i>r</i></div>
@@ -703,6 +753,8 @@
         <div class="lbl" data-i18n="tryThis">Try this</div>
         <p data-i18n="s1try">Drag the slider until the arc length <i>s</i> equals the radius <i>r</i>. What is &theta; then?</p>
       </div>
+      </div>
+      <div class="viz">
       <figure>
         <svg id="svgRad" viewBox="0 12 320 206" role="img" aria-label="Circle showing radius, arc length and angle theta">
           <line x1="160" y1="20" x2="160" y2="210" stroke="#eee" />
@@ -729,11 +781,15 @@
         <div><span data-i18n="s1th">Angle &theta; = s/r</span><b id="outTh">1.00 rad</b></div>
       </div>
       <div id="radCue" class="on"><p data-i18n="s1cue">Here <i>s</i> = <i>r</i>, so &theta; = <i>s</i>/<i>r</i> = <b>1</b>. This angle is <b>1 radian</b> (about 57.3°).</p></div>
+      </div>
+      </div>
     `));
 
     steps.push(el(`
       <span class="pill">A · Radian</span>
       <h2 data-i18n="s2h">The angle around a point</h2>
+      <div class="spread">
+      <div class="copy">
       <div class="think">
         <div class="lbl" data-i18n="why2pi">Why 2&pi;?</div>
         <p data-i18n="s2why">A full turn follows the whole circumference, so the arc length is <i>s</i> = 2&pi;<i>r</i>. Put that into &theta; = <i>s</i>/<i>r</i>:</p>
@@ -741,6 +797,8 @@
       <div class="eqn">&theta;<sub>circle</sub> = 2&pi;<i>r</i> / <i>r</i> = 2&pi;</div>
       <p data-i18n="s2p">So 2&pi; is not a number to memorise on its own — it is how many radii fit around the circle. That full turn is <b>2&pi; rad = 360° = 1 revolution</b>.</p>
       <p class="note" data-i18n="s2note">The unit ‘rad’ is often omitted when the angle is expressed in terms of &pi;.</p>
+      </div>
+      <div class="viz">
       <figure>
         <svg viewBox="0 0 320 200" role="img" aria-label="Full circle marked as 2 pi radians">
           <circle cx="160" cy="100" r="70" fill="#f8fbfd" stroke="#222" stroke-width="2" />
@@ -751,6 +809,8 @@
           <text x="160" y="188" text-anchor="middle" font-size="15">&theta;<tspan font-size="11" baseline-shift="sub">circle</tspan> = 2&pi;</text>
         </svg>
       </figure>
+      </div>
+      </div>
     `));
 
     steps.push(el(`
@@ -852,12 +912,16 @@
     steps.push(el(`
       <span class="pill">B · Angular displacement</span>
       <h2>Angular displacement</h2>
+      <div class="spread">
+      <div class="copy">
       <p data-i18n="s7p">The motion of an object moving in a circle can be described by <b>angular displacement</b> &theta;, which concerns only the <b>angle</b> but not the distance travelled.</p>
       <div class="think">
         <div class="lbl" data-i18n="twoQty">Two different quantities</div>
         <p data-i18n="s7two"><i>s</i> is the distance along the arc. &theta; is how far the object has <b>turned</b> about the centre. They are linked by the same formula as the radian, so &theta; is in radians.</p>
       </div>
       <div class="eqn">&theta; = <i>s</i> / <i>r</i></div>
+      </div>
+      <div class="viz">
       <figure>
         <svg id="svgDisp" viewBox="0 22 320 198" role="img" aria-label="Object moving on a circle, showing angular displacement theta and arc s">
           <circle cx="160" cy="125" r="80" fill="#fff" stroke="#222" stroke-width="2" />
@@ -884,15 +948,21 @@
           <button type="button" class="play" id="dispPlay" data-i18n="play">Play</button>
         </div>
       </div>
+      </div>
+      </div>
     `));
 
     steps.push(el(`
       <span class="pill">B · Angular displacement</span>
       <h2 data-i18n="s8h">Same angle, different distance</h2>
+      <div class="spread">
+      <div class="copy">
       <div class="think">
         <div class="lbl" data-i18n="predictFirst">Predict first</div>
         <p data-i18n="s8pred">Two objects turn through the <b>same</b> angle &theta;, but one is farther from the centre. Which one travels the larger distance? Move the slider and check.</p>
       </div>
+      </div>
+      <div class="viz">
       <figure>
         <svg id="svgTwo" viewBox="0 0 320 250" role="img" aria-label="Two concentric circles showing a larger arc on the larger radius">
           <circle cx="160" cy="130" r="100" fill="none" stroke="#222" stroke-width="2" />
@@ -917,6 +987,8 @@
         <div><span data-i18n="s8in">Inner arc s<sub>1</sub></span><b id="twoS1">rθ</b></div>
         <div><span data-i18n="s8out">Outer arc s<sub>2</sub></span><b id="twoS2">Rθ = (R/r) s<sub>1</sub></b></div>
       </div>
+      </div>
+      </div>
       <p data-i18n="s8p">The outer object travels farther. From &theta; = <i>s</i>/<i>r</i> we get <i>s</i> = <i>r</i>&theta;, so for the same &theta;, a <b>larger</b> radius means a <b>larger</b> distance.</p>
       <p class="note" data-i18n="s8door">A door shows the same idea: the handle moves farther than a point near the hinge, but both rotate through the same angle.</p>
     `));
@@ -924,9 +996,13 @@
     steps.push(el(`
       <span class="pill">C · Angular velocity</span>
       <h2>Angular velocity and angular speed</h2>
+      <div class="spread">
+      <div class="copy">
       <p data-i18n="s9p1">Ordinary speed is distance per unit time. <b>Angular velocity</b> &omega; is the same idea for turning: the rate of change of angular displacement, or the angular displacement per unit time.</p>
       <div class="eqn">&omega; = &Delta;&theta; / &Delta;<i>t</i></div>
       <p data-i18n="s9p2">&theta; is measured in rad and <i>t</i> in seconds, so the unit of angular velocity is <b>rad s<sup>&minus;1</sup></b>.</p>
+      </div>
+      <div class="viz">
       <figure>
         <svg id="svgW" viewBox="0 0 320 168" role="img" aria-label="Object moving at constant angular velocity">
           <circle cx="160" cy="88" r="60" fill="#fff" stroke="#222" stroke-width="2" />
@@ -939,6 +1015,8 @@
       <div class="controls">
         <label><span>Angular speed</span><span id="wLbl">slow</span></label>
         <input type="range" id="wSlider" min="0.3" max="3.2" step="0.05" value="1" />
+      </div>
+      </div>
       </div>
       <p data-i18n="s9drag">Drag the slider: a larger &omega; means the object sweeps out a larger angle in the same time.</p>
       <h3>Uniform circular motion</h3>
