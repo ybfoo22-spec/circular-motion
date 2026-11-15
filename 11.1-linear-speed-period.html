@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b3a5f" />
+  <title>11.1 Linear speed and period — In-class notes</title>
+  <style>
+    :root {
+      --navy: #1b3a5f;
+      --navy-2: #24507f;
+      --ink: #1a1a1a;
+      --muted: #5a6570;
+      --line: #d5dbe3;
+      --paper: #f6f3ec;
+      --card: #ffffff;
+      --arc: #1a7aad;
+      --arc-soft: #d7eef8;
+      --ok: #1b7a46;
+      --ok-bg: #e7f6ec;
+      --bad: #b42318;
+      --bad-bg: #fdecea;
+      --accent: #c45c26;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(27,58,95,.08), 0 8px 24px rgba(27,58,95,.06);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+      font-size: 17px;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .app { max-width: 42rem; margin: 0 auto; height: 100dvh; height: 100svh; display: flex; flex-direction: column; overflow: hidden; }
+    header.top {
+      background: var(--navy);
+      color: #fff;
+      padding: 0.7rem 1.15rem 0.85rem;
+      position: relative;
+    }
+    header.top .kicker {
+      padding-right: 5.8rem;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      margin: 0 0 .15rem;
+      pointer-events: none;
+    }
+    .lang-switch {
+      position: absolute;
+      top: 0.7rem;
+      right: 1rem;
+      display: flex;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 5;
+      pointer-events: auto;
+    }
+    .lang-switch button {
+      min-height: 36px;
+      min-width: 2.45rem;
+      padding: 0 .55rem;
+      background: transparent;
+      color: rgba(255,255,255,.9);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      border-radius: 0;
+    }
+    .lang-switch button[aria-pressed="true"] {
+      background: #fff;
+      color: var(--navy);
+    }
+    html[lang="zh-HK"] body { line-height: 1.65; }
+    html[lang="zh-HK"] .lbl,
+    html[lang="zh-HK"] .pill,
+    html[lang="zh-HK"] .kicker {
+      text-transform: none;
+      letter-spacing: .03em;
+    }
+    header.top .kicker {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .8;
+      margin: 0 0 .2rem;
+    }
+    header.top h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.3;
+    }
+    header.top p {
+      margin: .25rem 0 0;
+      font-size: .92rem;
+      opacity: .9;
+    }
+    .progress {
+      display: flex;
+      gap: 4px;
+      padding: .55rem 1.15rem .2rem;
+      background: #efebe3;
+    }
+    .progress button {
+      flex: 1;
+      height: 5px;
+      border: 0;
+      padding: 0;
+      border-radius: 99px;
+      background: #c9c3b6;
+      cursor: pointer;
+    }
+    .progress button.on { background: var(--navy); }
+    .progress button.done { background: #7a93b0; }
+    main {
+      flex: 1;
+      padding: 1rem 1.15rem 1.4rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .step { display: none; }
+    .step.show { display: block; }
+    h2 {
+      font-size: 1.22rem;
+      margin: 0 0 .55rem;
+      color: var(--navy);
+    }
+    h3 {
+      font-size: 1.02rem;
+      margin: .7rem 0 .25rem;
+      color: var(--navy-2);
+    }
+    p { margin: 0 0 .7rem; }
+    .lead { font-size: 1.02rem; }
+    .eqn {
+      display: block;
+      text-align: center;
+      font-size: 1.25rem;
+      margin: .55rem 0;
+      padding: .6rem .8rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hint {
+      font-size: .92rem;
+      color: var(--muted);
+      background: #efe8d8;
+      border-radius: 10px;
+      padding: .55rem .7rem;
+      margin: .7rem 0;
+    }
+    .note {
+      font-size: .95rem;
+      color: var(--muted);
+    }
+    figure { margin: .65rem 0 .7rem; }
+    figure svg, table.conv svg { width: 100%; height: auto; display: block; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    svg text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    figcaption { font-size: .88rem; color: var(--muted); text-align: center; margin-top: .3rem; }
+    .controls {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      margin: .4rem 0 1rem;
+    }
+    .controls label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--navy); }
+    .readout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: .4rem;
+      margin-top: .55rem;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .85rem;
+    }
+    .readout div {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .45rem .5rem;
+      text-align: center;
+    }
+    .readout b { display: block; font-size: 1rem; color: var(--navy); font-family: inherit; }
+    table.conv {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: .95rem;
+    }
+    table.conv th, table.conv td {
+      border: 1px solid var(--line);
+      padding: .55rem .4rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.conv th { background: #eef2f6; font-weight: 600; width: 28%; }
+    table.conv svg { width: 72px; height: 72px; margin: 0 auto; display: block; background: transparent; border: 0; box-shadow: none; }
+    .q {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: .55rem .7rem .6rem;
+      margin: 0 0 .5rem;
+      box-shadow: var(--shadow);
+    }
+    .q .num {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: .04em;
+      flex: 0 0 auto;
+    }
+    .q p { margin: .2rem 0 .45rem; }
+    .q-line { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .4rem; }
+    .q-line input[type="text"] { flex: 1; min-width: 6.5rem; }
+    .q .note { margin: .25rem 0 0; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+    }
+    input[type="text"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: .45rem .55rem;
+      border: 1px solid #b8c0c8;
+      border-radius: 8px;
+      min-width: 0;
+      flex: 1;
+      min-height: 44px;
+    }
+    input[type="text"]:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
+    .unit { color: var(--muted); }
+    button {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      border: 0;
+      border-radius: 10px;
+      min-height: 44px;
+      padding: 0 .9rem;
+      cursor: pointer;
+    }
+    button.primary { background: var(--navy); color: #fff; }
+    button.primary:active { background: #132a46; }
+    button.ghost { background: transparent; color: var(--navy); border: 1px solid #b7c4d3; }
+    button.play { background: var(--navy-2); color: #fff; }
+    .feedback { font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; font-size: .88rem; margin-top: .45rem; border-radius: 8px; padding: .4rem .55rem; display: none; }
+    .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+    .feedback.bad { display: block; background: var(--bad-bg); color: var(--bad); }
+    .feedback.show { display: block; background: #eef2f6; color: var(--navy); }
+    nav.bar {
+      display: flex;
+      gap: .5rem;
+      flex-shrink: 0;
+      padding: .7rem 1.15rem 1.1rem;
+      background: #efebe3;
+      border-top: 1px solid #e0d9cc;
+      padding-bottom: max(1.1rem, env(safe-area-inset-bottom));
+    }
+    nav.bar button { flex: 1; }
+
+    nav.sec-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.4rem;
+      margin-top: 0.7rem;
+    }
+    nav.sec-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0.15rem 0.7rem;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 99px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    nav.sec-nav a:hover,
+    nav.sec-nav a:focus-visible {
+      background: rgba(255,255,255,.14);
+    }
+    nav.sec-nav a[aria-current="page"] {
+      background: #fff;
+      color: var(--navy);
+      border-color: #fff;
+      pointer-events: none;
+    }
+    .pill {
+      display: inline-block;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      background: #e8e1d2;
+      color: var(--navy);
+      border-radius: 99px;
+      padding: .15rem .55rem;
+      margin-bottom: .45rem;
+    }
+    ul.learn { margin: .3rem 0 .8rem 1.1rem; padding: 0; }
+    ul.learn li { margin: 0 0 .35rem; }
+    .summary dt { font-weight: 700; color: var(--navy); margin-top: .55rem; }
+    .summary dd { margin: .15rem 0 0 0; }
+    .form-box {
+      background: var(--card);
+      border: 1px dashed #8aa0b8;
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      margin-top: .8rem;
+    }
+    .form-box a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy);
+      color: #fff;
+      text-decoration: none;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-weight: 600;
+      border-radius: 10px;
+      min-height: 48px;
+      padding: 0 1.1rem;
+      margin-top: .4rem;
+    }
+
+    .think, .worked, .watch, #radCue {
+      border-radius: 12px;
+      padding: .65rem .75rem;
+      margin: .7rem 0;
+      font-size: .95rem;
+    }
+    .think { background: #e8f1f8; border-left: 3px solid var(--arc); }
+    .worked, #radCue { background: #f3efe6; border-left: 3px solid #b0893e; }
+    .watch { background: #f8eee8; border-left: 3px solid var(--accent); }
+    .think p, .worked p, .watch p, #radCue p { margin: 0 0 .4rem; }
+    .think p:last-child, .worked p:last-child, .watch p:last-child, #radCue p:last-child { margin: 0; }
+    .lbl {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin: 0 0 .3rem;
+      color: var(--navy);
+    }
+    details.hint-fold { margin: .4rem 0 0; font-size: .9rem; }
+    details.hint-fold summary {
+      cursor: pointer;
+      color: var(--navy);
+      font-weight: 600;
+      user-select: none;
+    }
+    details.hint-fold p { margin: .35rem 0 0; color: var(--muted); }
+    #radCue { display: none; }
+    #radCue.on { display: block; }
+    .eqn { font-variant-numeric: lining-nums; }
+    .hidden { display: none !important; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+    }
+
+    /* Fluid layout: phone, tablet, desktop, wide */
+    .app { width: 100%; max-width: 42rem; }
+    .spread > .copy, .spread > .viz { min-width: 0; }
+    .ex-grid { display: grid; gap: 0.85rem; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+      .app { max-width: 52rem; }
+      header.top { padding-left: 1.35rem; padding-right: 1.35rem; }
+      .progress, main, nav.bar { padding-left: 1.35rem; padding-right: 1.35rem; }
+    }
+    @media (min-width: 900px) {
+      .app { max-width: 70rem; }
+      header.top { padding: 0.85rem 1.7rem 1rem; }
+      .lang-switch { top: 0.85rem; right: 1.5rem; }
+      .progress { padding: .55rem 1.7rem .2rem; }
+      main { padding: 1.25rem 1.7rem 1.7rem; }
+      nav.bar { padding-left: 1.7rem; padding-right: 1.7rem; }
+      header.top h1 { font-size: 1.45rem; }
+      .spread {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+        gap: 1.1rem 2rem;
+        align-items: start;
+      }
+      .spread > .viz figure { margin-top: 0; }
+      .spread > .viz { position: sticky; top: 0; }
+      .ex-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        align-items: start;
+      }
+      .step.show:not(:has(.spread)):not(:has(.ex-grid)) { max-width: 46rem; }
+    }
+    @media (min-width: 1200px) {
+      .app { max-width: 80rem; }
+      .spread {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        gap: 1.25rem 2.5rem;
+      }
+    }
+    @media (max-height: 480px) and (orientation: landscape) {
+      header.top { padding-top: .45rem; padding-bottom: .55rem; }
+      header.top h1 { font-size: 1.05rem; }
+      .progress { padding-top: .35rem; padding-bottom: .15rem; }
+    }
+
+    /* In-class notes extras */
+    button.choice, button.chip {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid #b7c4d3;
+    }
+    button.choice[aria-pressed="true"], button.chip[aria-pressed="true"] {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+    button.choice.is-ok {
+      background: var(--ok-bg);
+      color: var(--ok);
+      border-color: #1b7a46;
+    }
+    button.choice.is-bad {
+      background: var(--bad-bg);
+      color: var(--bad);
+      border-color: #b42318;
+    }
+    .choice-row, .chip-row, .break-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+      margin: .35rem 0 .55rem;
+    }
+    .caption-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      font-size: .92rem;
+      margin: .45rem 0 .7rem;
+    }
+    .sol-head {
+      font-weight: 700;
+      color: var(--navy);
+      margin: .65rem 0 .35rem;
+      font-size: .95rem;
+    }
+    .eqn-box {
+      display: block;
+      margin: .55rem 0;
+      padding: .7rem .9rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      font-size: 1.08rem;
+      text-align: left;
+    }
+    .eqn-box p { margin: 0 0 .35rem; text-align: center; }
+    .eqn-box p:last-child { margin: 0; }
+    .eqn-box .or { color: var(--muted); font-size: .9rem; }
+    .comic-list { margin: .5rem 0 0; padding: 0; list-style: none; }
+    .comic-list li {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      margin: 0 0 .4rem;
+      font-size: .92rem;
+      box-shadow: var(--shadow);
+    }
+    .comic-list li b { color: var(--navy); }
+    .ex-title {
+      font-style: italic;
+      font-weight: 700;
+      color: var(--navy);
+      margin: .85rem 0 .35rem;
+    }
+    .readout.cols-2 { grid-template-columns: 1fr 1fr; }
+    .readout.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    main { padding-bottom: 1.6rem; }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="lang-switch" role="group" aria-label="Language" id="langSwitch">
+        <button type="button" id="langEn" aria-pressed="true" lang="en">EN</button>
+        <button type="button" id="langZh" aria-pressed="false" lang="zh-HK">粵</button>
+      </div>
+      <p class="kicker" data-i18n="kicker">CSWCSS F.5 Physics · In-class notes</p>
+      <h1>Chapter 11 Uniform Circular Motion</h1>
+      <p>11.1 Describing circular motion</p>
+          <nav class="sec-nav" id="secNav" aria-label="Chapter sections">
+        <a href="index.html" data-i18n="navPre">11.1 Pre-lesson</a>
+        <a href="11.1-linear-speed-period.html" data-i18n="navLSP" aria-current="page">11.1 Linear speed</a>
+        <a href="11.2-centripetal-force.html" data-i18n="navCF">11.2 Centripetal force</a>
+      </nav>
+    </header>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <main id="main"></main>
+    <nav class="bar">
+      <button type="button" class="ghost" id="btnBack" data-i18n="back">Back</button>
+      <button type="button" class="primary" id="btnNext" data-i18n="next">Next</button>
+    </nav>
+  </div>
+
+  <script>
+  (function () {
+    const steps = [];
+    const $main = document.getElementById("main");
+    const $prog = document.getElementById("progress");
+    const $back = document.getElementById("btnBack");
+    const $next = document.getElementById("btnNext");
+    let i = 0;
+    const PREV_FILE = 'index.html';
+    const NEXT_FILE = '11.2-centripetal-force.html';
+    const NEXT_KEY = 'nextCF';
+
+    const I18N = {
+      en: {
+          "docTitle": "11.1 Linear speed and period — In-class notes",
+          "langGroup": "Language",
+          "kicker": "CSWCSS F.5 Physics · In-class notes",
+          "back": "Back",
+          "next": "Next",
+          "backToStart": "Back to start",
+          "secNav": "Chapter sections",
+          "navPre": "11.1 Pre-lesson",
+          "navLSP": "11.1 Linear speed",
+          "navCF": "11.2 Centripetal force",
+          "nextLSP": "Next: Linear speed",
+          "nextCF": "Next: Centripetal force",
+          "play": "Play",
+          "stop": "Stop",
+          "check": "Check",
+          "showAnswers": "Show answers",
+          "checkPage": "Check this page",
+          "hint": "Hint",
+          "tryThis": "Try this",
+          "worked": "Worked example",
+          "watchOut": "Watch out",
+          "predictFirst": "Predict first",
+          "pillNotes": "In-class notes",
+          "pillQC": "Quick check",
+          "pillSum": "Summary",
+          "correct": "Correct.",
+          "exactPrefix": "Exact: ",
+          "enterAns": "Enter an answer.",
+          "notQuite": "Not quite. Try again, or use the hint.",
+          "phAnswer": "answer",
+          "ariaAnswer": "Answer {label}",
+          "s0h": "Linear speed and period",
+          "s0lead": "Work through this part of the Chapter 11 in-class notes. It covers linear speed and the period of uniform circular motion — sections D and E of 11.1 Describing circular motion.",
+          "s0li1": "<b>Linear speed</b> <i>v</i>, and how it is related to angular speed <i>ω</i> by <i>v</i> = <i>rω</i>",
+          "s0li2": "How <i>v</i> depends on the radius <i>r</i> when objects share the same <i>ω</i>, and how <i>ω</i> depends on <i>r</i> when they share the same <i>v</i>",
+          "s0li3": "The <b>period</b> <i>T</i> of uniform circular motion",
+          "s0try": "There is a Quick check at the end. When you see <b>Try this</b> or <b>Predict first</b>, attempt the idea before you move the sliders.",
+          "d1h": "Linear speed",
+          "d1p1": "For an object performing <b>uniform circular motion</b>, linear speed <i>v</i> is equal to the magnitude of the object’s <b>linear velocity</b>. The linear velocity at a point lies along the <b>tangent</b> of the circle at that point. Therefore, it keeps changing as the object moves.",
+          "d1cap": "Press Play and watch the linear velocity: it stays tangent to the circle, so its direction keeps changing.",
+          "d1slider": "Angular displacement θ",
+          "d2h": "The relation <i>v</i> = <i>rω</i>",
+          "d2p1": "When an object travels an angular displacement of θ along a circular path of radius <i>r</i> at a uniform speed <i>v</i>, the distance travelled <i>s</i> is given by <b><i>s</i> = <i>r</i>θ</b>. Besides,",
+          "d2work": "From <i>s</i> = <i>r</i>θ and <i>ω</i> = θ/<i>t</i> (already in the notes), the linear speed is <i>v</i> = <i>s</i>/<i>t</i> = <i>r</i>θ/<i>t</i> = <i>rω</i>.",
+          "d2p2": "Therefore, the relationship between the linear speed <i>v</i> and the angular speed <i>ω</i> is",
+          "d3h": "Same angular speed, different radius",
+          "d3p": "For objects moving with the same angular speed <i>ω</i>, the linear speed <i>v</i> is <b>directly</b> proportional to the radius of the path <i>r</i>.",
+          "d3pred": "If the outer radius is twice the inner radius, and both objects have the same angular speed <i>ω</i>, what happens to the linear speed <i>v</i> of the outer object? Then use the sliders to check.",
+          "d3cap": "If ω<sub>B</sub> = ω<sub>A</sub>, then <i>r</i><sub>B</sub> = 2 <i>r</i><sub>A</sub> implies <i>v</i><sub>B</sub> = 2 <i>v</i><sub>A</sub>.",
+          "d3sliderW": "Common angular speed ω",
+          "d3sliderR": "Radius ratio r<sub>B</sub> / r<sub>A</sub>",
+          "d3vA": "Linear speed v<sub>A</sub>",
+          "d3vB": "Linear speed v<sub>B</sub>",
+          "d3ratio": "Ratio v<sub>B</sub> / v<sub>A</sub>",
+          "d3obs": "The objects keep in step (same ω), but the outer one must travel farther in the same time, so it has the larger linear speed. When the ratio is 2, you should find v<sub>B</sub> = 2 v<sub>A</sub>.",
+          "d4h": "Same linear speed, different radius",
+          "d4p": "If two objects have the same <i>v</i>, the one with smaller <i>r</i> has a <b>larger</b> <i>ω</i>.",
+          "d4pred": "If the outer radius is twice the inner radius, but both objects have the same linear speed <i>v</i>, what happens to the angular speed <i>ω</i> of the outer object? Then use the sliders to check.",
+          "d4cap": "If <i>v</i><sub>Q</sub> = <i>v</i><sub>P</sub>, then <i>r</i><sub>Q</sub> = 2 <i>r</i><sub>P</sub> implies ω<sub>Q</sub> = ½ ω<sub>P</sub>.",
+          "d4sliderV": "Common linear speed v",
+          "d4sliderR": "Radius ratio r<sub>Q</sub> / r<sub>P</sub>",
+          "d4wP": "Angular speed ω<sub>P</sub>",
+          "d4wQ": "Angular speed ω<sub>Q</sub>",
+          "d4ratio": "Ratio ω<sub>Q</sub> / ω<sub>P</sub>",
+          "d4obs": "The inner object has less distance to cover per revolution, so to keep the same linear speed it must go around more often — a larger ω. When the ratio is 2, you should find ω<sub>Q</sub> = ½ ω<sub>P</sub>.",
+          "e1h": "Period",
+          "e1p": "The period <i>T</i> of a uniform circular motion is the time that the object takes to complete one revolution.",
+          "e1why": "These follow from one revolution: θ = 2π, so <i>T</i> = 2π/ω; and the distance is the circumference <i>s</i> = 2π<i>r</i>, so <i>T</i> = 2π<i>r</i>/<i>v</i>. Rearranged, ω = 2π/<i>T</i>.",
+          "qc1h": "Quick check 1",
+          "qc1stem": "Both Anson and Benny run at the same linear speed of 5 m s<sup>−1</sup> in circular paths around the same centre. The radii of Anson’s and Benny’s paths are 18 m and 12 m respectively.",
+          "qc1a": "Find their angular speeds.",
+          "qc1b": "Find their periods.",
+          "qc1sol": "Solution",
+          "qc1applyW": "Apply ω =",
+          "qc1ansonW": "Angular speed of Anson =",
+          "qc1bennyW": "Angular speed of Benny =",
+          "qc1applyT": "Apply <i>T</i> = 2π<i>r</i> / <i>v</i>.",
+          "qc1ansonT": "Period of Anson =",
+          "qc1bennyT": "Period of Benny =",
+          "qc1hint": "They have the same <i>v</i>. The runner on the smaller radius has the larger ω, and a shorter period <i>T</i>.",
+          "qc1watch": "Give the angular speeds and periods to 3 significant figures, as in the notes.",
+          "sumH": "Linear speed and period",
+          "dtV": "Linear speed v",
+          "ddV": "Equal to the magnitude of the linear velocity. The linear velocity is always tangent to the circle, so its direction keeps changing. The link to angular speed is <i>v</i> = <i>rω</i>.",
+          "dtRel": "v, ω and r",
+          "ddRel": "Same ω: <i>v</i> is directly proportional to <i>r</i>. Same <i>v</i>: the smaller <i>r</i> has the larger ω.",
+          "dtT": "Period T",
+          "ddT": "Time for one revolution. <i>T</i> = 2π/ω = 2π<i>r</i>/<i>v</i>.",
+          "watch1": "Linear speed is the magnitude of the linear velocity: <i>v</i> can stay constant even while the velocity keeps changing direction.",
+          "watch2": "θ in <i>s</i> = <i>r</i>θ and in ω = θ/<i>t</i> must be in radians."
+      },
+      "zh-HK": {
+          "docTitle": "11.1 Linear speed and period — 堂課筆記",
+          "langGroup": "語言",
+          "kicker": "CSWCSS F.5 Physics · 堂課筆記",
+          "back": "返回",
+          "next": "下一頁",
+          "backToStart": "回到開始",
+          "secNav": "本章各節",
+          "navPre": "11.1 課前任務",
+          "navLSP": "11.1 Linear speed",
+          "navCF": "11.2 Centripetal force",
+          "nextLSP": "下一節：Linear speed",
+          "nextCF": "下一節：Centripetal force",
+          "play": "播放",
+          "stop": "停止",
+          "check": "檢查",
+          "showAnswers": "顯示答案",
+          "checkPage": "檢查本頁",
+          "hint": "提示",
+          "tryThis": "試一試",
+          "worked": "例題",
+          "watchOut": "注意",
+          "predictFirst": "先預測",
+          "pillNotes": "堂課筆記",
+          "pillQC": "Quick check",
+          "pillSum": "總結",
+          "correct": "正確。",
+          "exactPrefix": "準確答案：",
+          "enterAns": "請輸入答案。",
+          "notQuite": "未答對。再試一次，或先看提示。",
+          "phAnswer": "答案",
+          "ariaAnswer": "答案 {label}",
+          "s0h": "Linear speed 與 period",
+          "s0lead": "請完成這部分 Chapter 11 堂課筆記。內容涵蓋 linear speed，以及 uniform circular motion 的 period——即 11.1 Describing circular motion 的 D、E 節。",
+          "s0li1": "<b>linear speed</b> <i>v</i>，以及它與 angular speed <i>ω</i> 的關係：<i>v</i> = <i>rω</i>",
+          "s0li2": "當物體有相同的 <i>ω</i> 時，<i>v</i> 如何隨 radius <i>r</i> 改變；以及當它們有相同的 <i>v</i> 時，<i>ω</i> 如何隨 <i>r</i> 改變",
+          "s0li3": "uniform circular motion 的 <b>period</b> <i>T</i>",
+          "s0try": "最後有一道 Quick check。見到「試一試」或「先預測」時，請先自己想一想，再移動滑桿。",
+          "d1h": "Linear speed",
+          "d1p1": "當物體做 <b>uniform circular motion</b> 時，linear speed <i>v</i> 等於該物體 <b>linear velocity</b> 的大小。在圓上任一點，linear velocity 沿該點的 <b>tangent</b>（切線）方向。因此，當物體移動時，它會不斷改變。",
+          "d1cap": "按「播放」，觀察 linear velocity：它始終沿圓的 tangent，所以方向會不斷改變。",
+          "d1slider": "Angular displacement θ",
+          "d2h": "關係式 <i>v</i> = <i>rω</i>",
+          "d2p1": "當物體以均勻的速率 <i>v</i>，沿 radius 為 <i>r</i> 的圓形路徑走過 angular displacement θ 時，行經的距離 <i>s</i> 由 <b><i>s</i> = <i>r</i>θ</b> 給出。此外，",
+          "d2work": "由 <i>s</i> = <i>r</i>θ 和已學過的 <i>ω</i> = θ/<i>t</i>，linear speed 就是 <i>v</i> = <i>s</i>/<i>t</i> = <i>r</i>θ/<i>t</i> = <i>rω</i>。",
+          "d2p2": "因此，linear speed <i>v</i> 與 angular speed <i>ω</i> 的關係是",
+          "d3h": "相同的 angular speed，不同的 radius",
+          "d3p": "對於以相同 angular speed <i>ω</i> 運動的物體，linear speed <i>v</i> 與路徑的 radius <i>r</i> <b>成正比</b>（directly proportional）。",
+          "d3pred": "如果外圈的 radius 是內圈的兩倍，而且兩個物體有相同的 angular speed <i>ω</i>，外圈物體的 linear speed <i>v</i> 會怎樣？先想一想，再用滑桿驗證。",
+          "d3cap": "If ω<sub>B</sub> = ω<sub>A</sub>, then <i>r</i><sub>B</sub> = 2 <i>r</i><sub>A</sub> implies <i>v</i><sub>B</sub> = 2 <i>v</i><sub>A</sub>.",
+          "d3sliderW": "相同的 angular speed ω",
+          "d3sliderR": "radius 之比 r<sub>B</sub> / r<sub>A</sub>",
+          "d3vA": "Linear speed v<sub>A</sub>",
+          "d3vB": "Linear speed v<sub>B</sub>",
+          "d3ratio": "比值 v<sub>B</sub> / v<sub>A</sub>",
+          "d3obs": "兩個物體同步轉動（相同的 ω），但外圈在同一時間內要走較遠的距離，所以它的 linear speed 較大。當比值為 2 時，應得到 v<sub>B</sub> = 2 v<sub>A</sub>。",
+          "d4h": "相同的 linear speed，不同的 radius",
+          "d4p": "如果兩個物體有相同的 <i>v</i>，<i>r</i> 較小的那個有<b>較大</b>的 <i>ω</i>。",
+          "d4pred": "如果外圈的 radius 是內圈的兩倍，但兩個物體有相同的 linear speed <i>v</i>，外圈物體的 angular speed <i>ω</i> 會怎樣？先想一想，再用滑桿驗證。",
+          "d4cap": "If <i>v</i><sub>Q</sub> = <i>v</i><sub>P</sub>, then <i>r</i><sub>Q</sub> = 2 <i>r</i><sub>P</sub> implies ω<sub>Q</sub> = ½ ω<sub>P</sub>.",
+          "d4sliderV": "相同的 linear speed v",
+          "d4sliderR": "radius 之比 r<sub>Q</sub> / r<sub>P</sub>",
+          "d4wP": "Angular speed ω<sub>P</sub>",
+          "d4wQ": "Angular speed ω<sub>Q</sub>",
+          "d4ratio": "比值 ω<sub>Q</sub> / ω<sub>P</sub>",
+          "d4obs": "內圈每轉一圈所行的距離較短，要保持相同的 linear speed，就必須更頻密地轉圈——即有較大的 ω。當比值為 2 時，應得到 ω<sub>Q</sub> = ½ ω<sub>P</sub>。",
+          "e1h": "Period",
+          "e1p": "uniform circular motion 的 period <i>T</i>，是物體完成一圈（one revolution）所需的時間。",
+          "e1why": "這兩式都來自一圈：θ = 2π，所以 <i>T</i> = 2π/ω；而行經距離是圓周 <i>s</i> = 2π<i>r</i>，所以 <i>T</i> = 2π<i>r</i>/<i>v</i>。移項後亦可寫成 ω = 2π/<i>T</i>。",
+          "qc1h": "Quick check 1",
+          "qc1stem": "Anson 和 Benny 以相同的 linear speed 5 m s<sup>−1</sup>，繞同一圓心在圓形路徑上跑步。Anson 和 Benny 路徑的 radius 分別是 18 m 和 12 m。",
+          "qc1a": "求他們的 angular speed。",
+          "qc1b": "求他們的 period。",
+          "qc1sol": "解題",
+          "qc1applyW": "應用 ω =",
+          "qc1ansonW": "Anson 的 angular speed =",
+          "qc1bennyW": "Benny 的 angular speed =",
+          "qc1applyT": "應用 <i>T</i> = 2π<i>r</i> / <i>v</i>。",
+          "qc1ansonT": "Anson 的 period =",
+          "qc1bennyT": "Benny 的 period =",
+          "qc1hint": "他們有相同的 <i>v</i>。radius 較小的跑者有較大的 ω，以及較短的 period <i>T</i>。",
+          "qc1watch": "angular speed 和 period 須如筆記所示，取 3 位有效數字。",
+          "sumH": "Linear speed 與 period",
+          "dtV": "Linear speed v",
+          "ddV": "等於 linear velocity 的大小。linear velocity 始終沿圓的 tangent，所以方向會不斷改變。它與 angular speed 的關係是 <i>v</i> = <i>rω</i>。",
+          "dtRel": "v、ω 與 r",
+          "ddRel": "相同的 ω：<i>v</i> 與 <i>r</i> 成正比。相同的 <i>v</i>：較小的 <i>r</i> 有較大的 ω。",
+          "dtT": "Period T",
+          "ddT": "完成一圈所需的時間。<i>T</i> = 2π/ω = 2π<i>r</i>/<i>v</i>。",
+          "watch1": "linear speed 是 linear velocity 的大小：即使 velocity 的方向不斷改變，<i>v</i> 仍可以保持不變。",
+          "watch2": "在 <i>s</i> = <i>r</i>θ 和 ω = θ/<i>t</i> 之中，θ 必須用 radian。"
+      }
+    };
+
+    let lang = "en";
+    try { lang = localStorage.getItem("cm11.lang") || "en"; } catch (e) {}
+    if (lang !== "zh-HK") lang = "en";
+
+    function t(key) {
+      const pack = I18N[lang] || I18N.en;
+      return (pack && pack[key] != null) ? pack[key] : (I18N.en[key] || key);
+    }
+
+    function applyLang() {
+      document.documentElement.lang = lang === "zh-HK" ? "zh-HK" : "en";
+      document.title = t("docTitle");
+      const grp = document.getElementById("langSwitch");
+      if (grp) grp.setAttribute("aria-label", t("langGroup"));
+      const sec = document.getElementById("secNav");
+      if (sec) sec.setAttribute("aria-label", t("secNav"));
+      const enBtn = document.getElementById("langEn");
+      const zhBtn = document.getElementById("langZh");
+      if (enBtn) enBtn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+      if (zhBtn) zhBtn.setAttribute("aria-pressed", lang === "zh-HK" ? "true" : "false");
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        if (el.id === "btnNext") return;
+        if (el.hasAttribute("data-dynamic")) return;
+        const key = el.getAttribute("data-i18n");
+        el.innerHTML = t(key);
+      });
+
+      document.querySelectorAll("input[data-aria-label]").forEach((el) => {
+        el.setAttribute("aria-label", t("ariaAnswer").replace("{label}", el.getAttribute("data-aria-label")));
+        el.setAttribute("placeholder", t("phAnswer"));
+      });
+
+      $back.textContent = t("back");
+      $next.textContent = i === steps.length - 1 ? (NEXT_KEY ? t(NEXT_KEY) : t("backToStart")) : t("next");
+      document.querySelectorAll("button.play[data-dynamic]").forEach((btn) => {
+        const on = btn.getAttribute("data-playing") === "1";
+        btn.textContent = on ? t("stop") : t("play");
+      });
+    }
+
+    function setLang(next) {
+      lang = next === "zh-HK" ? "zh-HK" : "en";
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+      applyLang();
+    }
+
+    function el(html) {
+      const d = document.createElement("div");
+      d.className = "step";
+      d.innerHTML = html;
+      return d;
+    }
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillNotes">In-class notes</span>
+      <h2 data-i18n="s0h">Linear speed and period</h2>
+      <p class="lead" data-i18n="s0lead">Work through this part of the Chapter 11 in-class notes. It covers linear speed and the period of uniform circular motion — sections D and E of 11.1 Describing circular motion.</p>
+      <ul class="learn">
+        <li data-i18n="s0li1"><b>Linear speed</b> <i>v</i>, and how it is related to angular speed <i>ω</i> by <i>v</i> = <i>rω</i></li>
+        <li data-i18n="s0li2">How <i>v</i> depends on the radius <i>r</i> when objects share the same <i>ω</i>, and how <i>ω</i> depends on <i>r</i> when they share the same <i>v</i></li>
+        <li data-i18n="s0li3">The <b>period</b> <i>T</i> of uniform circular motion</li>
+      </ul>
+      <p data-i18n="s0try">There is a Quick check at the end. When you see <b>Try this</b> or <b>Predict first</b>, attempt the idea before you move the sliders.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">D · Linear speed</span>
+      <h2 data-i18n="d1h">Linear speed</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="d1p1">For an object performing <b>uniform circular motion</b>, linear speed <i>v</i> is equal to the magnitude of the object’s <b>linear velocity</b>. The linear velocity at a point lies along the <b>tangent</b> of the circle at that point. Therefore, it keeps changing as the object moves.</p>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgD1" viewBox="0 0 320 250" role="img" aria-label="Circle with two radii, arc s, and tangent velocity arrows">
+          <defs>
+            <marker id="arrD1v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1b3a5f"/>
+            </marker>
+          </defs>
+          <circle cx="160" cy="125" r="88" fill="#fff" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <path id="d1arcS" fill="none" stroke="#c45c26" stroke-width="3.5" stroke-linecap="round"/>
+          <line id="d1r0" x1="160" y1="125" x2="248" y2="125" stroke="#222" stroke-width="1.5"/>
+          <line id="d1r1" x1="160" y1="125" x2="248" y2="125" stroke="#222" stroke-width="1.5"/>
+          <path id="d1ang" fill="none" stroke="#1a7aad" stroke-width="2.2"/>
+          <path id="d1sq" fill="none" stroke="#222" stroke-width="1.35"/>
+          <circle cx="160" cy="125" r="3" fill="#222"/>
+          <circle id="d1start" r="7" fill="#c8c8c8" stroke="#222" stroke-width="1.3"/>
+          <circle id="d1obj" r="7.5" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <line id="d1v0" stroke="#1b3a5f" stroke-width="2.1" marker-end="url(#arrD1v)"/>
+          <line id="d1v1" stroke="#1b3a5f" stroke-width="2.1" marker-end="url(#arrD1v)"/>
+          <text id="d1th" font-size="16" font-style="italic" fill="#1a7aad">θ</text>
+          <text id="d1s" font-size="16" font-style="italic" fill="#c45c26">s</text>
+          <text id="d1rl0" font-size="15" font-style="italic" fill="#222">r</text>
+          <text id="d1rl1" font-size="15" font-style="italic" fill="#222">r</text>
+          <text id="d1vl0" font-size="15" font-style="italic" fill="#1b3a5f">v</text>
+          <text id="d1vl1" font-size="15" font-style="italic" fill="#1b3a5f">v</text>
+        </svg>
+        <figcaption data-i18n="d1cap">Press Play and watch the linear velocity: it stays tangent to the circle, so its direction keeps changing.</figcaption>
+      </figure>
+      <div class="controls">
+        <label><span data-i18n="d1slider">Angular displacement θ</span><span id="d1lbl">1.00 rad</span></label>
+        <div class="row">
+          <input type="range" id="d1slider" min="0.25" max="6.28" step="0.01" value="1.05" style="flex:1;min-width:8rem" />
+          <button type="button" class="play" id="d1play" data-i18n="play" data-dynamic>Play</button>
+        </div>
+      </div>
+      </div>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">D · Linear speed</span>
+      <h2 data-i18n="d2h">The relation <i>v</i> = <i>rω</i></h2>
+      <p data-i18n="d2p1">When an object travels an angular displacement of θ along a circular path of radius <i>r</i> at a uniform speed <i>v</i>, the distance travelled <i>s</i> is given by <b><i>s</i> = <i>r</i>θ</b>. Besides,</p>
+      <div class="eqn"><i>v</i> = <i>s</i>/<i>t</i> = <i>r</i>θ/<i>t</i> = <i>rω</i></div>
+      <div class="worked">
+        <div class="lbl" data-i18n="tryThis">Try this</div>
+        <p data-i18n="d2work">From <i>s</i> = <i>r</i>θ and <i>ω</i> = θ/<i>t</i> (already in the notes), the linear speed is <i>v</i> = <i>s</i>/<i>t</i> = <i>r</i>θ/<i>t</i> = <i>rω</i>.</p>
+      </div>
+      <p data-i18n="d2p2">Therefore, the relationship between the linear speed <i>v</i> and the angular speed <i>ω</i> is</p>
+      <div class="eqn"><i>v</i> = <i>rω</i></div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">D · Linear speed</span>
+      <h2 data-i18n="d3h">Same angular speed, different radius</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="d3p">For objects moving with the same angular speed <i>ω</i>, the linear speed <i>v</i> is <b>directly</b> proportional to the radius of the path <i>r</i>.</p>
+      <div class="think">
+        <div class="lbl" data-i18n="predictFirst">Predict first</div>
+        <p data-i18n="d3pred">If the outer radius is twice the inner radius, and both objects have the same angular speed <i>ω</i>, what happens to the linear speed <i>v</i> of the outer object? Then use the sliders to check.</p>
+      </div>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgD3" viewBox="0 0 320 300" role="img" aria-label="Two concentric objects A and B with the same angular speed">
+          <defs>
+            <marker id="arrD3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1a7aad"/>
+            </marker>
+            <marker id="arrD3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c45c26"/>
+            </marker>
+          </defs>
+          <circle id="d3circB" cx="160" cy="128" r="104" fill="none" stroke="#222" stroke-width="1.7"/>
+          <circle id="d3circA" cx="160" cy="128" r="52" fill="none" stroke="#222" stroke-width="1.7"/>
+          <line id="d3ray" x1="160" y1="128" x2="264" y2="128" stroke="#222" stroke-width="1.4"/>
+          <line id="d3dropO" x1="160" y1="128" x2="160" y2="248" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d3dropA" x1="212" y1="128" x2="212" y2="232" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d3dropB" x1="264" y1="128" x2="264" y2="252" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d3dimA" x1="160" y1="232" x2="212" y2="232" stroke="#222" stroke-width="1.1"/>
+          <line id="d3dimB" x1="160" y1="252" x2="264" y2="252" stroke="#222" stroke-width="1.1"/>
+          <circle cx="160" cy="128" r="3" fill="#222"/>
+          <circle id="d3objA" r="7" fill="#1a7aad" stroke="#fff" stroke-width="1.5"/>
+          <circle id="d3objB" r="7" fill="#c45c26" stroke="#fff" stroke-width="1.5"/>
+          <line id="d3vA" stroke="#1a7aad" stroke-width="2.1" marker-end="url(#arrD3a)"/>
+          <line id="d3vB" stroke="#c45c26" stroke-width="2.1" marker-end="url(#arrD3b)"/>
+          <text x="148" y="124" font-size="13" font-style="italic">O</text>
+          <text id="d3labA" font-size="13" font-style="italic" fill="#1a7aad">A</text>
+          <text id="d3labB" font-size="13" font-style="italic" fill="#c45c26">B</text>
+          <text id="d3labVA" font-size="13" font-style="italic" fill="#1a7aad">v<tspan font-size="10" dy="3">A</tspan></text>
+          <text id="d3labVB" font-size="13" font-style="italic" fill="#c45c26">v<tspan font-size="10" dy="3">B</tspan></text>
+          <text id="d3labRA" font-size="12" font-style="italic" text-anchor="middle">r<tspan font-size="10" dy="3">A</tspan></text>
+          <text id="d3labRB" font-size="12" font-style="italic" text-anchor="middle">r<tspan font-size="10" dy="3">B</tspan></text>
+        </svg>
+      </figure>
+      <div class="caption-box" data-i18n="d3cap">If ω<sub>B</sub> = ω<sub>A</sub>, then <i>r</i><sub>B</sub> = 2 <i>r</i><sub>A</sub> implies <i>v</i><sub>B</sub> = 2 <i>v</i><sub>A</sub>.</div>
+      <div class="controls">
+        <label><span data-i18n="d3sliderW">Common angular speed ω</span><span id="d3wLbl">1.00 rad s⁻¹</span></label>
+        <div class="row">
+          <input type="range" id="d3w" min="0.3" max="2.4" step="0.05" value="1" style="flex:1;min-width:8rem" />
+          <button type="button" class="play" id="d3play" data-i18n="play" data-dynamic>Play</button>
+        </div>
+        <label style="margin-top:.45rem"><span data-i18n="d3sliderR">Radius ratio r<sub>B</sub> / r<sub>A</sub></span><span id="d3rLbl">2.00</span></label>
+        <input type="range" id="d3ratioSl" min="1.2" max="2.4" step="0.05" value="2" />
+      </div>
+      <div class="readout cols-3">
+        <div><span data-i18n="d3vA">Linear speed v<sub>A</sub></span><b id="d3outA">1.00 m s⁻¹</b></div>
+        <div><span data-i18n="d3vB">Linear speed v<sub>B</sub></span><b id="d3outB">2.00 m s⁻¹</b></div>
+        <div><span data-i18n="d3ratio">Ratio v<sub>B</sub> / v<sub>A</sub></span><b id="d3outR">2.00</b></div>
+      </div>
+      </div>
+      </div>
+      <p class="note" data-i18n="d3obs">The objects keep in step (same ω), but the outer one must travel farther in the same time, so it has the larger linear speed. When the ratio is 2, you should find v<sub>B</sub> = 2 v<sub>A</sub>.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">D · Linear speed</span>
+      <h2 data-i18n="d4h">Same linear speed, different radius</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="d4p">If two objects have the same <i>v</i>, the one with smaller <i>r</i> has a <b>larger</b> <i>ω</i>.</p>
+      <div class="think">
+        <div class="lbl" data-i18n="predictFirst">Predict first</div>
+        <p data-i18n="d4pred">If the outer radius is twice the inner radius, but both objects have the same linear speed <i>v</i>, what happens to the angular speed <i>ω</i> of the outer object? Then use the sliders to check.</p>
+      </div>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgD4" viewBox="0 0 320 300" role="img" aria-label="Two concentric objects P and Q with the same linear speed">
+          <defs>
+            <marker id="arrD4p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1a7aad"/>
+            </marker>
+            <marker id="arrD4q" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c45c26"/>
+            </marker>
+          </defs>
+          <circle id="d4circQ" cx="160" cy="128" r="104" fill="none" stroke="#222" stroke-width="1.7"/>
+          <circle id="d4circP" cx="160" cy="128" r="52" fill="none" stroke="#222" stroke-width="1.7"/>
+          <line id="d4rayP" x1="160" y1="128" x2="212" y2="128" stroke="#222" stroke-width="1.4"/>
+          <line id="d4rayQ" x1="160" y1="128" x2="264" y2="128" stroke="#222" stroke-width="1.4"/>
+          <line id="d4dropO" x1="160" y1="128" x2="160" y2="248" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d4dropP" x1="212" y1="128" x2="212" y2="232" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d4dropQ" x1="264" y1="128" x2="264" y2="252" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+          <line id="d4dimP" x1="160" y1="232" x2="212" y2="232" stroke="#222" stroke-width="1.1"/>
+          <line id="d4dimQ" x1="160" y1="252" x2="264" y2="252" stroke="#222" stroke-width="1.1"/>
+          <circle cx="160" cy="128" r="3" fill="#222"/>
+          <circle id="d4objP" r="7" fill="#1a7aad" stroke="#fff" stroke-width="1.5"/>
+          <circle id="d4objQ" r="7" fill="#c45c26" stroke="#fff" stroke-width="1.5"/>
+          <line id="d4vP" stroke="#1a7aad" stroke-width="2.1" marker-end="url(#arrD4p)"/>
+          <line id="d4vQ" stroke="#c45c26" stroke-width="2.1" marker-end="url(#arrD4q)"/>
+          <text x="148" y="124" font-size="13" font-style="italic">O</text>
+          <text id="d4labP" font-size="13" font-style="italic" fill="#1a7aad">P</text>
+          <text id="d4labQ" font-size="13" font-style="italic" fill="#c45c26">Q</text>
+          <text id="d4labVP" font-size="13" font-style="italic" fill="#1a7aad">v<tspan font-size="10" dy="3">P</tspan></text>
+          <text id="d4labVQ" font-size="13" font-style="italic" fill="#c45c26">v<tspan font-size="10" dy="3">Q</tspan></text>
+          <text id="d4labRP" font-size="12" font-style="italic" text-anchor="middle">r<tspan font-size="10" dy="3">P</tspan></text>
+          <text id="d4labRQ" font-size="12" font-style="italic" text-anchor="middle">r<tspan font-size="10" dy="3">Q</tspan></text>
+        </svg>
+      </figure>
+      <div class="caption-box" data-i18n="d4cap">If <i>v</i><sub>Q</sub> = <i>v</i><sub>P</sub>, then <i>r</i><sub>Q</sub> = 2 <i>r</i><sub>P</sub> implies ω<sub>Q</sub> = ½ ω<sub>P</sub>.</div>
+      <div class="controls">
+        <label><span data-i18n="d4sliderV">Common linear speed v</span><span id="d4vLbl">2.00 m s⁻¹</span></label>
+        <div class="row">
+          <input type="range" id="d4v" min="0.6" max="3.2" step="0.05" value="2" style="flex:1;min-width:8rem" />
+          <button type="button" class="play" id="d4play" data-i18n="play" data-dynamic>Play</button>
+        </div>
+        <label style="margin-top:.45rem"><span data-i18n="d4sliderR">Radius ratio r<sub>Q</sub> / r<sub>P</sub></span><span id="d4rLbl">2.00</span></label>
+        <input type="range" id="d4ratioSl" min="1.2" max="2.4" step="0.05" value="2" />
+      </div>
+      <div class="readout cols-3">
+        <div><span data-i18n="d4wP">Angular speed ω<sub>P</sub></span><b id="d4outP">2.00 rad s⁻¹</b></div>
+        <div><span data-i18n="d4wQ">Angular speed ω<sub>Q</sub></span><b id="d4outQ">1.00 rad s⁻¹</b></div>
+        <div><span data-i18n="d4ratio">Ratio ω<sub>Q</sub> / ω<sub>P</sub></span><b id="d4outR">0.50</b></div>
+      </div>
+      </div>
+      </div>
+      <p class="note" data-i18n="d4obs">The inner object has less distance to cover per revolution, so to keep the same linear speed it must go around more often — a larger ω. When the ratio is 2, you should find ω<sub>Q</sub> = ½ ω<sub>P</sub>.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">E · Period</span>
+      <h2 data-i18n="e1h">Period</h2>
+      <p data-i18n="e1p">The period <i>T</i> of a uniform circular motion is the time that the object takes to complete one revolution.</p>
+      <div class="eqn"><i>T</i> = 2π / ω = 2π<i>r</i> / <i>v</i></div>
+      <div class="worked">
+        <div class="lbl" data-i18n="tryThis">Try this</div>
+        <p data-i18n="e1why">These follow from one revolution: θ = 2π, so <i>T</i> = 2π/ω; and the distance is the circumference <i>s</i> = 2π<i>r</i>, so <i>T</i> = 2π<i>r</i>/<i>v</i>. Rearranged, ω = 2π/<i>T</i>.</p>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillQC">Quick check</span>
+      <h2 data-i18n="qc1h">Quick check 1</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="qc1stem">Both Anson and Benny run at the same linear speed of 5 m s<sup>−1</sup> in circular paths around the same centre. The radii of Anson’s and Benny’s paths are 18 m and 12 m respectively.</p>
+      <p><b>(a)</b> <span data-i18n="qc1a">Find their angular speeds.</span></p>
+      <p><b>(b)</b> <span data-i18n="qc1b">Find their periods.</span></p>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg viewBox="0 0 320 230" role="img" aria-label="Anson on the outer track and Benny on the inner track">
+          <circle cx="160" cy="125" r="28" fill="#d8d8d8" stroke="none"/>
+          <circle cx="160" cy="125" r="16" fill="#eeeeee" stroke="none"/>
+          <circle cx="160" cy="125" r="56" fill="none" stroke="#444" stroke-width="1.7"/>
+          <circle cx="160" cy="125" r="84" fill="none" stroke="#222" stroke-width="1.7"/>
+          <!-- Benny, inner, slightly to the right of the top -->
+          <g id="qc1Benny" transform="translate(178,71)">
+            <circle cx="0" cy="-8" r="4.2" fill="#fff" stroke="#222" stroke-width="1.1"/>
+            <path d="M0,-3 L0,6 M0,6 L-5,13 M0,6 L5,13 M-6,0 L6,0" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <!-- Anson, outer, slightly to the left of the top -->
+          <g id="qc1Anson" transform="translate(142,44)">
+            <circle cx="0" cy="-8" r="4.2" fill="#fff" stroke="#222" stroke-width="1.1"/>
+            <path d="M0,-3 L0,6 M0,6 L-5,13 M0,6 L5,13 M-6,0 L6,0" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <text x="100" y="36" font-size="13">Anson</text>
+          <text x="196" y="64" font-size="13">Benny</text>
+        </svg>
+      </figure>
+      </div>
+      </div>
+      <p class="sol-head" data-i18n="qc1sol">Solution</p>
+      <div class="q">
+        <div class="q-line">
+          <span class="num">(a)</span>
+          <span data-i18n="qc1applyW">Apply ω =</span>
+          <input type="text" id="qc1w" inputmode="text" data-aria-label="ω formula">
+        </div>
+        <div class="feedback" id="fb_qc1w"></div>
+      </div>
+      <div class="q">
+        <p data-i18n="qc1ansonW" style="margin:0 0 .35rem">Angular speed of Anson =</p>
+        <div class="q-line">
+          <input type="text" id="qc1aw" inputmode="text" data-aria-label="Anson ω">
+          <span class="unit">rad s<sup>−1</sup></span>
+        </div>
+        <div class="feedback" id="fb_qc1aw"></div>
+      </div>
+      <div class="q">
+        <p data-i18n="qc1bennyW" style="margin:0 0 .35rem">Angular speed of Benny =</p>
+        <div class="q-line">
+          <input type="text" id="qc1bw" inputmode="text" data-aria-label="Benny ω">
+          <span class="unit">rad s<sup>−1</sup></span>
+        </div>
+        <div class="feedback" id="fb_qc1bw"></div>
+      </div>
+      <div class="q">
+        <p data-i18n="qc1applyT" style="margin:0 0 .45rem"><b>(b)</b> Apply <i>T</i> = 2π<i>r</i> / <i>v</i>.</p>
+        <p data-i18n="qc1ansonT" style="margin:0 0 .35rem">Period of Anson =</p>
+        <div class="q-line">
+          <input type="text" id="qc1at" inputmode="text" data-aria-label="Anson T">
+          <span class="unit">s</span>
+        </div>
+        <div class="feedback" id="fb_qc1at"></div>
+        <p data-i18n="qc1bennyT" style="margin:.5rem 0 .35rem">Period of Benny =</p>
+        <div class="q-line">
+          <input type="text" id="qc1bt" inputmode="text" data-aria-label="Benny T">
+          <span class="unit">s</span>
+        </div>
+        <div class="feedback" id="fb_qc1bt"></div>
+      </div>
+      <details class="hint-fold"><summary data-i18n="hint">Hint</summary>
+        <p data-i18n="qc1hint">They have the same <i>v</i>. The runner on the smaller radius has the larger ω, and a shorter period <i>T</i>.</p>
+      </details>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="qc1watch">Give the angular speeds and periods to 3 significant figures, as in the notes.</p>
+      </div>
+      <div class="row" style="margin-top:.55rem">
+        <button type="button" class="primary" id="checkQC1" data-i18n="checkPage">Check this page</button>
+        <button type="button" class="ghost" id="revealQC1" data-i18n="showAnswers">Show answers</button>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillSum">Summary</span>
+      <h2 data-i18n="sumH">Linear speed and period</h2>
+      <dl class="summary">
+        <dt data-i18n="dtV">Linear speed v</dt>
+        <dd data-i18n="ddV">Equal to the magnitude of the linear velocity. The linear velocity is always tangent to the circle, so its direction keeps changing. The link to angular speed is <i>v</i> = <i>rω</i>.</dd>
+        <dt data-i18n="dtRel">v, ω and r</dt>
+        <dd data-i18n="ddRel">Same ω: <i>v</i> is directly proportional to <i>r</i>. Same <i>v</i>: the smaller <i>r</i> has the larger ω.</dd>
+        <dt data-i18n="dtT">Period T</dt>
+        <dd data-i18n="ddT">Time for one revolution. <i>T</i> = 2π/ω = 2π<i>r</i>/<i>v</i>.</dd>
+      </dl>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="watch1">Linear speed is the magnitude of the linear velocity: <i>v</i> can stay constant even while the velocity keeps changing direction.</p>
+        <p data-i18n="watch2">θ in <i>s</i> = <i>r</i>θ and in ω = θ/<i>t</i> must be in radians.</p>
+      </div>
+    `));
+
+    steps.forEach((s, n) => {
+      $main.appendChild(s);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.title = "Go to step " + (n + 1);
+      b.addEventListener("click", () => go(n));
+      $prog.appendChild(b);
+    });
+
+    function go(n) {
+      i = Math.max(0, Math.min(steps.length - 1, n));
+      steps.forEach((s, k) => s.classList.toggle("show", k === i));
+      [...$prog.children].forEach((b, k) => {
+        b.classList.toggle("on", k === i);
+        b.classList.toggle("done", k < i);
+      });
+      $back.disabled = i === 0 && !PREV_FILE;
+      $back.style.opacity = $back.disabled ? .4 : 1;
+      $next.textContent = i === steps.length - 1 ? (NEXT_KEY ? t(NEXT_KEY) : t("backToStart")) : t("next");
+      $main.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      initStep(i);
+      applyLang();
+    }
+    $back.addEventListener("click", () => {
+      if (i === 0 && PREV_FILE) { location.href = PREV_FILE; return; }
+      go(i - 1);
+    });
+    $next.addEventListener("click", () => {
+      if (i === steps.length - 1) {
+        if (NEXT_FILE) { location.href = NEXT_FILE; return; }
+        go(0);
+        return;
+      }
+      go(i + 1);
+    });
+
+    function norm(s) {
+      return String(s).trim()
+        .replace(/π/g, "pi")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "")
+        .replace(/degrees?|deg|rads?|rpm/gi, "")
+        .replace(/\^/g, "**")
+        .toLowerCase()
+        .replace(/(\d)(pi)/g, "$1*$2")
+        .replace(/(pi)(\d)/g, "$1*$2");
+    }
+    function evalExpr(s) {
+      const t = norm(s);
+      if (!t) return NaN;
+      if (!/^[0-9.+*/()pi-]+$/.test(t.replace(/\*\*/g, ""))) return NaN;
+      try {
+        const fn = new Function("pi", "return (" + t + ");");
+        const v = fn(Math.PI);
+        return typeof v === "number" && isFinite(v) ? v : NaN;
+      } catch (e) { return NaN; }
+    }
+    function close(a, b, rel) {
+      if (!isFinite(a) || !isFinite(b)) return false;
+      const tol = Math.max(Math.abs(b) * (rel || 0.02), 0.015);
+      return Math.abs(a - b) <= tol;
+    }
+    function mark(input, fb, ok, msg) {
+      if (input) input.style.borderColor = ok ? "#1b7a46" : "#b42318";
+      if (fb) {
+        fb.className = "feedback " + (ok ? "ok" : "bad");
+        fb.textContent = msg;
+      }
+    }
+    function checkOne(id, expected, exactText, reveal, fillText) {
+      const input = document.getElementById(id);
+      const fb = document.getElementById("fb_" + id);
+      if (reveal) {
+        input.value = fillText;
+        mark(input, fb, true, exactText || fillText);
+        return true;
+      }
+      const v = evalExpr(input.value);
+      const ok = expected.some(e => close(v, e));
+      if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
+      else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
+      else mark(input, fb, false, t("notQuite"));
+      return ok;
+    }
+    function normSym(s) {
+      return String(s).trim()
+        .replace(/π/g, "pi")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/·/g, "*")
+        .replace(/\s+/g, "")
+        .replace(/^[ωw]=/i, "")
+        .replace(/\*\*2/g, "²")
+        .replace(/\^2/g, "²")
+        .replace(/v\s*\*\s*v/gi, "v²")
+        .replace(/\(v\)²/gi, "v²")
+        .toLowerCase();
+    }
+    function checkSym(id, accepted, exactText, reveal, fillText) {
+      const input = document.getElementById(id);
+      const fb = document.getElementById("fb_" + id);
+      if (reveal) {
+        input.value = fillText;
+        mark(input, fb, true, exactText || fillText);
+        return true;
+      }
+      const n = normSym(input.value);
+      const ok = !!n && accepted.some(a => n === normSym(a));
+      if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
+      else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
+      else mark(input, fb, false, t("notQuite"));
+      return ok;
+    }
+    function checkQC1(reveal) {
+      checkSym("qc1w", ["v/r"], t("exactPrefix") + "ω = v/r.", reveal, "v/r");
+      checkOne("qc1aw", [5/18, 0.278], "5/18 = 0.278 rad s⁻¹ (3 s.f.).", reveal, "0.278");
+      checkOne("qc1bw", [5/12, 0.417], "5/12 = 0.417 rad s⁻¹ (3 s.f.).", reveal, "0.417");
+      checkOne("qc1at", [2*Math.PI*18/5, 22.6], "2π(18)/5 = 22.6 s (3 s.f.).", reveal, "22.6");
+      checkOne("qc1bt", [2*Math.PI*12/5, 15.1], "2π(12)/5 = 15.1 s (3 s.f.).", reveal, "15.1");
+    }
+
+    function polar(cx, cy, r, ang) {
+      return [cx + r * Math.cos(ang), cy - r * Math.sin(ang)];
+    }
+    function arcOnly(cx, cy, r, a0, a1) {
+      const [x0, y0] = polar(cx, cy, r, a0);
+      const [x1, y1] = polar(cx, cy, r, a1);
+      let dth = a1 - a0;
+      while (dth < 0) dth += 2 * Math.PI;
+      while (dth > 2 * Math.PI) dth -= 2 * Math.PI;
+      const large = dth > Math.PI ? 1 : 0;
+      return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 0 ${x1} ${y1}`;
+    }
+    function setLine(id, x1, y1, x2, y2) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute("x1", x1); el.setAttribute("y1", y1);
+      el.setAttribute("x2", x2); el.setAttribute("y2", y2);
+    }
+    function setPos(id, x, y, ax, ay) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute(ax || "cx", x);
+      el.setAttribute(ay || "cy", y);
+    }
+    function setText(id, x, y) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute("x", x); el.setAttribute("y", y);
+    }
+    function fmt(th) {
+      const keys = [
+        [Math.PI/6, "π/6"], [Math.PI/4, "π/4"], [Math.PI/3, "π/3"],
+        [Math.PI/2, "π/2"], [2*Math.PI/3, "2π/3"], [3*Math.PI/4, "3π/4"],
+        [Math.PI, "π"], [5*Math.PI/4, "5π/4"], [3*Math.PI/2, "3π/2"],
+        [7*Math.PI/4, "7π/4"], [2*Math.PI, "2π"]
+      ];
+      for (const [v, s] of keys) if (Math.abs(th - v) < 0.02) return s + " rad";
+      return th.toFixed(2) + " rad";
+    }
+    function rightAngle(px, py, uxIn, uyIn, uxTan, uyTan, s) {
+      const x1 = px + s * uxTan, y1 = py + s * uyTan;
+      const x2 = x1 + s * uxIn, y2 = y1 + s * uyIn;
+      const x3 = px + s * uxIn, y3 = py + s * uyIn;
+      return `M ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)} L ${x3.toFixed(2)} ${y3.toFixed(2)}`;
+    }
+
+    /* ---------- D1: tangent velocity ---------- */
+    let d1Timer = 0, d1Last = 0, d1Play = false;
+    function drawD1(th) {
+      const cx = 160, cy = 125, R = 88, a0 = 0, a1 = th;
+      const [x0, y0] = polar(cx, cy, R, a0);
+      const [x1, y1] = polar(cx, cy, R, a1);
+      setLine("d1r0", cx, cy, x0, y0);
+      setLine("d1r1", cx, cy, x1, y1);
+      setPos("d1start", x0, y0);
+      setPos("d1obj", x1, y1);
+      const sEl = document.getElementById("d1arcS");
+      if (sEl) sEl.setAttribute("d", arcOnly(cx, cy, R, a0, a1));
+      const ang = document.getElementById("d1ang");
+      if (ang) ang.setAttribute("d", arcOnly(cx, cy, 22, a0, a1));
+      // unit tangent (CCW): d/dθ of (cos θ, -sin θ) = (-sin θ, -cos θ)
+      const t0x = -Math.sin(a0), t0y = -Math.cos(a0);
+      const t1x = -Math.sin(a1), t1y = -Math.cos(a1);
+      const L = 46;
+      setLine("d1v0", x0, y0, x0 + L * t0x, y0 + L * t0y);
+      setLine("d1v1", x1, y1, x1 + L * t1x, y1 + L * t1y);
+      // right-angle mark at current point, between inward radius and tangent
+      const inx = (cx - x1) / R, iny = (cy - y1) / R;
+      const sq = document.getElementById("d1sq");
+      if (sq) sq.setAttribute("d", rightAngle(x1, y1, inx, iny, t1x, t1y, 11));
+      const mid = a1 / 2;
+      const [tx, ty] = polar(cx, cy, 34, mid);
+      setText("d1th", tx - 4, ty + 5);
+      const [sx, sy] = polar(cx, cy, R + 16, mid);
+      setText("d1s", Math.min(300, Math.max(10, sx - 4)), Math.max(16, sy + 4));
+      const [r0x, r0y] = polar(cx, cy, R * 0.5, a0 + 0.18);
+      setText("d1rl0", r0x - 4, r0y + 5);
+      const [r1x, r1y] = polar(cx, cy, R * 0.55, a1 - 0.2);
+      setText("d1rl1", r1x - 4, r1y + 5);
+      setText("d1vl0", x0 + L * t0x + 8 * t0x - 4, y0 + L * t0y + 8 * t0y);
+      setText("d1vl1", x1 + L * t1x + 8 * t1x - 4, y1 + L * t1y + 8 * t1y);
+      const lbl = document.getElementById("d1lbl");
+      if (lbl) lbl.textContent = fmt(th);
+    }
+    function tickD1(ts) {
+      if (!d1Play) { d1Timer = 0; d1Last = 0; return; }
+      if (!d1Last) d1Last = ts;
+      const dt = Math.min(0.05, (ts - d1Last) / 1000);
+      d1Last = ts;
+      const sl = document.getElementById("d1slider");
+      if (!sl) { d1Play = false; d1Timer = 0; return; }
+      let th = +sl.value + 0.7 * dt;
+      if (th >= 6.28) th = 0.25;
+      sl.value = th;
+      drawD1(th);
+      d1Timer = requestAnimationFrame(tickD1);
+    }
+    function toggleD1() {
+      d1Play = !d1Play;
+      const btn = document.getElementById("d1play");
+      if (btn) {
+        btn.setAttribute("data-playing", d1Play ? "1" : "0");
+        btn.textContent = d1Play ? t("stop") : t("play");
+      }
+      if (d1Play) {
+        d1Last = 0;
+        d1Timer = requestAnimationFrame(tickD1);
+      }
+    }
+
+    /* ---------- D3: same ω ---------- */
+    let d3Timer = 0, d3Last = 0, d3Play = false, d3Ang = 0;
+    const D3_RA = 1.0; // metres (display)
+    const D3_CX = 160, D3_CY = 128, D3_PX = 50;
+    function drawD3() {
+      const wEl = document.getElementById("d3w");
+      const rEl = document.getElementById("d3ratioSl");
+      if (!wEl || !rEl) return;
+      const w = +wEl.value;
+      const ratio = +rEl.value;
+      const rB = D3_RA * ratio;
+      const rApx = D3_PX, rBpx = D3_PX * ratio;
+      const vA = w * D3_RA, vB = w * rB;
+      document.getElementById("d3circA").setAttribute("r", rApx);
+      document.getElementById("d3circB").setAttribute("r", rBpx);
+      const [xA, yA] = polar(D3_CX, D3_CY, rApx, d3Ang);
+      const [xB, yB] = polar(D3_CX, D3_CY, rBpx, d3Ang);
+      setPos("d3objA", xA, yA);
+      setPos("d3objB", xB, yB);
+      setLine("d3ray", D3_CX, D3_CY, xB, yB);
+      const tx = -Math.sin(d3Ang), ty = -Math.cos(d3Ang);
+      const k = 22; // px per (m/s) at ω=1, r=1 → v=1
+      setLine("d3vA", xA, yA, xA + k * vA * tx, yA + k * vA * ty);
+      setLine("d3vB", xB, yB, xB + k * vB * tx, yB + k * vB * ty);
+      setText("d3labA", xA + 10, yA - 8);
+      setText("d3labB", xB + 10, yB - 8);
+      setText("d3labVA", xA + k * vA * tx + 8, yA + k * vA * ty);
+      setText("d3labVB", xB + k * vB * tx + 8, yB + k * vB * ty);
+      const yAline = D3_CY + rBpx + 18;
+      const yBline = yAline + 18;
+      setLine("d3dropO", D3_CX, D3_CY, D3_CX, yBline);
+      setLine("d3dropA", D3_CX + rApx, D3_CY, D3_CX + rApx, yAline);
+      setLine("d3dropB", D3_CX + rBpx, D3_CY, D3_CX + rBpx, yBline);
+      setLine("d3dimA", D3_CX, yAline, D3_CX + rApx, yAline);
+      setLine("d3dimB", D3_CX, yBline, D3_CX + rBpx, yBline);
+      setText("d3labRA", D3_CX + rApx / 2, yAline - 4);
+      setText("d3labRB", D3_CX + rBpx / 2, yBline - 4);
+      document.getElementById("d3wLbl").textContent = w.toFixed(2) + " rad s⁻¹";
+      document.getElementById("d3rLbl").textContent = ratio.toFixed(2);
+      document.getElementById("d3outA").textContent = vA.toFixed(2) + " m s⁻¹";
+      document.getElementById("d3outB").textContent = vB.toFixed(2) + " m s⁻¹";
+      document.getElementById("d3outR").textContent = ratio.toFixed(2);
+    }
+    function tickD3(ts) {
+      if (!d3Play) { d3Timer = 0; d3Last = 0; return; }
+      if (!d3Last) d3Last = ts;
+      const dt = Math.min(0.05, (ts - d3Last) / 1000);
+      d3Last = ts;
+      const wEl = document.getElementById("d3w");
+      if (!wEl) { d3Play = false; d3Timer = 0; return; }
+      d3Ang += (+wEl.value) * dt;
+      drawD3();
+      d3Timer = requestAnimationFrame(tickD3);
+    }
+    function toggleD3() {
+      d3Play = !d3Play;
+      const btn = document.getElementById("d3play");
+      if (btn) {
+        btn.setAttribute("data-playing", d3Play ? "1" : "0");
+        btn.textContent = d3Play ? t("stop") : t("play");
+      }
+      if (d3Play) { d3Last = 0; d3Timer = requestAnimationFrame(tickD3); }
+    }
+
+    /* ---------- D4: same v ---------- */
+    let d4Timer = 0, d4Last = 0, d4Play = false, d4AngP = 0, d4AngQ = 0;
+    const D4_RP = 1.0, D4_CX = 160, D4_CY = 128, D4_PX = 50;
+    function drawD4() {
+      const vEl = document.getElementById("d4v");
+      const rEl = document.getElementById("d4ratioSl");
+      if (!vEl || !rEl) return;
+      const v = +vEl.value;
+      const ratio = +rEl.value;
+      const rQ = D4_RP * ratio;
+      const rPpx = D4_PX, rQpx = D4_PX * ratio;
+      const wP = v / D4_RP, wQ = v / rQ;
+      document.getElementById("d4circP").setAttribute("r", rPpx);
+      document.getElementById("d4circQ").setAttribute("r", rQpx);
+      const [xP, yP] = polar(D4_CX, D4_CY, rPpx, d4AngP);
+      const [xQ, yQ] = polar(D4_CX, D4_CY, rQpx, d4AngQ);
+      setPos("d4objP", xP, yP);
+      setPos("d4objQ", xQ, yQ);
+      setLine("d4rayP", D4_CX, D4_CY, xP, yP);
+      setLine("d4rayQ", D4_CX, D4_CY, xQ, yQ);
+      const tPx = -Math.sin(d4AngP), tPy = -Math.cos(d4AngP);
+      const tQx = -Math.sin(d4AngQ), tQy = -Math.cos(d4AngQ);
+      const L = 40; // same length arrows (same v)
+      setLine("d4vP", xP, yP, xP + L * tPx, yP + L * tPy);
+      setLine("d4vQ", xQ, yQ, xQ + L * tQx, yQ + L * tQy);
+      setText("d4labP", xP + 10, yP - 8);
+      setText("d4labQ", xQ + 10, yQ - 8);
+      setText("d4labVP", xP + L * tPx + 8, yP + L * tPy);
+      setText("d4labVQ", xQ + L * tQx + 8, yQ + L * tQy);
+      const yPline = D4_CY + rQpx + 18;
+      const yQline = yPline + 18;
+      setLine("d4dropO", D4_CX, D4_CY, D4_CX, yQline);
+      setLine("d4dropP", D4_CX + rPpx, D4_CY, D4_CX + rPpx, yPline);
+      setLine("d4dropQ", D4_CX + rQpx, D4_CY, D4_CX + rQpx, yQline);
+      setLine("d4dimP", D4_CX, yPline, D4_CX + rPpx, yPline);
+      setLine("d4dimQ", D4_CX, yQline, D4_CX + rQpx, yQline);
+      setText("d4labRP", D4_CX + rPpx / 2, yPline - 4);
+      setText("d4labRQ", D4_CX + rQpx / 2, yQline - 4);
+      document.getElementById("d4vLbl").textContent = v.toFixed(2) + " m s⁻¹";
+      document.getElementById("d4rLbl").textContent = ratio.toFixed(2);
+      document.getElementById("d4outP").textContent = wP.toFixed(2) + " rad s⁻¹";
+      document.getElementById("d4outQ").textContent = wQ.toFixed(2) + " rad s⁻¹";
+      document.getElementById("d4outR").textContent = (wQ / wP).toFixed(2);
+    }
+    function tickD4(ts) {
+      if (!d4Play) { d4Timer = 0; d4Last = 0; return; }
+      if (!d4Last) d4Last = ts;
+      const dt = Math.min(0.05, (ts - d4Last) / 1000);
+      d4Last = ts;
+      const vEl = document.getElementById("d4v");
+      const rEl = document.getElementById("d4ratioSl");
+      if (!vEl || !rEl) { d4Play = false; d4Timer = 0; return; }
+      const v = +vEl.value, ratio = +rEl.value;
+      d4AngP += (v / D4_RP) * dt;
+      d4AngQ += (v / (D4_RP * ratio)) * dt;
+      drawD4();
+      d4Timer = requestAnimationFrame(tickD4);
+    }
+    function toggleD4() {
+      d4Play = !d4Play;
+      const btn = document.getElementById("d4play");
+      if (btn) {
+        btn.setAttribute("data-playing", d4Play ? "1" : "0");
+        btn.textContent = d4Play ? t("stop") : t("play");
+      }
+      if (d4Play) { d4Last = 0; d4Timer = requestAnimationFrame(tickD4); }
+    }
+
+    function stopAnims() {
+      d1Play = false; d3Play = false; d4Play = false;
+      if (d1Timer) { cancelAnimationFrame(d1Timer); d1Timer = 0; }
+      if (d3Timer) { cancelAnimationFrame(d3Timer); d3Timer = 0; }
+      if (d4Timer) { cancelAnimationFrame(d4Timer); d4Timer = 0; }
+      d1Last = d3Last = d4Last = 0;
+      ["d1play", "d3play", "d4play"].forEach((id) => {
+        const b = document.getElementById(id);
+        if (b) { b.setAttribute("data-playing", "0"); b.textContent = t("play"); }
+      });
+    }
+
+    function initStep(n) {
+      stopAnims();
+      const step = steps[n];
+
+      const d1s = document.getElementById("d1slider");
+      if (d1s && step.contains(d1s)) {
+        if (!d1s.dataset.ready) {
+          d1s.addEventListener("input", () => drawD1(+d1s.value));
+          document.getElementById("d1play").addEventListener("click", toggleD1);
+          d1s.dataset.ready = "1";
+        }
+        drawD1(+d1s.value);
+      }
+
+      const d3w = document.getElementById("d3w");
+      if (d3w && step.contains(d3w)) {
+        if (!d3w.dataset.ready) {
+          d3w.addEventListener("input", drawD3);
+          document.getElementById("d3ratioSl").addEventListener("input", drawD3);
+          document.getElementById("d3play").addEventListener("click", toggleD3);
+          d3w.dataset.ready = "1";
+        }
+        drawD3();
+        // auto-play this explorer so the shared ω is obvious
+        if (!d3Play) toggleD3();
+      }
+
+      const d4v = document.getElementById("d4v");
+      if (d4v && step.contains(d4v)) {
+        if (!d4v.dataset.ready) {
+          d4v.addEventListener("input", drawD4);
+          document.getElementById("d4ratioSl").addEventListener("input", drawD4);
+          document.getElementById("d4play").addEventListener("click", toggleD4);
+          d4v.dataset.ready = "1";
+        }
+        drawD4();
+        if (!d4Play) toggleD4();
+      }
+
+      const c1 = document.getElementById("checkQC1");
+      if (c1 && !c1.dataset.ready) {
+        c1.addEventListener("click", () => checkQC1(false));
+        document.getElementById("revealQC1").addEventListener("click", () => checkQC1(true));
+        c1.dataset.ready = "1";
+      }
+    }
+
+    document.getElementById("langEn").addEventListener("click", () => setLang("en"));
+    document.getElementById("langZh").addEventListener("click", () => setLang("zh-HK"));
+
+    const params = new URLSearchParams(location.search);
+    const ql = params.get("lang");
+    if (ql === "zh-HK" || ql === "en") {
+      lang = ql;
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+    }
+    const q = params.get("step");
+    const start = q !== null && !isNaN(+q) ? Math.max(0, Math.min(steps.length - 1, +q)) : 0;
+    go(start);
+  })();
+  </script>
+</body>
+</html>

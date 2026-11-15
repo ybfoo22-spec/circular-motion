@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b3a5f" />
+  <title>11.2 Centripetal force and centripetal acceleration — In-class notes</title>
+  <style>
+    :root {
+      --navy: #1b3a5f;
+      --navy-2: #24507f;
+      --ink: #1a1a1a;
+      --muted: #5a6570;
+      --line: #d5dbe3;
+      --paper: #f6f3ec;
+      --card: #ffffff;
+      --arc: #1a7aad;
+      --arc-soft: #d7eef8;
+      --ok: #1b7a46;
+      --ok-bg: #e7f6ec;
+      --bad: #b42318;
+      --bad-bg: #fdecea;
+      --accent: #c45c26;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(27,58,95,.08), 0 8px 24px rgba(27,58,95,.06);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+      font-size: 17px;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .app { max-width: 42rem; margin: 0 auto; height: 100dvh; height: 100svh; display: flex; flex-direction: column; overflow: hidden; }
+    header.top {
+      background: var(--navy);
+      color: #fff;
+      padding: 0.7rem 1.15rem 0.85rem;
+      position: relative;
+    }
+    header.top .kicker {
+      padding-right: 5.8rem;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      margin: 0 0 .15rem;
+      pointer-events: none;
+    }
+    .lang-switch {
+      position: absolute;
+      top: 0.7rem;
+      right: 1rem;
+      display: flex;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 5;
+      pointer-events: auto;
+    }
+    .lang-switch button {
+      min-height: 36px;
+      min-width: 2.45rem;
+      padding: 0 .55rem;
+      background: transparent;
+      color: rgba(255,255,255,.9);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      border-radius: 0;
+    }
+    .lang-switch button[aria-pressed="true"] {
+      background: #fff;
+      color: var(--navy);
+    }
+    html[lang="zh-HK"] body { line-height: 1.65; }
+    html[lang="zh-HK"] .lbl,
+    html[lang="zh-HK"] .pill,
+    html[lang="zh-HK"] .kicker {
+      text-transform: none;
+      letter-spacing: .03em;
+    }
+    header.top .kicker {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .8;
+      margin: 0 0 .2rem;
+    }
+    header.top h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.3;
+    }
+    header.top p {
+      margin: .25rem 0 0;
+      font-size: .92rem;
+      opacity: .9;
+    }
+    .progress {
+      display: flex;
+      gap: 4px;
+      padding: .55rem 1.15rem .2rem;
+      background: #efebe3;
+    }
+    .progress button {
+      flex: 1;
+      height: 5px;
+      border: 0;
+      padding: 0;
+      border-radius: 99px;
+      background: #c9c3b6;
+      cursor: pointer;
+    }
+    .progress button.on { background: var(--navy); }
+    .progress button.done { background: #7a93b0; }
+    main {
+      flex: 1;
+      padding: 1rem 1.15rem 1.4rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .step { display: none; }
+    .step.show { display: block; }
+    h2 {
+      font-size: 1.22rem;
+      margin: 0 0 .55rem;
+      color: var(--navy);
+    }
+    h3 {
+      font-size: 1.02rem;
+      margin: .7rem 0 .25rem;
+      color: var(--navy-2);
+    }
+    p { margin: 0 0 .7rem; }
+    .lead { font-size: 1.02rem; }
+    .eqn {
+      display: block;
+      text-align: center;
+      font-size: 1.25rem;
+      margin: .55rem 0;
+      padding: .6rem .8rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hint {
+      font-size: .92rem;
+      color: var(--muted);
+      background: #efe8d8;
+      border-radius: 10px;
+      padding: .55rem .7rem;
+      margin: .7rem 0;
+    }
+    .note {
+      font-size: .95rem;
+      color: var(--muted);
+    }
+    figure { margin: .65rem 0 .7rem; }
+    figure svg, table.conv svg { width: 100%; height: auto; display: block; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    svg text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans", sans-serif; }
+    figcaption { font-size: .88rem; color: var(--muted); text-align: center; margin-top: .3rem; }
+    .controls {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      margin: .4rem 0 1rem;
+    }
+    .controls label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--navy); }
+    .readout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: .4rem;
+      margin-top: .55rem;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .85rem;
+    }
+    .readout div {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .45rem .5rem;
+      text-align: center;
+    }
+    .readout b { display: block; font-size: 1rem; color: var(--navy); font-family: inherit; }
+    table.conv {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: .95rem;
+    }
+    table.conv th, table.conv td {
+      border: 1px solid var(--line);
+      padding: .55rem .4rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.conv th { background: #eef2f6; font-weight: 600; width: 28%; }
+    table.conv svg { width: 72px; height: 72px; margin: 0 auto; display: block; background: transparent; border: 0; box-shadow: none; }
+    .q {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: .55rem .7rem .6rem;
+      margin: 0 0 .5rem;
+      box-shadow: var(--shadow);
+    }
+    .q .num {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: .04em;
+      flex: 0 0 auto;
+    }
+    .q p { margin: .2rem 0 .45rem; }
+    .q-line { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .4rem; }
+    .q-line input[type="text"] { flex: 1; min-width: 6.5rem; }
+    .q .note { margin: .25rem 0 0; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+    }
+    input[type="text"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: .45rem .55rem;
+      border: 1px solid #b8c0c8;
+      border-radius: 8px;
+      min-width: 0;
+      flex: 1;
+      min-height: 44px;
+    }
+    input[type="text"]:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
+    .unit { color: var(--muted); }
+    button {
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      border: 0;
+      border-radius: 10px;
+      min-height: 44px;
+      padding: 0 .9rem;
+      cursor: pointer;
+    }
+    button.primary { background: var(--navy); color: #fff; }
+    button.primary:active { background: #132a46; }
+    button.ghost { background: transparent; color: var(--navy); border: 1px solid #b7c4d3; }
+    button.play { background: var(--navy-2); color: #fff; }
+    .feedback { font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; font-size: .88rem; margin-top: .45rem; border-radius: 8px; padding: .4rem .55rem; display: none; }
+    .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+    .feedback.bad { display: block; background: var(--bad-bg); color: var(--bad); }
+    .feedback.show { display: block; background: #eef2f6; color: var(--navy); }
+    nav.bar {
+      display: flex;
+      gap: .5rem;
+      flex-shrink: 0;
+      padding: .7rem 1.15rem 1.1rem;
+      background: #efebe3;
+      border-top: 1px solid #e0d9cc;
+      padding-bottom: max(1.1rem, env(safe-area-inset-bottom));
+    }
+    nav.bar button { flex: 1; }
+
+    nav.sec-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.4rem;
+      margin-top: 0.7rem;
+    }
+    nav.sec-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0.15rem 0.7rem;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 99px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    nav.sec-nav a:hover,
+    nav.sec-nav a:focus-visible {
+      background: rgba(255,255,255,.14);
+    }
+    nav.sec-nav a[aria-current="page"] {
+      background: #fff;
+      color: var(--navy);
+      border-color: #fff;
+      pointer-events: none;
+    }
+    .pill {
+      display: inline-block;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      background: #e8e1d2;
+      color: var(--navy);
+      border-radius: 99px;
+      padding: .15rem .55rem;
+      margin-bottom: .45rem;
+    }
+    ul.learn { margin: .3rem 0 .8rem 1.1rem; padding: 0; }
+    ul.learn li { margin: 0 0 .35rem; }
+    .summary dt { font-weight: 700; color: var(--navy); margin-top: .55rem; }
+    .summary dd { margin: .15rem 0 0 0; }
+    .form-box {
+      background: var(--card);
+      border: 1px dashed #8aa0b8;
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      margin-top: .8rem;
+    }
+    .form-box a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy);
+      color: #fff;
+      text-decoration: none;
+      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-weight: 600;
+      border-radius: 10px;
+      min-height: 48px;
+      padding: 0 1.1rem;
+      margin-top: .4rem;
+    }
+
+    .think, .worked, .watch, #radCue {
+      border-radius: 12px;
+      padding: .65rem .75rem;
+      margin: .7rem 0;
+      font-size: .95rem;
+    }
+    .think { background: #e8f1f8; border-left: 3px solid var(--arc); }
+    .worked, #radCue { background: #f3efe6; border-left: 3px solid #b0893e; }
+    .watch { background: #f8eee8; border-left: 3px solid var(--accent); }
+    .think p, .worked p, .watch p, #radCue p { margin: 0 0 .4rem; }
+    .think p:last-child, .worked p:last-child, .watch p:last-child, #radCue p:last-child { margin: 0; }
+    .lbl {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin: 0 0 .3rem;
+      color: var(--navy);
+    }
+    details.hint-fold { margin: .4rem 0 0; font-size: .9rem; }
+    details.hint-fold summary {
+      cursor: pointer;
+      color: var(--navy);
+      font-weight: 600;
+      user-select: none;
+    }
+    details.hint-fold p { margin: .35rem 0 0; color: var(--muted); }
+    #radCue { display: none; }
+    #radCue.on { display: block; }
+    .eqn { font-variant-numeric: lining-nums; }
+    .hidden { display: none !important; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+    }
+
+    /* Fluid layout: phone, tablet, desktop, wide */
+    .app { width: 100%; max-width: 42rem; }
+    .spread > .copy, .spread > .viz { min-width: 0; }
+    .ex-grid { display: grid; gap: 0.85rem; }
+    @media (min-width: 640px) {
+      body { font-size: 18px; }
+      header.top h1 { font-size: 1.35rem; }
+      .app { max-width: 52rem; }
+      header.top { padding-left: 1.35rem; padding-right: 1.35rem; }
+      .progress, main, nav.bar { padding-left: 1.35rem; padding-right: 1.35rem; }
+    }
+    @media (min-width: 900px) {
+      .app { max-width: 70rem; }
+      header.top { padding: 0.85rem 1.7rem 1rem; }
+      .lang-switch { top: 0.85rem; right: 1.5rem; }
+      .progress { padding: .55rem 1.7rem .2rem; }
+      main { padding: 1.25rem 1.7rem 1.7rem; }
+      nav.bar { padding-left: 1.7rem; padding-right: 1.7rem; }
+      header.top h1 { font-size: 1.45rem; }
+      .spread {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+        gap: 1.1rem 2rem;
+        align-items: start;
+      }
+      .spread > .viz figure { margin-top: 0; }
+      .spread > .viz { position: sticky; top: 0; }
+      .ex-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        align-items: start;
+      }
+      .step.show:not(:has(.spread)):not(:has(.ex-grid)) { max-width: 46rem; }
+    }
+    @media (min-width: 1200px) {
+      .app { max-width: 80rem; }
+      .spread {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        gap: 1.25rem 2.5rem;
+      }
+    }
+    @media (max-height: 480px) and (orientation: landscape) {
+      header.top { padding-top: .45rem; padding-bottom: .55rem; }
+      header.top h1 { font-size: 1.05rem; }
+      .progress { padding-top: .35rem; padding-bottom: .15rem; }
+    }
+
+    /* In-class notes extras */
+    button.choice, button.chip {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid #b7c4d3;
+    }
+    button.choice[aria-pressed="true"], button.chip[aria-pressed="true"] {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+    button.choice.is-ok {
+      background: var(--ok-bg);
+      color: var(--ok);
+      border-color: #1b7a46;
+    }
+    button.choice.is-bad {
+      background: var(--bad-bg);
+      color: var(--bad);
+      border-color: #b42318;
+    }
+    .choice-row, .chip-row, .break-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+      margin: .35rem 0 .55rem;
+    }
+    .caption-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      font-size: .92rem;
+      margin: .45rem 0 .7rem;
+    }
+    .sol-head {
+      font-weight: 700;
+      color: var(--navy);
+      margin: .65rem 0 .35rem;
+      font-size: .95rem;
+    }
+    .eqn-box {
+      display: block;
+      margin: .55rem 0;
+      padding: .7rem .9rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      font-size: 1.08rem;
+      text-align: left;
+    }
+    .eqn-box p { margin: 0 0 .35rem; text-align: center; }
+    .eqn-box p:last-child { margin: 0; }
+    .eqn-box .or { color: var(--muted); font-size: .9rem; }
+    .comic-list { margin: .5rem 0 0; padding: 0; list-style: none; }
+    .comic-list li {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      margin: 0 0 .4rem;
+      font-size: .92rem;
+      box-shadow: var(--shadow);
+    }
+    .comic-list li b { color: var(--navy); }
+    .ex-title {
+      font-style: italic;
+      font-weight: 700;
+      color: var(--navy);
+      margin: .85rem 0 .35rem;
+    }
+    .readout.cols-2 { grid-template-columns: 1fr 1fr; }
+    .readout.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    main { padding-bottom: 1.6rem; }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="lang-switch" role="group" aria-label="Language" id="langSwitch">
+        <button type="button" id="langEn" aria-pressed="true" lang="en">EN</button>
+        <button type="button" id="langZh" aria-pressed="false" lang="zh-HK">粵</button>
+      </div>
+      <p class="kicker" data-i18n="kicker">CSWCSS F.5 Physics · In-class notes</p>
+      <h1>Chapter 11 Uniform Circular Motion</h1>
+      <p>11.2 Centripetal force and centripetal acceleration</p>
+          <nav class="sec-nav" id="secNav" aria-label="Chapter sections">
+        <a href="index.html" data-i18n="navPre">11.1 Pre-lesson</a>
+        <a href="11.1-linear-speed-period.html" data-i18n="navLSP">11.1 Linear speed</a>
+        <a href="11.2-centripetal-force.html" data-i18n="navCF" aria-current="page">11.2 Centripetal force</a>
+      </nav>
+    </header>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <main id="main"></main>
+    <nav class="bar">
+      <button type="button" class="ghost" id="btnBack" data-i18n="back">Back</button>
+      <button type="button" class="primary" id="btnNext" data-i18n="next">Next</button>
+    </nav>
+  </div>
+
+  <script>
+  (function () {
+    const steps = [];
+    const $main = document.getElementById("main");
+    const $prog = document.getElementById("progress");
+    const $back = document.getElementById("btnBack");
+    const $next = document.getElementById("btnNext");
+    let i = 0;
+    const PREV_FILE = '11.1-linear-speed-period.html';
+    const NEXT_FILE = '';
+    const NEXT_KEY = '';
+
+    const I18N = {
+      en: {
+          "docTitle": "11.2 Centripetal force and centripetal acceleration — In-class notes",
+          "langGroup": "Language",
+          "kicker": "CSWCSS F.5 Physics · In-class notes",
+          "back": "Back",
+          "next": "Next",
+          "backToStart": "Back to start",
+          "secNav": "Chapter sections",
+          "navPre": "11.1 Pre-lesson",
+          "navLSP": "11.1 Linear speed",
+          "navCF": "11.2 Centripetal force",
+          "nextLSP": "Next: Linear speed",
+          "nextCF": "Next: Centripetal force",
+          "play": "Play",
+          "stop": "Stop",
+          "check": "Check",
+          "showAnswers": "Show answers",
+          "checkPage": "Check this page",
+          "hint": "Hint",
+          "tryThis": "Try this",
+          "worked": "Worked example",
+          "watchOut": "Watch out",
+          "predictFirst": "Predict first",
+          "pillNotes": "In-class notes",
+          "pillQC": "Quick check",
+          "pillSum": "Summary",
+          "correct": "Correct.",
+          "exactPrefix": "Exact: ",
+          "enterAns": "Enter an answer.",
+          "notQuite": "Not quite. Try again, or use the hint.",
+          "phAnswer": "answer",
+          "ariaAnswer": "Answer {label}",
+          "reset": "Reset",
+          "showV": "Show v",
+          "showA": "Show a",
+          "showF": "Show F",
+          "stringBreaks": "The string breaks",
+          "s0h": "Centripetal force and centripetal acceleration",
+          "s0lead": "Work through this part of the Chapter 11 in-class notes. It covers 11.2 Centripetal force and centripetal acceleration.",
+          "s0li1": "The <b>centripetal force</b> and the <b>centripetal acceleration</b>, both directed towards the centre of the path",
+          "s0li2": "The formulae <i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>² and <i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>²",
+          "s0li3": "How different forces — friction, gravitational force, tension — can provide the centripetal force",
+          "s0li4": "Why the centripetal force is always perpendicular to the velocity, and what happens if it disappears",
+          "s0try": "There are two Quick checks along the way. When you see <b>Predict first</b> or <b>Hint</b>, attempt the idea before you press Play.",
+          "a1h": "Centripetal force",
+          "a1p": "When an object performs uniform circular motion, the net force acting on it points towards the <b>centre</b> of the circular path and is called the <b>centripetal force</b>.",
+          "a1cap": "The net force is towards the centre — this is the centripetal force.",
+          "b1h": "Centripetal acceleration",
+          "b1p": "When an object performs uniform circular motion, its acceleration always points towards the <b>centre</b> of the path and is called the <b>centripetal</b> acceleration.",
+          "b2p": "Suppose an object travels in a circle of radius <i>r</i> at a uniform speed <i>v</i>, or at a uniform angular speed <i>ω</i>. The magnitude of the centripetal acceleration is given by:",
+          "inTermsV": "(in terms of v)",
+          "inTermsW": "(in terms of ω)",
+          "b2hint": "The direction of <i>v</i> keeps changing, so there is a centripetal acceleration. Its magnitude is <i>a</i> = <i>v</i>²/<i>r</i>, or <i>a</i> = <i>rω</i>² because <i>v</i> = <i>rω</i>.",
+          "b2cap": "Press Play: <i>v</i> stays tangent, while <i>a</i> always points towards the centre.",
+          "qc2h": "Quick check 2",
+          "qc2stem": "A car turns at a junction as shown. It travels a quarter of a circle of radius 21 m at a uniform speed <i>v</i> in 2.6 s.",
+          "qc2a": "Find <i>v</i>.",
+          "qc2b": "Find the acceleration of the car when it turns.",
+          "qc2sol": "Solution",
+          "qc2vpre": "<i>v</i> = distance travelled / time taken =",
+          "qc2apre": "Centripetal acceleration =",
+          "qc2hint": "The path is a quarter-circle, so the distance is (2π<i>r</i>)/4, not the straight radii. The acceleration is the centripetal acceleration <i>a</i> = <i>v</i>²/<i>r</i> (or <i>rω</i>²), towards the centre.",
+          "qc2watch": "2.6 s is the time for a quarter-turn, not the period of a full revolution.",
+          "c1h": "Circular motion and Newton’s laws",
+          "c1p": "By <i>F</i> = <i>ma</i>, the magnitude of the centripetal force is:",
+          "c2h": "What provides the centripetal force?",
+          "c2p": "The centripetal force is the net force acting on an object to keep it in circular motion. The centripetal force can be provided by different kinds of forces.",
+          "ex1": "Example 1",
+          "ex1p": "A dish of dim sum sits on a rotating lazy Susan (a turning tray). Friction on the dish, towards the centre, provides the centripetal force.",
+          "ex2": "Example 2",
+          "ex2p": "The Moon orbits the Earth. Gravitational force on the Moon, towards the Earth, provides the centripetal force.",
+          "c3h": "Direction, work and speed",
+          "c3p": "The centripetal force and the centripetal acceleration are <b>constant</b> in magnitude, but their directions are constantly changing.",
+          "c4p": "The centripetal force is always <b>perpendicular</b> to the velocity of the object. Therefore, the centripetal force does no work on the object.",
+          "c4note": "There is no component of <i>F</i> along <i>v</i>, so the force does no work and the speed stays constant.",
+          "c4cap": "Watch the right angle between <i>F</i> (inward) and <i>v</i> (tangent) as the object goes around.",
+          "c4pred": "If <i>F</i> is always perpendicular to <i>v</i>, can it change the object’s speed, or only the direction of the velocity?",
+          "qc3h": "Quick check 3",
+          "qc3stem": "A ball of 0.5 kg is connected to a fixed point <i>O</i> by a string of 20 cm long. It moves in a circle on a smooth horizontal table with a constant speed 0.8 m s<sup>−1</sup>.",
+          "qc3a": "Find the tension <i>T</i> in the string.",
+          "qc3b": "If the speed of the ball doubles, how will <i>T</i> change?",
+          "qc3sol": "Solution",
+          "qc3apre": "<i>T</i> = centripetal force =",
+          "qc3bpre": "Since <i>T</i> ∝",
+          "qc3bmid": ", <i>T</i> will",
+          "qc3bto": "to",
+          "increase": "increase",
+          "decrease": "decrease",
+          "qc3hint": "Convert 20 cm to 0.2 m before you substitute. Then use <i>T</i> = <i>m v</i>²/<i>r</i>.",
+          "qc3watch": "If the speed doubles, <i>T</i> does not merely double — look at how <i>T</i> depends on <i>v</i>.",
+          "c5h": "If the centripetal force disappears",
+          "c5p": "Suppose the centripetal force disappears suddenly when an object performs uniform circular motion on a smooth horizontal surface. According to Newton’s <b>first</b> law, the object will continue to move along a <b>straight</b> path tangential to the circle.",
+          "c5pred": "If the string breaks, will the ball fly radially outward, or continue in a straight line along the tangent?",
+          "comic1": "The tension in the string provides the centripetal force.",
+          "comic2": "The string breaks suddenly.",
+          "comic3": "No unbalanced forces act on the ball.",
+          "c5cap": "Press Play, then “The string breaks”. The ball keeps the velocity it had at that instant, so it moves off in a straight line — Newton’s first law.",
+          "sumH": "Centripetal force and acceleration",
+          "dtFc": "Centripetal force",
+          "ddFc": "The net force towards the centre that keeps an object in uniform circular motion. <i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>².",
+          "dtA": "Centripetal acceleration",
+          "ddA": "Always towards the centre. <i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>².",
+          "dtProv": "What provides F",
+          "ddProv": "Different forces can provide the centripetal force — friction, gravitational force, tension, and others.",
+          "dtWork": "Direction and work",
+          "ddWork": "<i>F</i> and <i>a</i> are constant in magnitude, but their directions keep changing. <i>F</i> is always perpendicular to <i>v</i>, so it does no work and the speed stays constant.",
+          "dtBreak": "If F disappears",
+          "ddBreak": "On a smooth surface there is then no unbalanced force, so by Newton’s first law the object moves in a straight line along the tangent.",
+          "watch1": "Centripetal force is not a new kind of force — it is the net force towards the centre, provided by one or more ordinary forces.",
+          "watch2": "Do not convert centimetres to metres after you have already substituted — change 20 cm to 0.2 m first."
+      },
+      "zh-HK": {
+          "docTitle": "11.2 Centripetal force and centripetal acceleration — 堂課筆記",
+          "langGroup": "語言",
+          "kicker": "CSWCSS F.5 Physics · 堂課筆記",
+          "back": "返回",
+          "next": "下一頁",
+          "backToStart": "回到開始",
+          "secNav": "本章各節",
+          "navPre": "11.1 課前任務",
+          "navLSP": "11.1 Linear speed",
+          "navCF": "11.2 Centripetal force",
+          "nextLSP": "下一節：Linear speed",
+          "nextCF": "下一節：Centripetal force",
+          "play": "播放",
+          "stop": "停止",
+          "check": "檢查",
+          "showAnswers": "顯示答案",
+          "checkPage": "檢查本頁",
+          "hint": "提示",
+          "tryThis": "試一試",
+          "worked": "例題",
+          "watchOut": "注意",
+          "predictFirst": "先預測",
+          "pillNotes": "堂課筆記",
+          "pillQC": "Quick check",
+          "pillSum": "總結",
+          "correct": "正確。",
+          "exactPrefix": "準確答案：",
+          "enterAns": "請輸入答案。",
+          "notQuite": "未答對。再試一次，或先看提示。",
+          "phAnswer": "答案",
+          "ariaAnswer": "答案 {label}",
+          "reset": "重設",
+          "showV": "顯示 v",
+          "showA": "顯示 a",
+          "showF": "顯示 F",
+          "stringBreaks": "繩突然斷開",
+          "s0h": "Centripetal force 與 centripetal acceleration",
+          "s0lead": "請完成這部分 Chapter 11 堂課筆記。內容涵蓋 11.2 Centripetal force and centripetal acceleration。",
+          "s0li1": "<b>centripetal force</b> 和 <b>centripetal acceleration</b>，兩者都指向路徑的圓心",
+          "s0li2": "公式 <i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>² 和 <i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>²",
+          "s0li3": "不同的力——friction、gravitational force、tension——如何提供 centripetal force",
+          "s0li4": "為甚麼 centripetal force 始終與 velocity 垂直，以及它消失時會發生甚麼事",
+          "s0try": "途中有兩道 Quick check。見到「先預測」或「提示」時，請先自己想一想，再按「播放」。",
+          "a1h": "Centripetal force",
+          "a1p": "當物體做 uniform circular motion 時，作用在它上面的淨力指向圓形路徑的<b>圓心</b>（centre），這力稱為 <b>centripetal force</b>。",
+          "a1cap": "淨力指向圓心——這就是 centripetal force。",
+          "b1h": "Centripetal acceleration",
+          "b1p": "當物體做 uniform circular motion 時，它的 acceleration 始終指向路徑的<b>圓心</b>（centre），稱為 <b>centripetal</b> acceleration。",
+          "b2p": "設物體以均勻的速率 <i>v</i>，或均勻的 angular speed <i>ω</i>，沿半徑為 <i>r</i> 的圓運動。centripetal acceleration 的大小為：",
+          "inTermsV": "(in terms of v)",
+          "inTermsW": "(in terms of ω)",
+          "b2hint": "<i>v</i> 的方向不斷改變，所以有 centripetal acceleration。它的大小是 <i>a</i> = <i>v</i>²/<i>r</i>，或寫成 <i>a</i> = <i>rω</i>²，因為 <i>v</i> = <i>rω</i>。",
+          "b2cap": "按「播放」：<i>v</i> 沿 tangent，而 <i>a</i> 始終指向圓心。",
+          "qc2h": "Quick check 2",
+          "qc2stem": "一輛汽車如圖在路口轉彎。它以均勻的速率 <i>v</i>，在 2.6 s 內走完半徑 21 m 的四分之一圓。",
+          "qc2a": "求 <i>v</i>。",
+          "qc2b": "求汽車轉彎時的 acceleration。",
+          "qc2sol": "解題",
+          "qc2vpre": "<i>v</i> = 行經距離 / 所用時間 =",
+          "qc2apre": "Centripetal acceleration =",
+          "qc2hint": "路徑是四分之一圓，所以距離是 (2π<i>r</i>)/4，不是直線半徑。所求的 acceleration 是 centripetal acceleration <i>a</i> = <i>v</i>²/<i>r</i>（或 <i>rω</i>²），指向圓心。",
+          "qc2watch": "2.6 s 是四分之一圈所用的時間，不是整整一圈的 period。",
+          "c1h": "Circular motion and Newton’s laws",
+          "c1p": "由 <i>F</i> = <i>ma</i>，centripetal force 的大小為：",
+          "c2h": "甚麼提供 centripetal force？",
+          "c2p": "centripetal force 是作用在物體上、使它保持圓周運動的淨力。centripetal force 可以由不同種類的力來提供。",
+          "ex1": "Example 1",
+          "ex1p": "一碟 dim sum 放在旋轉中的 lazy Susan（回轉盤）上。作用在碟子上、指向圓心的 friction 提供 centripetal force。",
+          "ex2": "Example 2",
+          "ex2p": "月球繞地球運行。作用在月球上、指向地球的 gravitational force 提供 centripetal force。",
+          "c3h": "方向、功與速率",
+          "c3p": "centripetal force 和 centripetal acceleration 的大小是<b>恆定</b>的（constant），但它們的方向不斷改變。",
+          "c4p": "centripetal force 始終與物體的 velocity <b>垂直</b>（perpendicular）。因此，centripetal force 對物體不做功。",
+          "c4note": "<i>F</i> 在 <i>v</i> 的方向上沒有分量，所以這力不做功，速率保持不變。",
+          "c4cap": "觀察物體繞行時，<i>F</i>（向內）與 <i>v</i>（tangent）之間的直角。",
+          "c4pred": "如果 <i>F</i> 始終與 <i>v</i> 垂直，它能改變物體的速率，還是只能改變 velocity 的方向？",
+          "qc3h": "Quick check 3",
+          "qc3stem": "一個質量 0.5 kg 的小球，用長 20 cm 的繩連接到固定點 <i>O</i>。它在光滑水平桌面上以恆定速率 0.8 m s<sup>−1</sup> 做圓周運動。",
+          "qc3a": "求繩的 tension <i>T</i>。",
+          "qc3b": "如果小球的速率變為兩倍，<i>T</i> 會怎樣改變？",
+          "qc3sol": "解題",
+          "qc3apre": "<i>T</i> = centripetal force =",
+          "qc3bpre": "由於 <i>T</i> ∝",
+          "qc3bmid": "，<i>T</i> 將會",
+          "qc3bto": "至",
+          "increase": "increase",
+          "decrease": "decrease",
+          "qc3hint": "代入前先把 20 cm 換成 0.2 m，再用 <i>T</i> = <i>m v</i>²/<i>r</i>。",
+          "qc3watch": "速率變為兩倍時，<i>T</i> 不是只變為兩倍——留意 <i>T</i> 與 <i>v</i> 的關係。",
+          "c5h": "若 centripetal force 消失",
+          "c5p": "假設物體在光滑水平面上做 uniform circular motion 時，centripetal force 突然消失。根據 Newton’s <b>first</b> law，物體將沿與圓相切的<b>直線</b>路徑繼續運動。",
+          "c5pred": "如果繩斷了，小球會沿半徑向外飛出，還是沿 tangent 作直線運動？",
+          "comic1": "繩的 tension 提供 centripetal force。",
+          "comic2": "繩突然斷開。",
+          "comic3": "沒有不平衡的力作用在小球上。",
+          "c5cap": "按「播放」，再按「繩突然斷開」。小球保持斷開那一瞬的 velocity，因此沿直線飛出——這就是 Newton’s first law。",
+          "sumH": "Centripetal force 與 acceleration",
+          "dtFc": "Centripetal force",
+          "ddFc": "指向圓心、使物體保持 uniform circular motion 的淨力。<i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>²。",
+          "dtA": "Centripetal acceleration",
+          "ddA": "始終指向圓心。<i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>²。",
+          "dtProv": "甚麼提供 F",
+          "ddProv": "不同的力都可以提供 centripetal force——例如 friction、gravitational force、tension 等。",
+          "dtWork": "方向與功",
+          "ddWork": "<i>F</i> 和 <i>a</i> 的大小恆定，但方向不斷改變。<i>F</i> 始終與 <i>v</i> 垂直，所以不做功，速率保持不變。",
+          "dtBreak": "若 F 消失",
+          "ddBreak": "在光滑面上此時沒有不平衡的力，根據 Newton’s first law，物體沿切線作直線運動。",
+          "watch1": "centripetal force 並不是一種新的力——它是指向圓心的淨力，由一種或多種普通的力所提供。",
+          "watch2": "不要在代入後才換算單位——先把 20 cm 換成 0.2 m。"
+      }
+    };
+
+    let lang = "en";
+    try { lang = localStorage.getItem("cm11.lang") || "en"; } catch (e) {}
+    if (lang !== "zh-HK") lang = "en";
+
+    function t(key) {
+      const pack = I18N[lang] || I18N.en;
+      return (pack && pack[key] != null) ? pack[key] : (I18N.en[key] || key);
+    }
+
+    function applyLang() {
+      document.documentElement.lang = lang === "zh-HK" ? "zh-HK" : "en";
+      document.title = t("docTitle");
+      const grp = document.getElementById("langSwitch");
+      if (grp) grp.setAttribute("aria-label", t("langGroup"));
+      const sec = document.getElementById("secNav");
+      if (sec) sec.setAttribute("aria-label", t("secNav"));
+      const enBtn = document.getElementById("langEn");
+      const zhBtn = document.getElementById("langZh");
+      if (enBtn) enBtn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+      if (zhBtn) zhBtn.setAttribute("aria-pressed", lang === "zh-HK" ? "true" : "false");
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        if (el.id === "btnNext") return;
+        if (el.hasAttribute("data-dynamic")) return;
+        const key = el.getAttribute("data-i18n");
+        el.innerHTML = t(key);
+      });
+
+      document.querySelectorAll("input[data-aria-label]").forEach((el) => {
+        el.setAttribute("aria-label", t("ariaAnswer").replace("{label}", el.getAttribute("data-aria-label")));
+        el.setAttribute("placeholder", t("phAnswer"));
+      });
+
+      $back.textContent = t("back");
+      $next.textContent = i === steps.length - 1 ? (NEXT_KEY ? t(NEXT_KEY) : t("backToStart")) : t("next");
+      document.querySelectorAll("button.play[data-dynamic]").forEach((btn) => {
+        const on = btn.getAttribute("data-playing") === "1";
+        btn.textContent = on ? t("stop") : t("play");
+      });
+    }
+
+    function setLang(next) {
+      lang = next === "zh-HK" ? "zh-HK" : "en";
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+      applyLang();
+    }
+
+    function el(html) {
+      const d = document.createElement("div");
+      d.className = "step";
+      d.innerHTML = html;
+      return d;
+    }
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillNotes">In-class notes</span>
+      <h2 data-i18n="s0h">Centripetal force and centripetal acceleration</h2>
+      <p class="lead" data-i18n="s0lead">Work through this part of the Chapter 11 in-class notes. It covers 11.2 Centripetal force and centripetal acceleration.</p>
+      <ul class="learn">
+        <li data-i18n="s0li1">The <b>centripetal force</b> and the <b>centripetal acceleration</b>, both directed towards the centre of the path</li>
+        <li data-i18n="s0li2">The formulae <i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>² and <i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>²</li>
+        <li data-i18n="s0li3">How different forces — friction, gravitational force, tension — can provide the centripetal force</li>
+        <li data-i18n="s0li4">Why the centripetal force is always perpendicular to the velocity, and what happens if it disappears</li>
+      </ul>
+      <p data-i18n="s0try">There are two Quick checks along the way. When you see <b>Predict first</b> or <b>Hint</b>, attempt the idea before you press Play.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill">A · Centripetal force</span>
+      <h2 data-i18n="a1h">Centripetal force</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="a1p">When an object performs uniform circular motion, the net force acting on it points towards the <b>centre</b> of the circular path and is called the <b>centripetal force</b>.</p>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg viewBox="0 0 320 220" role="img" aria-label="Centripetal force on an object points towards the centre">
+          <defs>
+            <marker id="arrAF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c45c26"/>
+            </marker>
+          </defs>
+          <circle cx="160" cy="110" r="78" fill="#fff" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <line x1="160" y1="110" x2="226" y2="68" stroke="#222" stroke-width="1.3"/>
+          <line x1="216" y1="74" x2="175" y2="100" stroke="#c45c26" stroke-width="2.3" marker-end="url(#arrAF)"/>
+          <circle cx="160" cy="110" r="3" fill="#222"/>
+          <circle cx="226" cy="68" r="9" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <text x="150" y="128" font-size="13" font-style="italic">O</text>
+          <text x="178" y="88" font-size="16" font-style="italic" fill="#c45c26">F</text>
+        </svg>
+        <figcaption data-i18n="a1cap">The net force is towards the centre — this is the centripetal force.</figcaption>
+      </figure>
+      </div>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">B · Centripetal acceleration</span>
+      <h2 data-i18n="b1h">Centripetal acceleration</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="b1p">When an object performs uniform circular motion, its acceleration always points towards the <b>centre</b> of the path and is called the <b>centripetal</b> acceleration.</p>
+      <p data-i18n="b2p">Suppose an object travels in a circle of radius <i>r</i> at a uniform speed <i>v</i>, or at a uniform angular speed <i>ω</i>. The magnitude of the centripetal acceleration is given by:</p>
+      <div class="eqn-box">
+        <p><i>a</i> = <i>v</i>² / <i>r</i> <span class="or" data-i18n="inTermsV">(in terms of v)</span></p>
+        <p><span class="or">or</span> <i>a</i> = <i>r ω</i>² <span class="or" data-i18n="inTermsW">(in terms of ω)</span></p>
+      </div>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgB" viewBox="0 0 320 240" role="img" aria-label="Velocity tangent and centripetal acceleration towards the centre">
+          <defs>
+            <marker id="arrBv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1b3a5f"/>
+            </marker>
+            <marker id="arrBa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c45c26"/>
+            </marker>
+          </defs>
+          <circle cx="160" cy="120" r="82" fill="#fff" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <line id="bRay" x1="160" y1="120" x2="230" y2="70" stroke="#222" stroke-width="1.3"/>
+          <path id="bSq" fill="none" stroke="#222" stroke-width="1.3"/>
+          <circle cx="160" cy="120" r="3" fill="#222"/>
+          <circle id="bGhost" r="8" fill="#d0d0d0" stroke="#222" stroke-width="1.2"/>
+          <circle id="bObj" r="9" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <line id="bV" stroke="#1b3a5f" stroke-width="2.1" marker-end="url(#arrBv)"/>
+          <line id="bA" stroke="#c45c26" stroke-width="2.1" marker-end="url(#arrBa)"/>
+          <line id="bVg" stroke="#1b3a5f" stroke-width="1.6" stroke-opacity=".45" marker-end="url(#arrBv)"/>
+          <line id="bAg" stroke="#c45c26" stroke-width="1.6" stroke-opacity=".45" marker-end="url(#arrBa)"/>
+          <text id="bLabV" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#1b3a5f">v</text>
+          <text id="bLabA" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#c45c26">a</text>
+          <text id="bLabR" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#222">r</text>
+        </svg>
+        <figcaption data-i18n="b2cap">Press Play: <i>v</i> stays tangent, while <i>a</i> always points towards the centre.</figcaption>
+      </figure>
+      <div class="chip-row">
+        <button type="button" class="chip" id="bShowV" aria-pressed="true" data-i18n="showV">Show v</button>
+        <button type="button" class="chip" id="bShowA" aria-pressed="true" data-i18n="showA">Show a</button>
+        <button type="button" class="play" id="bPlay" data-i18n="play" data-dynamic>Play</button>
+      </div>
+      </div>
+      </div>
+      <details class="hint-fold"><summary data-i18n="hint">Hint</summary>
+        <p data-i18n="b2hint">The direction of <i>v</i> keeps changing, so there is a centripetal acceleration. Its magnitude is <i>a</i> = <i>v</i>²/<i>r</i>, or <i>a</i> = <i>rω</i>² because <i>v</i> = <i>rω</i>.</p>
+      </details>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillQC">Quick check</span>
+      <h2 data-i18n="qc2h">Quick check 2</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="qc2stem">A car turns at a junction as shown. It travels a quarter of a circle of radius 21 m at a uniform speed <i>v</i> in 2.6 s.</p>
+      <p><b>(a)</b> <span data-i18n="qc2a">Find <i>v</i>.</span></p>
+      <p><b>(b)</b> <span data-i18n="qc2b">Find the acceleration of the car when it turns.</span></p>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg viewBox="0 0 280 230" role="img" aria-label="Car turning right through a quarter-circle at a junction">
+          <path d="M 58 8 L 58 222" fill="none" stroke="#222" stroke-width="1.8"/>
+          <path d="M 176 8 L 176 80 Q 176 92 188 92 L 272 92" fill="none" stroke="#222" stroke-width="1.8"/>
+          <path d="M 272 152 L 188 152 Q 176 152 176 164 L 176 222" fill="none" stroke="#222" stroke-width="1.8"/>
+          <line x1="117" y1="8" x2="117" y2="72" stroke="#222" stroke-width="1.1" stroke-dasharray="5 5"/>
+          <line x1="117" y1="170" x2="117" y2="222" stroke="#222" stroke-width="1.1" stroke-dasharray="5 5"/>
+          <line x1="188" y1="122" x2="272" y2="122" stroke="#222" stroke-width="1.1" stroke-dasharray="5 5"/>
+          <path d="M 90 196 L 90 172 A 72 72 0 0 1 162 100 L 188 100" fill="none" stroke="#222" stroke-width="1.8"/>
+          <polygon points="114.6,117.6 111.8,127.4 104.8,120.4" fill="#222"/>
+          <g transform="translate(90,200)">
+            <rect x="-9" y="-16" width="18" height="32" rx="3" fill="#fff" stroke="#222" stroke-width="1.3"/>
+            <rect x="-6" y="-10" width="12" height="10" rx="1.2" fill="none" stroke="#222" stroke-width="0.9"/>
+            <rect x="-11" y="-12" width="4" height="8" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="7" y="-12" width="4" height="8" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="-11" y="4" width="4" height="8" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="7" y="4" width="4" height="8" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+          </g>
+          <g transform="translate(210,100)">
+            <rect x="-16" y="-9" width="32" height="18" rx="3" fill="#fff" stroke="#222" stroke-width="1.3"/>
+            <rect x="0" y="-6" width="10" height="12" rx="1.2" fill="none" stroke="#222" stroke-width="0.9"/>
+            <rect x="-12" y="-11" width="8" height="4" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="-12" y="7" width="8" height="4" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="4" y="-11" width="8" height="4" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+            <rect x="4" y="7" width="8" height="4" rx="1" fill="#fff" stroke="#222" stroke-width="0.9"/>
+          </g>
+        </svg>
+      </figure>
+      </div>
+      </div>
+      <p class="sol-head" data-i18n="qc2sol">Solution</p>
+      <div class="q">
+        <div class="q-line">
+          <span class="num">(a)</span>
+          <span data-i18n="qc2vpre"><i>v</i> = distance travelled / time taken =</span>
+          <input type="text" id="qc2v" inputmode="text" data-aria-label="v">
+          <span class="unit">m s<sup>−1</sup></span>
+        </div>
+        <div class="feedback" id="fb_qc2v"></div>
+      </div>
+      <div class="q">
+        <div class="q-line">
+          <span class="num">(b)</span>
+          <span data-i18n="qc2apre">Centripetal acceleration =</span>
+          <input type="text" id="qc2a" inputmode="text" data-aria-label="a">
+          <span class="unit">m s<sup>−2</sup></span>
+        </div>
+        <div class="feedback" id="fb_qc2a"></div>
+      </div>
+      <details class="hint-fold"><summary data-i18n="hint">Hint</summary>
+        <p data-i18n="qc2hint">The path is a quarter-circle, so the distance is (2π<i>r</i>)/4, not the straight radii. The acceleration is the centripetal acceleration <i>a</i> = <i>v</i>²/<i>r</i> (or <i>rω</i>²), towards the centre.</p>
+      </details>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="qc2watch">2.6 s is the time for a quarter-turn, not the period of a full revolution.</p>
+      </div>
+      <div class="row" style="margin-top:.55rem">
+        <button type="button" class="primary" id="checkQC2" data-i18n="checkPage">Check this page</button>
+        <button type="button" class="ghost" id="revealQC2" data-i18n="showAnswers">Show answers</button>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">C · Newton’s laws</span>
+      <h2 data-i18n="c1h">Circular motion and Newton’s laws</h2>
+      <p data-i18n="c1p">By <i>F</i> = <i>ma</i>, the magnitude of the centripetal force is:</p>
+      <div class="eqn-box">
+        <p><i>F</i> = <i>m v</i>² / <i>r</i> <span class="or" data-i18n="inTermsV">(in terms of v)</span></p>
+        <p><span class="or">or</span> <i>F</i> = <i>m r ω</i>² <span class="or" data-i18n="inTermsW">(in terms of ω)</span></p>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">C · Newton’s laws</span>
+      <h2 data-i18n="c2h">What provides the centripetal force?</h2>
+      <p data-i18n="c2p">The centripetal force is the net force acting on an object to keep it in circular motion. The centripetal force can be provided by different kinds of forces.</p>
+      <div class="ex-grid">
+      <div>
+      <p class="ex-title" data-i18n="ex1">Example 1</p>
+      <p data-i18n="ex1p">A dish of dim sum sits on a rotating lazy Susan (a turning tray). Friction on the dish, towards the centre, provides the centripetal force.</p>
+      <figure>
+        <svg viewBox="0 0 320 220" role="img" aria-label="Lazy Susan with a dim sum dish and a free-body diagram">
+          <defs>
+            <marker id="arrFbd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#222"/>
+            </marker>
+          </defs>
+          <path d="M 156 92 L 180 124 L 156 110" fill="#fff" stroke="#222" stroke-width="1.5"/>
+          <rect x="6" y="8" width="150" height="188" rx="16" fill="#fff" stroke="#222" stroke-width="1.5"/>
+          <rect x="154" y="93" width="4" height="16" fill="#fff"/>
+          <rect x="58" y="88" width="34" height="22" fill="#e9edf1" stroke="#222" stroke-width="1.3"/>
+          <line x1="75" y1="88" x2="75" y2="40" stroke="#222" stroke-width="1.6" marker-end="url(#arrFbd)"/>
+          <line x1="75" y1="110" x2="75" y2="158" stroke="#222" stroke-width="1.6" marker-end="url(#arrFbd)"/>
+          <line x1="92" y1="99" x2="132" y2="99" stroke="#222" stroke-width="1.6" marker-end="url(#arrFbd)"/>
+          <text x="42" y="34" font-size="11">normal force</text>
+          <text x="55" y="176" font-size="11">weight</text>
+          <text x="94" y="80" font-size="10">friction</text>
+          <text x="94" y="116" font-size="9">(provides</text>
+          <text x="94" y="128" font-size="9">centripetal</text>
+          <text x="94" y="140" font-size="9">force)</text>
+          <ellipse cx="236" cy="130" rx="80" ry="34" fill="#f3efe6" stroke="#222" stroke-width="1.6"/>
+          <ellipse cx="236" cy="130" rx="22" ry="10" fill="none" stroke="#222" stroke-width="1.3"/>
+          <ellipse cx="236" cy="130" rx="13" ry="6" fill="#f3efe6" stroke="#c8c0b0" stroke-width="1"/>
+          <ellipse cx="186" cy="138" rx="13" ry="6" fill="#cfc9be" stroke="#222" stroke-width="1.1"/>
+          <path d="M 173 138 L 175 128 Q 186 122 197 128 L 199 138" fill="#ddd8cf" stroke="#222" stroke-width="1.1"/>
+          <ellipse cx="186" cy="128" rx="11" ry="5" fill="#e8e4dc" stroke="#222" stroke-width="1.1"/>
+          <text x="162" y="108" font-size="11">dim sum</text>
+          <text x="224" y="184" font-size="12">lazy Susan</text>
+          <path d="M 250 100 A 72 30 0 0 1 298 120" fill="none" stroke="#222" stroke-width="1.4"/>
+          <polygon points="298,120 292,112 306,113" fill="#222"/>
+        </svg>
+      </figure>
+      </div>
+      <div>
+      <p class="ex-title" data-i18n="ex2">Example 2</p>
+      <p data-i18n="ex2p">The Moon orbits the Earth. Gravitational force on the Moon, towards the Earth, provides the centripetal force.</p>
+      <figure>
+        <svg viewBox="0 0 320 180" role="img" aria-label="Moon orbiting Earth with gravitational force providing the centripetal force">
+          <defs>
+            <marker id="arrGrav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#222"/>
+            </marker>
+          </defs>
+          <ellipse cx="108" cy="78" rx="100" ry="46" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <circle cx="88" cy="78" r="26" fill="#c5d5c8" stroke="#222" stroke-width="1.4"/>
+          <path d="M 74 68 Q 84 74 80 86 Q 96 82 100 68 Q 90 62 74 68" fill="#7a9e84" stroke="none"/>
+          <text x="70" y="118" font-size="12">Earth</text>
+          <circle cx="208" cy="78" r="9" fill="#c8c8c8" stroke="#222" stroke-width="1.2"/>
+          <text x="178" y="66" font-size="12">Moon</text>
+          <path d="M 208 70 L 208 54" fill="none" stroke="#222" stroke-width="1.3"/>
+          <polygon points="208,50 213,60 203,60" fill="#222"/>
+          <path d="M 214 82 L 236 112" fill="none" stroke="#222" stroke-width="1.1"/>
+          <rect x="188" y="108" width="126" height="64" rx="12" fill="#fff" stroke="#222" stroke-width="1.4"/>
+          <line x1="268" y1="128" x2="216" y2="128" stroke="#222" stroke-width="1.6" marker-end="url(#arrGrav)"/>
+          <circle cx="276" cy="128" r="8" fill="#c8c8c8" stroke="#222" stroke-width="1.1"/>
+          <text x="196" y="152" font-size="9">gravitational force</text>
+          <text x="196" y="163" font-size="9">(provides centripetal force)</text>
+        </svg>
+      </figure>
+      </div>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">C · Newton’s laws</span>
+      <h2 data-i18n="c3h">Direction, work and speed</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="c3p">The centripetal force and the centripetal acceleration are <b>constant</b> in magnitude, but their directions are constantly changing.</p>
+      <p data-i18n="c4p">The centripetal force is always <b>perpendicular</b> to the velocity of the object. Therefore, the centripetal force does no work on the object.</p>
+      <div class="think">
+        <div class="lbl" data-i18n="predictFirst">Predict first</div>
+        <p data-i18n="c4pred">If <i>F</i> is always perpendicular to <i>v</i>, can it change the object’s speed, or only the direction of the velocity?</p>
+      </div>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgC4" viewBox="0 0 320 210" role="img" aria-label="Centripetal force perpendicular to the velocity">
+          <defs>
+            <marker id="arrC4v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1b3a5f"/>
+            </marker>
+            <marker id="arrC4f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c45c26"/>
+            </marker>
+          </defs>
+          <circle cx="108" cy="108" r="78" fill="#fff" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <path d="M 143.1 29.5 A 86 86 0 0 0 84.3 25.3" fill="none" stroke="#222" stroke-width="1.4"/>
+          <polygon points="84.3,25.3 90.8,18.9 93.2,27.4" fill="#222"/>
+          <line id="c4ray" x1="108" y1="108" x2="166" y2="54" stroke="#222" stroke-width="1.3"/>
+          <path id="c4sq" fill="none" stroke="#222" stroke-width="1.3"/>
+          <circle cx="108" cy="108" r="3" fill="#222"/>
+          <circle id="c4obj" r="8.5" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <line id="c4F" stroke="#c45c26" stroke-width="2.2" marker-end="url(#arrC4f)"/>
+          <line id="c4V" stroke="#1b3a5f" stroke-width="2.2" marker-end="url(#arrC4v)"/>
+          <text id="c4labF" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#c45c26">F</text>
+          <text id="c4labV" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#1b3a5f">v</text>
+          <!-- zoom inset -->
+          <circle cx="246" cy="108" r="58" fill="#fff" stroke="#222" stroke-width="1.8"/>
+          <line id="c4inF" stroke="#c45c26" stroke-width="2.3" marker-end="url(#arrC4f)"/>
+          <line id="c4inV" stroke="#1b3a5f" stroke-width="2.3" marker-end="url(#arrC4v)"/>
+          <path id="c4inSq" fill="none" stroke="#222" stroke-width="1.4"/>
+          <circle id="c4inObj" cx="246" cy="108" r="9" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <text id="c4inFlbl" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#c45c26">F</text>
+          <text id="c4inVlbl" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#1b3a5f">v</text>
+          <!-- zoom connector -->
+          <path d="M 168 58 L 214 68" fill="none" stroke="#888" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <figcaption data-i18n="c4cap">Watch the right angle between <i>F</i> (inward) and <i>v</i> (tangent) as the object goes around.</figcaption>
+      </figure>
+      <div class="row">
+        <button type="button" class="play" id="c4play" data-i18n="play" data-dynamic>Play</button>
+      </div>
+      </div>
+      </div>
+      <p class="note" data-i18n="c4note">There is no component of <i>F</i> along <i>v</i>, so the force does no work and the speed stays constant.</p>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillQC">Quick check</span>
+      <h2 data-i18n="qc3h">Quick check 3</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="qc3stem">A ball of 0.5 kg is connected to a fixed point <i>O</i> by a string of 20 cm long. It moves in a circle on a smooth horizontal table with a constant speed 0.8 m s<sup>−1</sup>.</p>
+      <p><b>(a)</b> <span data-i18n="qc3a">Find the tension <i>T</i> in the string.</span></p>
+      <p><b>(b)</b> <span data-i18n="qc3b">If the speed of the ball doubles, how will <i>T</i> change?</span></p>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg viewBox="0 0 320 180" role="img" aria-label="Ball on a smooth horizontal table, tied to O by a 20 cm string">
+          <defs>
+            <marker id="arrQc3v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1b3a5f"/>
+            </marker>
+          </defs>
+          <polygon points="36,62 276,62 308,150 8,150" fill="#e8e1d2" stroke="#222" stroke-width="1.5"/>
+          <ellipse cx="160" cy="106" rx="96" ry="28" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="160" y1="106" x2="256" y2="106" stroke="#222" stroke-width="1.4"/>
+          <circle cx="160" cy="106" r="2.6" fill="#222"/>
+          <text x="148" y="98" font-size="12" font-style="italic">O</text>
+          <text x="190" y="98" font-size="11">20 cm</text>
+          <circle cx="256" cy="106" r="8" fill="#fff" stroke="#222" stroke-width="1.4"/>
+          <!-- velocity: up and to the right, matching the printed notes -->
+          <line x1="262" y1="100" x2="292" y2="70" stroke="#1b3a5f" stroke-width="2" marker-end="url(#arrQc3v)"/>
+          <text x="270" y="66" font-size="11">0.8 m s⁻¹</text>
+        </svg>
+      </figure>
+      </div>
+      </div>
+      <p class="sol-head" data-i18n="qc3sol">Solution</p>
+      <div class="q">
+        <div class="q-line">
+          <span class="num">(a)</span>
+          <span data-i18n="qc3apre"><i>T</i> = centripetal force =</span>
+          <input type="text" id="qc3t" inputmode="text" data-aria-label="T">
+          <span class="unit">N</span>
+        </div>
+        <div class="feedback" id="fb_qc3t"></div>
+      </div>
+      <div class="q">
+        <div class="q-line">
+          <span class="num">(b)</span>
+          <span data-i18n="qc3bpre">Since <i>T</i> ∝</span>
+          <input type="text" id="qc3prop" inputmode="text" data-aria-label="T proportional to" style="flex:0 1 5.5rem;min-width:4.5rem">
+          <span data-i18n="qc3bmid">, <i>T</i> will</span>
+        </div>
+        <div class="choice-row" id="qc3chg">
+          <button type="button" class="choice" data-val="increase" aria-pressed="false" data-i18n="increase">increase</button>
+          <button type="button" class="choice" data-val="decrease" aria-pressed="false" data-i18n="decrease">decrease</button>
+        </div>
+        <div class="q-line">
+          <span data-i18n="qc3bto">to</span>
+          <input type="text" id="qc3new" inputmode="text" data-aria-label="new T">
+          <span class="unit">N</span>
+        </div>
+        <div class="feedback" id="fb_qc3prop"></div>
+        <div class="feedback" id="fb_qc3chg"></div>
+        <div class="feedback" id="fb_qc3new"></div>
+      </div>
+      <details class="hint-fold"><summary data-i18n="hint">Hint</summary>
+        <p data-i18n="qc3hint">Convert 20 cm to 0.2 m before you substitute. Then use <i>T</i> = <i>m v</i>²/<i>r</i>.</p>
+      </details>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="qc3watch">If the speed doubles, <i>T</i> does not merely double — look at how <i>T</i> depends on <i>v</i>.</p>
+      </div>
+      <div class="row" style="margin-top:.55rem">
+        <button type="button" class="primary" id="checkQC3" data-i18n="checkPage">Check this page</button>
+        <button type="button" class="ghost" id="revealQC3" data-i18n="showAnswers">Show answers</button>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill">C · Newton’s laws</span>
+      <h2 data-i18n="c5h">If the centripetal force disappears</h2>
+      <div class="spread">
+      <div class="copy">
+      <p data-i18n="c5p">Suppose the centripetal force disappears suddenly when an object performs uniform circular motion on a smooth horizontal surface. According to Newton’s <b>first</b> law, the object will continue to move along a <b>straight</b> path tangential to the circle.</p>
+      <div class="think">
+        <div class="lbl" data-i18n="predictFirst">Predict first</div>
+        <p data-i18n="c5pred">If the string breaks, will the ball fly radially outward, or continue in a straight line along the tangent?</p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 320 230" role="img" aria-label="Three stages: tension provides centripetal force, the string breaks, the ball goes off on a tangent">
+          <defs>
+            <marker id="arrC5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#222"/>
+            </marker>
+          </defs>
+          <!-- travelled path (solid) from the bottom, CCW, to the break; the rest is dashed -->
+          <path d="M 176.0 182.0 A 64.0 64.0 0 1 0 126.7 77.2" fill="none" stroke="#222" stroke-width="1.8"/>
+          <path d="M 126.7 77.2 A 64.0 64.0 0 0 0 176.0 182.0" fill="none" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <!-- strings still attached at the bottom and at ① -->
+          <line x1="176.0" y1="118.0" x2="176.0" y2="182.0" stroke="#222" stroke-width="1.6"/>
+          <line x1="176.0" y1="118.0" x2="236.1" y2="96.1" stroke="#222" stroke-width="1.6"/>
+          <circle cx="176.0" cy="118.0" r="3" fill="#222"/>
+          <!-- balls: bottom, ① (right, string on), ② (break), ③ (free on the tangent) -->
+          <circle cx="176.0" cy="182.0" r="8.0" fill="#fff" stroke="#222" stroke-width="1.3"/>
+          <circle cx="236.1" cy="96.1" r="8.0" fill="#fff" stroke="#222" stroke-width="1.3"/>
+          <circle cx="126.7" cy="77.2" r="8.0" fill="#fff" stroke="#222" stroke-width="1.3"/>
+          <!-- tangent from ② to ③, with two arrows pointing along the path -->
+          <line x1="126.7" y1="77.2" x2="65.5" y2="151.1" stroke="#222" stroke-width="1.6"/>
+          <polygon points="109.6,97.9 111.3,88.9 118.1,94.5" fill="#222"/>
+          <polygon points="93.0,117.9 94.7,108.9 101.5,114.5" fill="#222"/>
+          <circle cx="65.5" cy="151.1" r="8.0" fill="#fff" stroke="#222" stroke-width="1.3"/>
+          <!-- CCW rotation arrows: lower right, and at the top pointing left -->
+          <path d="M 208.7 191.0 A 80.0 80.0 0 0 0 248.0 152.8" fill="none" stroke="#222" stroke-width="1.3"/>
+          <polygon points="248.0,152.8 248.5,161.9 240.6,158.1" fill="#222"/>
+          <path d="M 201.2 42.1 A 80.0 80.0 0 0 0 142.7 45.3" fill="none" stroke="#222" stroke-width="1.3"/>
+          <polygon points="142.7,45.3 148.2,37.9 151.8,45.9" fill="#222"/>
+          <text x="250.1" y="90.1" font-size="14" font-weight="700" fill="#1b3a5f">①</text>
+          <text x="104.7" y="65.2" font-size="14" font-weight="700" fill="#1b3a5f">②</text>
+          <text x="43.5" y="143.1" font-size="14" font-weight="700" fill="#1b3a5f">③</text>
+        </svg>
+      </figure>
+      <ol class="comic-list">
+        <li><b>①</b> <span data-i18n="comic1">The tension in the string provides the centripetal force.</span></li>
+        <li><b>②</b> <span data-i18n="comic2">The string breaks suddenly.</span></li>
+        <li><b>③</b> <span data-i18n="comic3">No unbalanced forces act on the ball.</span></li>
+      </ol>
+      </div>
+      <div class="viz">
+      <figure>
+        <svg id="svgC5" viewBox="0 0 320 240" role="img" aria-label="Interactive: uniform circular motion, then the string breaks and the ball goes off on a tangent">
+          <defs>
+            <marker id="arrC5v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#1b3a5f"/>
+            </marker>
+          </defs>
+          <circle cx="150" cy="120" r="72" fill="#fff" stroke="#222" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <polyline id="c5trail" fill="none" stroke="#1a7aad" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+          <line id="c5string" x1="150" y1="120" x2="222" y2="120" stroke="#222" stroke-width="1.6"/>
+          <line id="c5tan" x1="0" y1="0" x2="0" y2="0" stroke="#c45c26" stroke-width="1.4" stroke-dasharray="4 3" opacity="0"/>
+          <circle cx="150" cy="120" r="3" fill="#222"/>
+          <circle id="c5obj" r="8.5" fill="#9aa0a6" stroke="#222" stroke-width="1.3"/>
+          <line id="c5v" stroke="#1b3a5f" stroke-width="2.1" marker-end="url(#arrC5v)"/>
+          <text id="c5labV" font-size="15" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3" fill="#1b3a5f">v</text>
+        </svg>
+        <figcaption data-i18n="c5cap">Press Play, then “The string breaks”. The ball keeps the velocity it had at that instant, so it moves off in a straight line — Newton’s first law.</figcaption>
+      </figure>
+      <div class="chip-row">
+        <button type="button" class="chip" id="c5showV" aria-pressed="true" data-i18n="showV">Show v</button>
+      </div>
+      <div class="break-btns">
+        <button type="button" class="play" id="c5play" data-i18n="play" data-dynamic>Play</button>
+        <button type="button" class="primary" id="c5break" data-i18n="stringBreaks">The string breaks</button>
+        <button type="button" class="ghost" id="c5reset" data-i18n="reset">Reset</button>
+      </div>
+      </div>
+      </div>
+    `));
+
+    steps.push(el(`
+      <span class="pill" data-i18n="pillSum">Summary</span>
+      <h2 data-i18n="sumH">Centripetal force and acceleration</h2>
+      <dl class="summary">
+        <dt data-i18n="dtFc">Centripetal force</dt>
+        <dd data-i18n="ddFc">The net force towards the centre that keeps an object in uniform circular motion. <i>F</i> = <i>m v</i>²/<i>r</i> = <i>m r ω</i>².</dd>
+        <dt data-i18n="dtA">Centripetal acceleration</dt>
+        <dd data-i18n="ddA">Always towards the centre. <i>a</i> = <i>v</i>²/<i>r</i> = <i>rω</i>².</dd>
+        <dt data-i18n="dtProv">What provides F</dt>
+        <dd data-i18n="ddProv">Different forces can provide the centripetal force — friction, gravitational force, tension, and others.</dd>
+        <dt data-i18n="dtWork">Direction and work</dt>
+        <dd data-i18n="ddWork"><i>F</i> and <i>a</i> are constant in magnitude, but their directions keep changing. <i>F</i> is always perpendicular to <i>v</i>, so it does no work and the speed stays constant.</dd>
+        <dt data-i18n="dtBreak">If F disappears</dt>
+        <dd data-i18n="ddBreak">On a smooth surface there is then no unbalanced force, so by Newton’s first law the object moves in a straight line along the tangent.</dd>
+      </dl>
+      <div class="watch">
+        <div class="lbl" data-i18n="watchOut">Watch out</div>
+        <p data-i18n="watch1">Centripetal force is not a new kind of force — it is the net force towards the centre, provided by one or more ordinary forces.</p>
+        <p data-i18n="watch2">Do not convert centimetres to metres after you have already substituted — change 20 cm to 0.2 m first.</p>
+      </div>
+    `));
+
+    steps.forEach((s, n) => {
+      $main.appendChild(s);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.title = "Go to step " + (n + 1);
+      b.addEventListener("click", () => go(n));
+      $prog.appendChild(b);
+    });
+
+    function go(n) {
+      i = Math.max(0, Math.min(steps.length - 1, n));
+      steps.forEach((s, k) => s.classList.toggle("show", k === i));
+      [...$prog.children].forEach((b, k) => {
+        b.classList.toggle("on", k === i);
+        b.classList.toggle("done", k < i);
+      });
+      $back.disabled = i === 0 && !PREV_FILE;
+      $back.style.opacity = $back.disabled ? .4 : 1;
+      $next.textContent = i === steps.length - 1 ? (NEXT_KEY ? t(NEXT_KEY) : t("backToStart")) : t("next");
+      $main.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      initStep(i);
+      applyLang();
+    }
+    $back.addEventListener("click", () => {
+      if (i === 0 && PREV_FILE) { location.href = PREV_FILE; return; }
+      go(i - 1);
+    });
+    $next.addEventListener("click", () => {
+      if (i === steps.length - 1) {
+        if (NEXT_FILE) { location.href = NEXT_FILE; return; }
+        go(0);
+        return;
+      }
+      go(i + 1);
+    });
+
+    function norm(s) {
+      return String(s).trim()
+        .replace(/π/g, "pi")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "")
+        .replace(/degrees?|deg|rads?|rpm/gi, "")
+        .replace(/\^/g, "**")
+        .toLowerCase()
+        .replace(/(\d)(pi)/g, "$1*$2")
+        .replace(/(pi)(\d)/g, "$1*$2");
+    }
+    function evalExpr(s) {
+      const t = norm(s);
+      if (!t) return NaN;
+      if (!/^[0-9.+*/()pi-]+$/.test(t.replace(/\*\*/g, ""))) return NaN;
+      try {
+        const fn = new Function("pi", "return (" + t + ");");
+        const v = fn(Math.PI);
+        return typeof v === "number" && isFinite(v) ? v : NaN;
+      } catch (e) { return NaN; }
+    }
+    function close(a, b, rel) {
+      if (!isFinite(a) || !isFinite(b)) return false;
+      const tol = Math.max(Math.abs(b) * (rel || 0.02), 0.015);
+      return Math.abs(a - b) <= tol;
+    }
+    function mark(input, fb, ok, msg) {
+      if (input) input.style.borderColor = ok ? "#1b7a46" : "#b42318";
+      if (fb) {
+        fb.className = "feedback " + (ok ? "ok" : "bad");
+        fb.textContent = msg;
+      }
+    }
+    function checkOne(id, expected, exactText, reveal, fillText) {
+      const input = document.getElementById(id);
+      const fb = document.getElementById("fb_" + id);
+      if (reveal) {
+        input.value = fillText;
+        mark(input, fb, true, exactText || fillText);
+        return true;
+      }
+      const v = evalExpr(input.value);
+      const ok = expected.some(e => close(v, e));
+      if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
+      else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
+      else mark(input, fb, false, t("notQuite"));
+      return ok;
+    }
+    function normSym(s) {
+      return String(s).trim()
+        .replace(/π/g, "pi")
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+        .replace(/·/g, "*")
+        .replace(/\s+/g, "")
+        .replace(/^[ωwatft]=/i, "")
+        .replace(/\*\*2/g, "²")
+        .replace(/\^2/g, "²")
+        .replace(/v\s*\*\s*v/gi, "v²")
+        .replace(/\(v\)²/gi, "v²")
+        .toLowerCase();
+    }
+    function checkSym(id, accepted, exactText, reveal, fillText) {
+      const input = document.getElementById(id);
+      const fb = document.getElementById("fb_" + id);
+      if (reveal) {
+        input.value = fillText;
+        mark(input, fb, true, exactText || fillText);
+        return true;
+      }
+      const n = normSym(input.value);
+      const ok = !!n && accepted.some(a => n === normSym(a));
+      if (ok) mark(input, fb, true, t("correct") + (exactText ? "  " + exactText : ""));
+      else if (!input.value.trim()) mark(input, fb, false, t("enterAns"));
+      else mark(input, fb, false, t("notQuite"));
+      return ok;
+    }
+    function checkChoice(groupId, expected, reveal) {
+      const group = document.getElementById(groupId);
+      const fb = document.getElementById("fb_" + groupId);
+      if (!group) return false;
+      const buttons = [...group.querySelectorAll("button.choice")];
+      if (reveal) {
+        buttons.forEach((b) => {
+          const on = b.getAttribute("data-val") === expected;
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+          b.classList.toggle("is-ok", on);
+          b.classList.remove("is-bad");
+        });
+        if (fb) { fb.className = "feedback ok"; fb.textContent = t("correct"); }
+        return true;
+      }
+      const sel = buttons.find((b) => b.getAttribute("aria-pressed") === "true");
+      const ok = !!(sel && sel.getAttribute("data-val") === expected);
+      buttons.forEach((b) => {
+        b.classList.toggle("is-ok", ok && b === sel);
+        b.classList.toggle("is-bad", !ok && b === sel);
+      });
+      if (fb) {
+        if (!sel) { fb.className = "feedback bad"; fb.textContent = t("enterAns"); }
+        else if (ok) { fb.className = "feedback ok"; fb.textContent = t("correct"); }
+        else { fb.className = "feedback bad"; fb.textContent = t("notQuite"); }
+      }
+      return ok;
+    }
+    function checkQC2(reveal) {
+      const vExact = (0.25 * 2 * Math.PI * 21) / 2.6;
+      checkOne("qc2v", [vExact, 12.69, 12.7], "(¼ × 2π × 21) / 2.6 = 12.69 m s⁻¹.", reveal, "12.69");
+      checkOne("qc2a", [12.69*12.69/21, 12.7*12.7/21, vExact*vExact/21, 7.67, 7.68], "12.69² / 21 = 7.67 m s⁻².", reveal, "7.67");
+    }
+    function checkQC3(reveal) {
+      checkOne("qc3t", [0.5*0.8*0.8/0.2, 1.6], "0.5 × (0.8)² / 0.2 = 1.6 N.", reveal, "1.6");
+      checkSym("qc3prop", ["v²", "v^2", "v**2"], t("exactPrefix") + "T ∝ v².", reveal, "v²");
+      checkChoice("qc3chg", "increase", reveal);
+      checkOne("qc3new", [6.4, 4*1.6, 0.5*(1.6)*(1.6)/0.2], "T becomes 4 × 1.6 = 6.4 N.", reveal, "6.4");
+    }
+
+    function polar(cx, cy, r, ang) {
+      return [cx + r * Math.cos(ang), cy - r * Math.sin(ang)];
+    }
+    function setLine(id, x1, y1, x2, y2) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute("x1", x1); el.setAttribute("y1", y1);
+      el.setAttribute("x2", x2); el.setAttribute("y2", y2);
+    }
+    function setPos(id, x, y) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute("cx", x);
+      el.setAttribute("cy", y);
+    }
+    function setText(id, x, y) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute("x", x); el.setAttribute("y", y);
+    }
+    function rightAngle(px, py, uxIn, uyIn, uxTan, uyTan, s) {
+      const x1 = px + s * uxTan, y1 = py + s * uyTan;
+      const x2 = x1 + s * uxIn, y2 = y1 + s * uyIn;
+      const x3 = px + s * uxIn, y3 = py + s * uyIn;
+      return `M ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)} L ${x3.toFixed(2)} ${y3.toFixed(2)}`;
+    }
+
+    function labelBeside(id, tipX, tipY, dirX, dirY, side) {
+      const s = Math.hypot(dirX, dirY) || 1;
+      const ux = dirX / s, uy = dirY / s;
+      const px = -uy, py = ux;
+      const k = (side == null ? 1 : side);
+      setText(id, tipX + 8 * ux + 11 * k * px, tipY + 8 * uy + 11 * k * py + 4);
+    }
+    function setVis(id, on) {
+      const el = document.getElementById(id);
+      if (el) el.style.visibility = on ? "visible" : "hidden";
+    }
+
+    /* ---------- B: v and a ---------- */
+    let bAng = 0.55, bPlay = false, bRaf = 0, bLast = 0, bShowV = true, bShowA = true;
+    const B_CX = 160, B_CY = 120, B_R = 82, B_W = 0.9;
+    function drawB() {
+      const [x, y] = polar(B_CX, B_CY, B_R, bAng);
+      const ghostAng = bAng - 0.7;
+      const [xg, yg] = polar(B_CX, B_CY, B_R, ghostAng);
+      setPos("bObj", x, y);
+      setPos("bGhost", xg, yg);
+      setLine("bRay", B_CX, B_CY, x, y);
+      const tx = -Math.sin(bAng), ty = -Math.cos(bAng);
+      const tgx = -Math.sin(ghostAng), tgy = -Math.cos(ghostAng);
+      const inx = (B_CX - x) / B_R, iny = (B_CY - y) / B_R;
+      const ingx = (B_CX - xg) / B_R, ingy = (B_CY - yg) / B_R;
+      const Lv = 48, La = 40;
+      setLine("bV", x, y, x + Lv * tx, y + Lv * ty);
+      setLine("bA", x, y, x + La * inx, y + La * iny);
+      setLine("bVg", xg, yg, xg + Lv * tgx, yg + Lv * tgy);
+      setLine("bAg", xg, yg, xg + La * ingx, yg + La * ingy);
+      const sq = document.getElementById("bSq");
+      if (sq) sq.setAttribute("d", rightAngle(x, y, inx, iny, tx, ty, 11));
+      labelBeside("bLabV", x + Lv * tx, y + Lv * ty, tx, ty, 1);
+      const midAx = x + 0.6 * La * inx, midAy = y + 0.6 * La * iny;
+      const px = -iny, py = inx;
+      const away = ((xg - midAx) * px + (yg - midAy) * py) > 0 ? -1 : 1;
+      setText("bLabA", midAx + away * 13 * px, midAy + away * 13 * py + 4);
+      const [rx, ry] = polar(B_CX, B_CY, B_R * 0.52, bAng - 0.4);
+      setText("bLabR", rx - 4, ry + 4);
+      setVis("bV", bShowV); setVis("bLabV", bShowV);
+      setVis("bVg", bShowV);
+      setVis("bA", bShowA); setVis("bLabA", bShowA);
+      setVis("bAg", bShowA);
+      setVis("bSq", bShowV);
+    }
+    function tickB(ts) {
+      if (!bPlay) { bRaf = 0; bLast = 0; return; }
+      if (!bLast) bLast = ts;
+      const dt = Math.min(0.05, (ts - bLast) / 1000);
+      bLast = ts;
+      bAng += B_W * dt;
+      drawB();
+      bRaf = requestAnimationFrame(tickB);
+    }
+    function toggleB() {
+      bPlay = !bPlay;
+      const btn = document.getElementById("bPlay");
+      if (btn) {
+        btn.setAttribute("data-playing", bPlay ? "1" : "0");
+        btn.textContent = bPlay ? t("stop") : t("play");
+      }
+      if (bPlay) { bLast = 0; bRaf = requestAnimationFrame(tickB); }
+    }
+
+    /* ---------- C4: F perpendicular to v ---------- */
+    let c4Ang = 0.7, c4Play = false, c4Raf = 0, c4Last = 0;
+    const C4_CX = 108, C4_CY = 108, C4_R = 78, C4_W = 0.85;
+    const C4_IX = 246, C4_IY = 108;
+    function drawC4() {
+      const [x, y] = polar(C4_CX, C4_CY, C4_R, c4Ang);
+      setPos("c4obj", x, y);
+      setLine("c4ray", C4_CX, C4_CY, x, y);
+      const tx = -Math.sin(c4Ang), ty = -Math.cos(c4Ang);
+      const inx = (C4_CX - x) / C4_R, iny = (C4_CY - y) / C4_R;
+      const Lf = 36, Lv = 46;
+      setLine("c4F", x, y, x + Lf * inx, y + Lf * iny);
+      setLine("c4V", x, y, x + Lv * tx, y + Lv * ty);
+      const sq = document.getElementById("c4sq");
+      if (sq) sq.setAttribute("d", rightAngle(x, y, inx, iny, tx, ty, 11));
+      labelBeside("c4labF", x + Lf * inx, y + Lf * iny, inx, iny, 1);
+      labelBeside("c4labV", x + Lv * tx, y + Lv * ty, tx, ty, 1);
+      // inset: same directions, centred
+      const iLf = 44, iLv = 50;
+      setLine("c4inF", C4_IX, C4_IY, C4_IX + iLf * inx, C4_IY + iLf * iny);
+      setLine("c4inV", C4_IX, C4_IY, C4_IX + iLv * tx, C4_IY + iLv * ty);
+      const isq = document.getElementById("c4inSq");
+      if (isq) isq.setAttribute("d", rightAngle(C4_IX, C4_IY, inx, iny, tx, ty, 12));
+      labelBeside("c4inFlbl", C4_IX + iLf * inx, C4_IY + iLf * iny, inx, iny, 1);
+      labelBeside("c4inVlbl", C4_IX + iLv * tx, C4_IY + iLv * ty, tx, ty, 1);
+    }
+    function tickC4(ts) {
+      if (!c4Play) { c4Raf = 0; c4Last = 0; return; }
+      if (!c4Last) c4Last = ts;
+      const dt = Math.min(0.05, (ts - c4Last) / 1000);
+      c4Last = ts;
+      c4Ang += C4_W * dt;
+      drawC4();
+      c4Raf = requestAnimationFrame(tickC4);
+    }
+    function toggleC4() {
+      c4Play = !c4Play;
+      const btn = document.getElementById("c4play");
+      if (btn) {
+        btn.setAttribute("data-playing", c4Play ? "1" : "0");
+        btn.textContent = c4Play ? t("stop") : t("play");
+      }
+      if (c4Play) { c4Last = 0; c4Raf = requestAnimationFrame(tickC4); }
+    }
+
+    /* ---------- C5: string breaks ---------- */
+    let c5Play = false, c5Broken = false, c5Raf = 0, c5Last = 0;
+    let c5Ang = 0.35, c5X = 0, c5Y = 0, c5Vx = 0, c5Vy = 0, c5ShowV = true;
+    const C5_CX = 150, C5_CY = 120, C5_R = 72, C5_W = 1.05;
+    const c5Trail = [];
+    function c5Pos() {
+      if (c5Broken) return [c5X, c5Y];
+      return polar(C5_CX, C5_CY, C5_R, c5Ang);
+    }
+    function c5Tan() {
+      if (c5Broken) {
+        const s = Math.hypot(c5Vx, c5Vy) || 1;
+        return [c5Vx / s, c5Vy / s];
+      }
+      return [-Math.sin(c5Ang), -Math.cos(c5Ang)];
+    }
+    function drawC5() {
+      const [x, y] = c5Pos();
+      setPos("c5obj", x, y);
+      const str = document.getElementById("c5string");
+      if (str) {
+        str.setAttribute("x1", C5_CX);
+        str.setAttribute("y1", C5_CY);
+        str.setAttribute("x2", x);
+        str.setAttribute("y2", y);
+        str.style.visibility = c5Broken ? "hidden" : "visible";
+      }
+      const [tx, ty] = c5Tan();
+      const Lv = 46;
+      setLine("c5v", x, y, x + Lv * tx, y + Lv * ty);
+      labelBeside("c5labV", x + Lv * tx, y + Lv * ty, tx, ty, 1);
+      setVis("c5v", c5ShowV);
+      setVis("c5labV", c5ShowV);
+      const trail = document.getElementById("c5trail");
+      if (trail) {
+        const pts = c5Trail.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+        trail.setAttribute("points", pts);
+      }
+      const tan = document.getElementById("c5tan");
+      if (tan) {
+        if (c5Broken) {
+          const s = 220;
+          tan.setAttribute("opacity", "0.85");
+          setLine("c5tan", x - s * tx, y - s * ty, x + s * tx, y + s * ty);
+        } else {
+          tan.setAttribute("opacity", "0");
+        }
+      }
+    }
+    function tickC5(ts) {
+      if (!c5Play) { c5Raf = 0; c5Last = 0; return; }
+      if (!c5Last) c5Last = ts;
+      const dt = Math.min(0.05, (ts - c5Last) / 1000);
+      c5Last = ts;
+      if (!c5Broken) {
+        c5Ang += C5_W * dt;
+        const [x, y] = polar(C5_CX, C5_CY, C5_R, c5Ang);
+        c5Trail.push([x, y]);
+        if (c5Trail.length > 180) c5Trail.shift();
+      } else {
+        c5X += c5Vx * dt;
+        c5Y += c5Vy * dt;
+        c5Trail.push([c5X, c5Y]);
+        if (c5Trail.length > 240) c5Trail.shift();
+      }
+      drawC5();
+      c5Raf = requestAnimationFrame(tickC5);
+    }
+    function toggleC5() {
+      c5Play = !c5Play;
+      const btn = document.getElementById("c5play");
+      if (btn) {
+        btn.setAttribute("data-playing", c5Play ? "1" : "0");
+        btn.textContent = c5Play ? t("stop") : t("play");
+      }
+      if (c5Play) { c5Last = 0; c5Raf = requestAnimationFrame(tickC5); }
+    }
+    function breakC5() {
+      if (c5Broken) return;
+      const [x, y] = polar(C5_CX, C5_CY, C5_R, c5Ang);
+      // velocity in px/s: ω R in the tangent direction
+      const tx = -Math.sin(c5Ang), ty = -Math.cos(c5Ang);
+      c5X = x; c5Y = y;
+      c5Vx = C5_W * C5_R * tx;
+      c5Vy = C5_W * C5_R * ty;
+      c5Broken = true;
+      if (!c5Play) { c5Play = true; c5Last = 0; c5Raf = requestAnimationFrame(tickC5); }
+      const btn = document.getElementById("c5play");
+      if (btn) {
+        btn.setAttribute("data-playing", "1");
+        btn.textContent = t("stop");
+      }
+      drawC5();
+    }
+    function resetC5() {
+      c5Play = false;
+      c5Broken = false;
+      c5Ang = 0.35;
+      c5Trail.length = 0;
+      if (c5Raf) { cancelAnimationFrame(c5Raf); c5Raf = 0; }
+      c5Last = 0;
+      const btn = document.getElementById("c5play");
+      if (btn) { btn.setAttribute("data-playing", "0"); btn.textContent = t("play"); }
+      drawC5();
+    }
+
+    function stopAnims() {
+      bPlay = false; c4Play = false; c5Play = false;
+      if (bRaf) { cancelAnimationFrame(bRaf); bRaf = 0; }
+      if (c4Raf) { cancelAnimationFrame(c4Raf); c4Raf = 0; }
+      if (c5Raf) { cancelAnimationFrame(c5Raf); c5Raf = 0; }
+      bLast = c4Last = c5Last = 0;
+      ["bPlay", "c4play", "c5play"].forEach((id) => {
+        const b = document.getElementById(id);
+        if (b) { b.setAttribute("data-playing", "0"); b.textContent = t("play"); }
+      });
+    }
+
+    function initStep(n) {
+      stopAnims();
+      const step = steps[n];
+
+      const bPlayBtn = document.getElementById("bPlay");
+      if (bPlayBtn && step.contains(bPlayBtn)) {
+        if (!bPlayBtn.dataset.ready) {
+          bPlayBtn.addEventListener("click", toggleB);
+          document.getElementById("bShowV").addEventListener("click", () => {
+            bShowV = !bShowV;
+            document.getElementById("bShowV").setAttribute("aria-pressed", bShowV ? "true" : "false");
+            drawB();
+          });
+          document.getElementById("bShowA").addEventListener("click", () => {
+            bShowA = !bShowA;
+            document.getElementById("bShowA").setAttribute("aria-pressed", bShowA ? "true" : "false");
+            drawB();
+          });
+          bPlayBtn.dataset.ready = "1";
+        }
+        drawB();
+        if (!bPlay) toggleB();
+      }
+
+      const c4btn = document.getElementById("c4play");
+      if (c4btn && step.contains(c4btn)) {
+        if (!c4btn.dataset.ready) {
+          c4btn.addEventListener("click", toggleC4);
+          c4btn.dataset.ready = "1";
+        }
+        drawC4();
+        if (!c4Play) toggleC4();
+      }
+
+      const c5btn = document.getElementById("c5play");
+      if (c5btn && step.contains(c5btn)) {
+        if (!c5btn.dataset.ready) {
+          c5btn.addEventListener("click", toggleC5);
+          document.getElementById("c5break").addEventListener("click", breakC5);
+          document.getElementById("c5reset").addEventListener("click", resetC5);
+          document.getElementById("c5showV").addEventListener("click", () => {
+            c5ShowV = !c5ShowV;
+            document.getElementById("c5showV").setAttribute("aria-pressed", c5ShowV ? "true" : "false");
+            drawC5();
+          });
+          c5btn.dataset.ready = "1";
+        }
+        // keep broken state if the student already used it in this session,
+        // but redraw; reset only when they press Reset.
+        drawC5();
+      }
+
+      const c2 = document.getElementById("checkQC2");
+      if (c2 && !c2.dataset.ready) {
+        c2.addEventListener("click", () => checkQC2(false));
+        document.getElementById("revealQC2").addEventListener("click", () => checkQC2(true));
+        c2.dataset.ready = "1";
+      }
+      const c3 = document.getElementById("checkQC3");
+      if (c3 && !c3.dataset.ready) {
+        c3.addEventListener("click", () => checkQC3(false));
+        document.getElementById("revealQC3").addEventListener("click", () => checkQC3(true));
+        const group = document.getElementById("qc3chg");
+        group.querySelectorAll("button.choice").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            group.querySelectorAll("button.choice").forEach((b) => {
+              b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+              b.classList.remove("is-ok", "is-bad");
+            });
+          });
+        });
+        c3.dataset.ready = "1";
+      }
+    }
+
+    document.getElementById("langEn").addEventListener("click", () => setLang("en"));
+    document.getElementById("langZh").addEventListener("click", () => setLang("zh-HK"));
+
+    const params = new URLSearchParams(location.search);
+    const ql = params.get("lang");
+    if (ql === "zh-HK" || ql === "en") {
+      lang = ql;
+      try { localStorage.setItem("cm11.lang", lang); } catch (e) {}
+    }
+    const q = params.get("step");
+    const start = q !== null && !isNaN(+q) ? Math.max(0, Math.min(steps.length - 1, +q)) : 0;
+    go(start);
+  })();
+  </script>
+</body>
+</html>
